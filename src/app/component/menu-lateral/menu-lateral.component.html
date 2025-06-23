@@ -1,0 +1,40 @@
+<div class="bg-dark text-white p-3 menu-lateral" *ngIf="isActive">
+    <section>
+        <header>
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col justifyCenter">
+                        <h4>Menu</h4>
+                    </div>
+                    <div class="col">
+                        <div class="justifyRight" (click)="toggleSidebar()">
+                            <i class="fas fa-bars icono-menu-open"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br>
+        </header>
+        <main>
+            <ul class="nav flex-column">
+                <div *ngFor="let item of listadoCategoria" style="margin-bottom: 8px;">
+                    <acordion-item [title]="item.categoria" [id]="formatId(item.categoria)"
+                        [listadoCarpetas]="item.carpetas" (onClickAction)="clickActionCarpeta($event)"
+                        (onClickCreate)="clickCreate($event)" (onClickEliminate)="clickDelete(item?.id)"></acordion-item>
+                </div>
+            </ul>
+        </main>
+        <footer>
+            <a class="nav-link text-white" routerLink="/configuracion">⚙️ Configuración</a>
+        </footer>
+    </section>
+
+
+
+
+
+</div>
+
+<div class="justifyRight icono-menu " (click)="toggleSidebar()" *ngIf="!isActive">
+    <i class="fas fa-bars"></i>
+</div>

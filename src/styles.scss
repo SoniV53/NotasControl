@@ -1,1 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
+
+.justifyCenter{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.justifyRight{
+    display: flex;
+    justify-content: right;
+    align-items: center;
+}

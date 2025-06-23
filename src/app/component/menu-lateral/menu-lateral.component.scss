@@ -1,0 +1,42 @@
+.menu-lateral {
+    width: 250px;
+    min-height: 100vh;
+}
+
+.icono-menu {
+    margin: 1rem;
+    padding: 1rem;
+    border: 1px solid #111111;
+    border-radius: 1rem;
+}
+
+.icono-menu-open {
+    padding: 1rem;
+}
+
+section {
+    display: grid;
+    height: 97dvh;
+    grid-template-rows: auto 1fr auto;
+}
+
+header {
+    h4 {
+        margin: 0 !important;
+    }
+}
+
+footer {
+    margin-top: 1rem;
+}
+
+main {
+    overflow-y: auto;
+    min-height: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
+}
