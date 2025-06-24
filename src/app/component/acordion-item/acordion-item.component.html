@@ -1,19 +1,30 @@
 <div class="accordion" [id]="idAccordion">
     <div class="accordion-item">
         <h2 class="accordion-header">
-            <button class="accordion-button collapsed " type="button" data-bs-toggle="collapse" aria-expanded="false"
+            <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" aria-expanded="false"
                 [attr.data-bs-target]="'#' + idCollap" [attr.aria-controls]="idCollap">
-                {{title}}
+                {{ title }}
             </button>
         </h2>
-        <div [id]="idCollap" class="accordion-collapse collapse " [attr.data-bs-parent]="'#' + idAccordion">
-            <div class="d-grid gap-2 d-md-block">
+        <div [id]="idCollap" class="accordion-collapse collapse" [attr.data-bs-parent]="'#' + idAccordion">
+            <div class="d-grid gap-2 d-md-block p-2">
                 <button type="button" class="btn btn-link" (click)="clickDelete($event)">Eliminar</button>
-               <button type="button" class="btn btn-link" (click)="clickCreate($event)">Crear Carpeta </button>
+                <button type="button" class="btn btn-link" (click)="clickCreate($event)">Crear Carpeta</button>
             </div>
+
             <div class="accordion-body">
-                <ul class="list-group list-group-flush" *ngFor="let item of listadoCarpetas">
-                    <li class="list-group-item" (click)="clickAction(item)">{{item?.nombre}}</li>
+                <ul class="list-group list-group-flush">
+                    <li class="list-group-item d-flex justify-content-between align-items-center"
+                        (click)="clickAction(item)" *ngFor="let item of listadoCarpetas">
+                        <span style="cursor: pointer;">
+                            {{ item?.nombre }}
+                        </span>
+                        <div class="justifyCenter">
+                            <p (click)="eliminarCarpeta(item, $event)"
+                                style="font-size: 20px; margin-bottom: 4px !important;  margin-left: 4px !important;">
+                                &times;</p>
+                        </div>
+                    </li>
                 </ul>
             </div>
         </div>

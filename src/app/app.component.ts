@@ -63,6 +63,7 @@ export class AppComponent implements OnInit, AfterViewInit {
         icon: "success",
         draggable: true
       });
+      this.router.navigate(['/home']);
     } catch (error) {
       console.error(error);
       Swal.fire({
