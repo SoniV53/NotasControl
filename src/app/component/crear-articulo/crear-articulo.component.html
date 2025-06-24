@@ -1,0 +1,32 @@
+<div class="modal fade" [id]="modalId" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalLabel">{{ title }}</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div>
+          <label for="titulo" class="form-label fw-semibold">Título del artículo</label>
+          <input id="titulo" type="text" class="form-control form-control-lg" [(ngModel)]="titulo"
+            placeholder="Escribe el título aquí..." />
+        </div>
+
+        <div class="flex-grow-1">
+          <label for="contenido" class="form-label fw-semibold">Contenido</label>
+          <textarea id="contenido" [(ngModel)]="contenido" class="form-control contenido-area" rows="15"
+            placeholder="Empieza a escribir tu artículo aquí..."></textarea>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" id="close-modal-id">
+          Cerrar
+        </button>
+        <button type="button" class="btn btn-primary" (click)="crearArticulo()" data-bs-dismiss="modal">
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

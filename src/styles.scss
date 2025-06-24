@@ -1,13 +1,36 @@
 /* You can add global styles to this file, and also import other style files */
 
-.justifyCenter{
+.justifyCenter {
     display: flex;
     justify-content: center;
     align-items: center;
 }
 
-.justifyRight{
+.justifyRight {
     display: flex;
     justify-content: right;
     align-items: center;
+}
+
+section {
+    display: grid;
+    height: 99dvh;
+    grid-template-rows: auto 1fr auto;
+    overflow: hidden;
+}
+
+footer {
+    margin-top: 1rem;
+}
+
+
+main {
+    overflow-y: auto;
+    min-height: 0;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+
+    &::-webkit-scrollbar {
+        display: none;
+    }
 }

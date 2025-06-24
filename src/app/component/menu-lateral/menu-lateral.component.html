@@ -1,10 +1,10 @@
-<div class="bg-dark text-white p-3 menu-lateral" *ngIf="isActive">
+<div class="bg-dark text-white menu-lateral" *ngIf="isActive">
     <section>
-        <header>
+        <header class="m-2">
             <div class="container text-center">
                 <div class="row">
                     <div class="col justifyCenter">
-                        <h4>Menu</h4>
+                        <h4 [routerLink]="['/home']">Menu</h4>
                     </div>
                     <div class="col">
                         <div class="justifyRight" (click)="toggleSidebar()">
@@ -13,28 +13,24 @@
                     </div>
                 </div>
             </div>
-            <br>
         </header>
         <main>
             <ul class="nav flex-column">
-                <div *ngFor="let item of listadoCategoria" style="margin-bottom: 8px;">
+                <div *ngFor="let item of listadoCategoria" style="margin: 4px 8px;">
                     <acordion-item [title]="item.categoria" [id]="formatId(item.categoria)"
                         [listadoCarpetas]="item.carpetas" (onClickAction)="clickActionCarpeta($event)"
-                        (onClickCreate)="clickCreate($event)" (onClickEliminate)="clickDelete(item?.id)"></acordion-item>
+                        (onClickCreate)="clickCreate(item?.id)"
+                        (onClickEliminate)="clickDelete(item?.id)"></acordion-item>
                 </div>
             </ul>
         </main>
         <footer>
-            <a class="nav-link text-white" routerLink="/configuracion">⚙️ Configuración</a>
+            <a class="nav-link text-white m-2" routerLink="/configuracion">⚙️ Configuración</a>
         </footer>
     </section>
 
-
-
-
-
 </div>
 
-<div class="justifyRight icono-menu " (click)="toggleSidebar()" *ngIf="!isActive">
+<div class="justifyRight icono-menu p-3 " (click)="toggleSidebar()" *ngIf="!isActive">
     <i class="fas fa-bars"></i>
 </div>

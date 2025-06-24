@@ -4,8 +4,8 @@ const db = require('./db');
 
 function createWindow() {
   const win = new BrowserWindow({
-    width: 800,
-    height: 600,
+    width: 1200,
+    height: 800,
     menuBarVisible: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -72,6 +72,9 @@ ipcMain.handle('crear-carpeta', (event, nombre, parentId = null, categoryId = nu
 ipcMain.handle('obtener-carpetas', (event, parentId = null) => {
   return db.obtenerCarpetas(parentId);
 });
+ipcMain.handle('obtener-carpetas-categoria', (event, categoriaId = null) => {
+  return db.obtenerCarpetasCategoria(categoriaId);
+});
 
 ipcMain.handle('actualizar-carpeta', (event, id, name) => {
   return db.actualizarCarpeta(id, name);
@@ -87,8 +90,11 @@ ipcMain.handle('crear-articulo', (event, folderId, title, content) => {
   return db.crearArticulo(folderId, title, content);
 });
 
-ipcMain.handle('obtener-articulos', (event, folderId) => {
+ipcMain.handle('obtener-articulos-carpeta', (event, folderId) => {
   return db.obtenerArticulosPorCarpeta(folderId);
+});
+ipcMain.handle('obtener-articulos', (event) => {
+  return db.obtenerArticulos();
 });
 
 ipcMain.handle('actualizar-articulo', (event, id, title, content) => {

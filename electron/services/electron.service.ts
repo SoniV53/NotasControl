@@ -49,6 +49,11 @@ export class ElectronService {
       ? this.ipcRenderer.obtenerCarpetas(parentId)
       : this.ipcRenderer.invoke('obtener-carpetas', parentId);
   }
+  obtenerCarpetaCategoria(categoriaId: number | null = null) {
+    return this.ipcRenderer.obtenerCarpetas
+      ? this.ipcRenderer.obtenerCarpetasCategoria(categoriaId)
+      : this.ipcRenderer.invoke('obtener-carpetas-categoria', categoriaId);
+  }
 
   actualizarCarpeta(id: number, name: string) {
     return this.ipcRenderer.actualizarCarpeta
@@ -63,16 +68,24 @@ export class ElectronService {
   }
 
   // Artículos
-  crearArticulo(folderId: number, title: string, content: string) {
+  crearArticulo(folderId: number | null, title: string, content: string) {
+    console.log({ titulo: title, contenido: content, folderId: folderId })
+
     return this.ipcRenderer.crearArticulo
       ? this.ipcRenderer.crearArticulo(folderId, title, content)
       : this.ipcRenderer.invoke('crear-articulo', folderId, title, content);
   }
 
-  obtenerArticulos(folderId: number) {
+  obtenerArticulosPorCarpeta(folderId: number | undefined) {
+    return this.ipcRenderer.obtenerArticulosPorCarpeta
+      ? this.ipcRenderer.obtenerArticulosPorCarpeta(folderId)
+      : this.ipcRenderer.invoke('obtener-articulos-carpeta', folderId);
+  }
+
+  obtenerArticulos() {
     return this.ipcRenderer.obtenerArticulos
-      ? this.ipcRenderer.obtenerArticulos(folderId)
-      : this.ipcRenderer.invoke('obtener-articulos', folderId);
+      ? this.ipcRenderer.obtenerArticulos()
+      : this.ipcRenderer.invoke('obtener-articulos');
   }
 
   actualizarArticulo(id: number, title: string, content: string) {

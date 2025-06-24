@@ -10,6 +10,11 @@ import { ConfiguracionPageComponent } from './ui/main/configuracion-page/configu
 import { ConfiguracionesComponent } from './ui/configuraciones/configuraciones.component';
 import { AcordionItemComponent } from './component/acordion-item/acordion-item.component';
 import { ModalCreacionActualizacionComponent } from './component/modal-creacion-actualizacion/modal-creacion-actualizacion.component';
+import { InputSelectorComponent } from './component/input-selector/input-selector.component';
+import { ArticulosComponent } from './component/articulos/articulos.component';
+import { CrearArticuloComponent } from './component/crear-articulo/crear-articulo.component';
+import { CarpetasComponent } from './component/carpetas/carpetas.component';
+import { HomeComponent } from './ui/main/home/home.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +24,12 @@ import { ModalCreacionActualizacionComponent } from './component/modal-creacion-
     ConfiguracionPageComponent,
     ConfiguracionesComponent,
     AcordionItemComponent,
-    ModalCreacionActualizacionComponent
+    ModalCreacionActualizacionComponent,
+    InputSelectorComponent,
+    ArticulosComponent,
+    CrearArticuloComponent,
+    CarpetasComponent,
+    HomeComponent
   ],
   imports: [
     BrowserModule,

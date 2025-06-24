@@ -1,0 +1,10 @@
+<div class="row g-3 justify-content-start">
+  <div
+    *ngFor="let item of carpetasListado"
+    class="col-6 col-sm-4 col-md-3 col-lg-2"
+  >
+    <div class="item-carpeta p-2 h-100" (click)="clickAction(item)">
+      <h4 class="mb-0">{{ item?.nombre }}</h4>
+    </div>
+  </div>
+</div>

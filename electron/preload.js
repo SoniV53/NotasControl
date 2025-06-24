@@ -30,6 +30,9 @@ window.crearCarpeta = (nombre, parentId = null, categoryId = null) =>
 window.obtenerCarpetas = (parentId = null) =>
   ipcRenderer.invoke('obtener-carpetas', parentId);
 
+window.obtenerCarpetasCategoria = (categoriaId = null) =>
+  ipcRenderer.invoke('obtener-carpetas-categoria', categoriaId);
+
 window.actualizarCarpeta = (id, name) =>
   ipcRenderer.invoke('actualizar-carpeta', id, name);
 
@@ -40,8 +43,11 @@ window.eliminarCarpeta = (id) =>
 window.crearArticulo = (folderId, title, content) =>
   ipcRenderer.invoke('crear-articulo', folderId, title, content);
 
-window.obtenerArticulos = (folderId) =>
-  ipcRenderer.invoke('obtener-articulos', folderId);
+window.obtenerArticulosPorCarpeta = (folderId) =>
+  ipcRenderer.invoke('obtener-articulos-carpeta', folderId);
+
+window.obtenerArticulos = () =>
+  ipcRenderer.invoke('obtener-articulos');
 
 window.actualizarArticulo = (id, title, content) =>
   ipcRenderer.invoke('actualizar-articulo', id, title, content);

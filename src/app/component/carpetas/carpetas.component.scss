@@ -1,0 +1,19 @@
+.item-carpeta {
+    border: 1px solid #131212;
+    border-radius: 12px;
+    color: #131212;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    &:hover {
+        background-color: rgb(90, 80, 80);
+        transform: scale(1.03);
+    }
+
+    h4 {
+        font-size: 13px;
+        word-break: break-word;
+        margin: 0;
+    }
+}

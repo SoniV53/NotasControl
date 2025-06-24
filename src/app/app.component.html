@@ -1,7 +1,15 @@
 <div class="d-flex">
   <menu-lateral [listadoCategoria]="listadoCategoria" (onClickActionCarpeta)="onClickActionCarpeta($event)"
     (onClickCreate)="clickCreate($event)" (onClickEliminate)="clickDelete($event)"></menu-lateral>
-  <div class="p-4 flex-fill">
+  <div class="flex-fill">
     <router-outlet></router-outlet>
   </div>
 </div>
+
+<modal-creacion-actualizacion
+  [modalId]="'carpetaCreateModal'"
+  [title]="'Crear Carpeta'"
+  [fields]="formFields"
+  [modelData]="requestData"
+  (formSubmit)="crearEspe($event)"
+></modal-creacion-actualizacion>

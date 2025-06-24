@@ -14,29 +14,9 @@
     padding: 1rem;
 }
 
-section {
-    display: grid;
-    height: 97dvh;
-    grid-template-rows: auto 1fr auto;
-}
-
 header {
     h4 {
         margin: 0 !important;
-    }
-}
-
-footer {
-    margin-top: 1rem;
-}
-
-main {
-    overflow-y: auto;
-    min-height: 0;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
-
-    &::-webkit-scrollbar {
-        display: none;
+        cursor: pointer;
     }
 }

@@ -1,0 +1,15 @@
+<div class="mb-1 text-start">
+  <div>
+    <select
+      *ngIf="listado.length > 0"
+      [(ngModel)]="seleccionado"
+      class="form-select"
+      (ngModelChange)="changeValue()"
+    >
+      <option value="">{{placeholder}}</option>
+      <option *ngFor="let item of listado" [value]="item.code">
+        {{ item.texto }}
+      </option>
+    </select>
+  </div>
+</div>

@@ -62,6 +62,9 @@ module.exports = {
   obtenerCarpetas(parentId = null) {
     return db.prepare('SELECT * FROM folders WHERE parent_id IS ?').all(parentId);
   },
+  obtenerCarpetasCategoria(categoriaId = null) {
+    return db.prepare('SELECT * FROM folders WHERE category_id IS ?').all(categoriaId);
+  },
   actualizarCarpeta(id, nombre) {
     return db.prepare('UPDATE folders SET name = ? WHERE id = ?').run(name, id);
   },
@@ -73,12 +76,18 @@ module.exports = {
 
   // === ARTÍCULOS ===
   crearArticulo(folderId, title, content = '') {
+    console.log(folderId)
     return db.prepare('INSERT INTO articles (folder_id, title, content) VALUES (?, ?, ?)').run(folderId, title, content);
   },
 
   obtenerArticulosPorCarpeta(folderId) {
     return db.prepare('SELECT * FROM articles WHERE folder_id = ? ORDER BY created_at DESC').all(folderId);
   },
+
+  obtenerArticulos() {
+    return db.prepare('SELECT * FROM articles ORDER BY created_at DESC').all();
+  },
+
   actualizarArticulo(id, title, content) {
     return db.prepare(`
     UPDATE articles

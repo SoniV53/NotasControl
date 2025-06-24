@@ -1,1 +1,67 @@
-<p>modal-creacion-actualizacion works!</p>
+<div
+  class="modal fade"
+  [id]="modalId"
+  tabindex="-1"
+  aria-labelledby="modalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="modalLabel">{{ title }}</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+
+      <div class="modal-body">
+        <div class="row">
+          <div class="col">
+            <div
+              *ngFor="let field of fields"
+              class="input-group flex-nowrap input mb-3"
+            >
+              <input
+                *ngIf="field.type != 'select'"
+                [type]="field.type"
+                class="form-control"
+                [placeholder]="field.placeholder"
+                [(ngModel)]="modelData[field.model]"
+              />
+
+              <input-selector
+                *ngIf="field.type === 'select'"
+                [listado]="field.listado || []"
+                [seleccionado]="modelData[field.model]"
+                [placeholder]="field.placeholder"
+              ></input-selector>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="modal-footer">
+        <button
+          type="button"
+          class="btn btn-secondary"
+          data-bs-dismiss="modal"
+          id="close-modal-id"
+        >
+          Cerrar
+        </button>
+        <button
+          type="button"
+          class="btn btn-primary"
+          (click)="onSubmit()"
+          [disabled]="!validButton"
+          data-bs-dismiss="modal"
+        >
+          Aceptar
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
