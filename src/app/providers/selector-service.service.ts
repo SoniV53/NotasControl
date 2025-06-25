@@ -6,23 +6,37 @@ import { Carpeta } from '../model/CategoriaCarpetasModel';
   providedIn: 'root'
 })
 export class SelectorServiceService {
-  private carpetaSubject = new BehaviorSubject<Carpeta | null>(null);
+  private historialCarpetas = new BehaviorSubject<Carpeta[]>([]);
 
-  public carpeta$: Observable<Carpeta | null> = this.carpetaSubject.asObservable();
+  public historialCarpetas$: Observable<Carpeta[]> = this.historialCarpetas.asObservable();
 
   constructor() { }
 
-  setCarpeta(carpeta: Carpeta) {
-    this.carpetaSubject.next(carpeta);
+  // Agrega una carpeta al historial
+  addCarpeta(carpeta: Carpeta): void {
+    const actuales = this.historialCarpetas.getValue();
+    this.historialCarpetas.next([...actuales, carpeta]);
   }
 
-  // Obtener la carpeta actual sincrónicamente
-  getCarpetaActual(): Carpeta | null {
-    return this.carpetaSubject.getValue();
+  // Obtiene el valor actual del historial (snapshot)
+  getHistorialActual(): Carpeta[] {
+    return this.historialCarpetas?.getValue();
   }
 
-  // Limpiar la carpeta (por ejemplo, al salir de vista)
-  limpiarCarpeta() {
-    this.carpetaSubject.next(null);
+  // Limpia todo el historial
+  clearHistorial(): void {
+    this.historialCarpetas.next([]);
+  }
+
+  // Elimina una carpeta por id (suponiendo que Carpeta tiene id)
+  removeCarpetaById(id:any): void {
+    const actuales = this.historialCarpetas.getValue();
+    const filtrados = actuales.filter(c => c.id !== id);
+    this.historialCarpetas.next(filtrados);
+  }
+
+  // Reemplaza todo el historial
+  setHistorial(nuevoHistorial: Carpeta[]): void {
+    this.historialCarpetas.next(nuevoHistorial);
   }
 }

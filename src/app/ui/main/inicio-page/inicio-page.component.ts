@@ -20,30 +20,32 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
   isOpen = false;
 
 
-  ngOnInit(): void {
-    this.selectorSer.carpeta$.subscribe(c => {
-      if (c) {
-        this.rastroCarpeta = [];
-        this.entrarEnCarpeta(c);
-        this.carpeta = this.rastroCarpeta[0];
-        this.viewportScroller.scrollToPosition([0, 0]);
-        this.obtenerArticulos();
-        this.obtenerFolderID();
-      }
-    });
+  async ngOnInit() {
+    this.selectorSer.historialCarpetas$.subscribe(data => {
+      this.rastroCarpeta = data;
+      const lastItem = this.rastroCarpeta[(this.rastroCarpeta.length - 1)]
+      this.entrarEnCarpeta(lastItem);
+      this.carpeta = lastItem;
+      this.viewportScroller.scrollToPosition([0, 0]);
+      this.obtenerArticulos();
+      this.obtenerFolderID();
+    })
   }
 
   irACarpeta(id: number, nivel: number) {
     this.rastroCarpeta = this.rastroCarpeta.slice(0, nivel + 1);
+    this.selectorSer.setHistorial(this.rastroCarpeta);
     this.electron.obtenerCarpetas(id);
     this.carpeta = this.rastroCarpeta[nivel];
     this.obtenerArticulos();
     this.obtenerFolderID();
+    this.agregarHistorial();
   }
 
   entrarEnCarpeta(carpeta: Carpeta) {
-    this.rastroCarpeta.push(carpeta);
-    this.electron.obtenerCarpetas(carpeta.id);
+    if (carpeta) {
+      this.electron.obtenerCarpetas(carpeta.id);
+    }
   }
 
   async obtenerArticulos() {
@@ -53,8 +55,11 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
         id: res.id,
         title: res.title,
         content: res.content,
-        created_at: res.created_at
+        ocultar: this.textoABoolean(res?.ocultar),
+        created_at: res.created_at,
+        updated_at: res.updated_at
       }));
+      console.log(articulos);
     } catch (error) {
       console.log(error);
     }
@@ -99,14 +104,40 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
     this.obtenerArticulos();
     this.obtenerFolderID();
     this.viewportScroller.scrollToPosition([0, 0]);
+    this.selectorSer.addCarpeta(event);
+    this.agregarHistorial();
   }
 
-  accionFlotante(){
+  async agregarHistorial() {
+    try {
+      const historialList = this.selectorSer?.getHistorialActual();
+      if (historialList) {
+        this.electron.limpiarHistorialCarpetas();
+        historialList.forEach(async element => {
+          this.electron.agregarHistorialCarpeta(element.id);
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  accionFlotante() {
     this.isOpen = !this.isOpen
   }
 
-  onClickClose(event:any){
+  onClickClose(event: any) {
     console.log(event);
     this.isOpen = event;
+  }
+
+  async crearArticulo() {
+    if (!this.carpeta) return;
+    try {
+      await this.electron.crearArticulo(this.carpeta.id, '', '', false);
+      this.obtenerArticulos();
+    } catch (err) {
+      console.error('Error al crear artículo:', err);
+    }
   }
 }

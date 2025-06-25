@@ -30,7 +30,7 @@ function createWindow() {
     console.error(' Error al cargar index.html:', err);
   });
 
-  win.webContents.openDevTools();
+  //win.webContents.openDevTools();
 
   win.on("closed", () => {
     window = null;
@@ -48,16 +48,16 @@ app.on('window-all-closed', () => {
 });
 
 // === CATEGORÍA ===
-ipcMain.handle('crear-categoria', (event, nombre) => {
-  return db.crearCategoria(nombre);
+ipcMain.handle('crear-categoria', (event, nombre, ocultar) => {
+  return db.crearCategoria(nombre, ocultar);
 });
 
 ipcMain.handle('obtener-categorias', () => {
   return db.obtenerCategorias();
 });
 
-ipcMain.handle('actualizar-categoria', (event, id, name) => {
-  return db.actualizarCategoria(id, name);
+ipcMain.handle('actualizar-categoria', (event, id, name, ocultar) => {
+  return db.actualizarCategoria(id, name, ocultar);
 });
 
 ipcMain.handle('eliminar-categoria', (event, id) => {
@@ -86,8 +86,8 @@ ipcMain.handle('eliminar-carpeta', (event, id) => {
 
 
 // === ARTÍCULO ===
-ipcMain.handle('crear-articulo', (event, folderId, title, content) => {
-  return db.crearArticulo(folderId, title, content);
+ipcMain.handle('crear-articulo', (event, folderId, title, content, ocultar) => {
+  return db.crearArticulo(folderId, title, content, ocultar);
 });
 
 ipcMain.handle('obtener-articulos-carpeta', (event, folderId) => {
@@ -97,10 +97,32 @@ ipcMain.handle('obtener-articulos', (event) => {
   return db.obtenerArticulos();
 });
 
-ipcMain.handle('actualizar-articulo', (event, id, title, content) => {
-  return db.actualizarArticulo(id, title, content);
+ipcMain.handle('actualizar-articulo', (event, id, title, content, ocultar) => {
+  return db.actualizarArticulo(id, title, content, ocultar);
+});
+
+ipcMain.handle('actualizar-articulo-ocultar', (event, id, ocultar) => {
+  return db.actualizarArticuloOcultar(id, ocultar);
 });
 
 ipcMain.handle('eliminar-articulo', (event, id) => {
   return db.eliminarArticulo(id);
+});
+
+// === HISTORIAL DE CARPETAS ===
+
+ipcMain.handle('agregar-historial-carpeta', (event, folderId) => {
+  return db.agregarHistorialCarpeta(folderId);
+});
+
+ipcMain.handle('obtener-historial-carpetas', () => {
+  return db.obtenerHistorialCarpetas();
+});
+
+ipcMain.handle('eliminar-historial-carpeta', (event, folderId) => {
+  return db.eliminarHistorialCarpeta(folderId);
+});
+
+ipcMain.handle('limpiar-historial-carpetas', () => {
+  return db.limpiarHistorialCarpetas();
 });

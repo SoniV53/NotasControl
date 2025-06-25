@@ -3,25 +3,7 @@
     No hay artículos en esta carpeta.
   </div>
 
-  <div *ngFor="let articulo of articulos" class="card mb-3 shadow-sm rounded-4">
-    <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
-      <h5 class="mb-0 flex-grow-1">{{ articulo.title }}</h5>
-
-      <button
-        class="btn btn-sm btn-outline-light ms-3"
-        (click)="eliminarArticulo(articulo.id)"
-        title="Eliminar artículo"
-      >
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-
-    <div class="card-body position-relative">
-      <p class="card-text mb-5" [innerHTML]="articulo.content"></p>
-
-      <div class="text-end text-muted small position-absolute bottom-0 end-0 p-3">
-        {{ articulo.created_at | date: 'short' }}
-      </div>
-    </div>
+  <div *ngFor="let articulo of articulos">
+    <app-item-articulo [articulo]="articulo" (onEliminarArticulo)="onEliminarArticulo($event)" [isMin]="true"></app-item-articulo>
   </div>
 </div>

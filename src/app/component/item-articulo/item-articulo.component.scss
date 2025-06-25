@@ -1,0 +1,20 @@
+.card {
+  transition: all 0.3s ease;
+}
+
+.card:hover {
+  box-shadow: 0 0 10px rgba(235, 235, 235, 0.25);
+}
+
+.card-header h5 {
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.cont-min{
+    height: 300px !important;
+}
+
+.cont-max{
+    height:75vh !important;
+}

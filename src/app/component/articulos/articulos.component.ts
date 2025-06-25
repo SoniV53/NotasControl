@@ -7,6 +7,9 @@ export interface Articulo {
   title: string;
   content: string;
   created_at: string;
+  updated_at?: string;
+  ocultar: boolean;
+  isChange?: boolean;
 }
 
 
@@ -15,18 +18,21 @@ export interface Articulo {
   templateUrl: './articulos.component.html',
   styleUrl: './articulos.component.scss'
 })
-export class ArticulosComponent extends ConfiguracionPageComponent {
+export class ArticulosComponent extends ConfiguracionPageComponent implements OnInit {
   @Input() articulos: Articulo[] = [];
 
-
-  ngOnInit(): void { }
-
-  eliminarArticulo(id: number) {
-    this.messageEliminar(() => {
-      this.electron.eliminarArticulo(id).then(() => {
-        this.articulos = this.articulos.filter(a => a.id !== id);
-      });
-    })
+  ngOnInit(): void {
+    console.log(this.articulos);
   }
 
+
+  onEliminarArticulo(event: any) {
+    if (event) {
+      this.messageEliminar(() => {
+        this.electron.eliminarArticulo(event).then(() => {
+          this.articulos = this.articulos.filter(a => a.id !== event);
+        });
+      })
+    }
+  }
 }

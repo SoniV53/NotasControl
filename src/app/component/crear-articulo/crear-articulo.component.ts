@@ -16,8 +16,6 @@ export class CrearArticuloComponent {
   titulo: string = '';
   contenido: string = '';
 
-
-
   constructor(private electron: ElectronService) { }
 
   async crearArticulo() {
@@ -30,7 +28,7 @@ export class CrearArticuloComponent {
       return;
     }
     try {
-      await this.electron.crearArticulo(this.folderId, this.titulo, this.contenido);
+      await this.electron.crearArticulo(this.folderId, this.titulo, this.contenido,false);
 
       if (this.onClickAction) {
         this.onClickAction.emit();
@@ -48,5 +46,12 @@ export class CrearArticuloComponent {
   openClose() {
     this.titulo = '';
     this.contenido = '';
+  }
+
+  onChangeText(event: any) {
+    console.log(event)
+    if (event) {
+      this.contenido = event;
+    }
   }
 }

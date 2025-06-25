@@ -1,0 +1,35 @@
+<div class="card mb-3 shadow-sm rounded-4">
+    <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
+        <div class="mb-0 flex-grow-1">
+            <app-titulo-editor [texto]="articulo.title" [articulo]="articulo"
+                (onChangeTextEmitter)="onChangeTextEmitter($event,articulo)"></app-titulo-editor>
+        </div>
+
+        <button *ngIf="!isPage" class="btn btn-sm btn-outline-light ms-3" (click)="maxiContent(articulo)" [title]="'Ver artículo'">
+            <i class="fa-solid fa-expand"></i>
+        </button>
+
+        <button class="btn btn-sm btn-outline-light ms-3" (click)="ocultarContent(articulo)"
+            [title]="!articulo.ocultar ? 'Ocultar artículo' : 'Monstrar artículo'">
+            <i class="fa-solid fa-minus" *ngIf="!articulo.ocultar"></i>
+            <i class="fa-solid fa-plus" *ngIf="articulo.ocultar"></i>
+        </button>
+
+        <button class="btn btn-sm btn-outline-light ms-3" (click)="eliminarArticulo(articulo.id)"
+            title="Eliminar artículo">
+            <i class="fas fa-times" style="color: #b98f8f;"></i>
+        </button>
+
+    </div>
+
+    <div class="card-body position-relative" *ngIf="!articulo.ocultar">
+        <div [ngClass]="{'cont-min':isMin,'cont-max':!isMin}" >
+            <app-editor-formato [articulo]="articulo"></app-editor-formato>
+        </div>
+
+        <div class="text-end text-muted small position-absolute bottom-0 end-0 p-3">
+            {{ datePrint(articulo) | date: 'short' }}
+        </div>
+    </div>
+
+</div>

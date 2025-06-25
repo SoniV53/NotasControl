@@ -12,14 +12,14 @@ window.addEventListener('DOMContentLoaded', () => {
 });
 
 // === CATEGORÍA ===
-window.crearCategoria = (nombre) =>
-  ipcRenderer.invoke('crear-categoria', nombre);
+window.crearCategoria = (nombre,ocultar) =>
+  ipcRenderer.invoke('crear-categoria', nombre,ocultar);
 
 window.obtenerCategorias = () =>
   ipcRenderer.invoke('obtener-categorias');
 
-window.actualizarCategoria = (id, name) =>
-  ipcRenderer.invoke('actualizar-categoria', id, name);
+window.actualizarCategoria = (id, name,ocultar) =>
+  ipcRenderer.invoke('actualizar-categoria', id, name,ocultar);
 
 window.eliminarCategoria = (id) =>
   ipcRenderer.invoke('eliminar-categoria', id);
@@ -40,8 +40,8 @@ window.eliminarCarpeta = (id) =>
   ipcRenderer.invoke('eliminar-carpeta', id);
 
 // === ARTÍCULO ===
-window.crearArticulo = (folderId, title, content) =>
-  ipcRenderer.invoke('crear-articulo', folderId, title, content);
+window.crearArticulo = (folderId, title, content,ocultar) =>
+  ipcRenderer.invoke('crear-articulo', folderId, title, content,ocultar);
 
 window.obtenerArticulosPorCarpeta = (folderId) =>
   ipcRenderer.invoke('obtener-articulos-carpeta', folderId);
@@ -49,9 +49,25 @@ window.obtenerArticulosPorCarpeta = (folderId) =>
 window.obtenerArticulos = () =>
   ipcRenderer.invoke('obtener-articulos');
 
-window.actualizarArticulo = (id, title, content) =>
-  ipcRenderer.invoke('actualizar-articulo', id, title, content);
+window.actualizarArticulo = (id, title, content,ocultar) =>
+  ipcRenderer.invoke('actualizar-articulo', id, title, content,ocultar);
+
+window.actualizarArticuloOcultar = (id, ocultar) =>
+  ipcRenderer.invoke('actualizar-articulo-ocultar', id, ocultar);
 
 window.eliminarArticulo = (id) =>
   ipcRenderer.invoke('eliminar-articulo', id);
+
+// === HISTORIAL DE CARPETAS ===
+window.agregarHistorialCarpeta = (folderId) =>
+  ipcRenderer.invoke('agregar-historial-carpeta', folderId);
+
+window.obtenerHistorialCarpetas = () =>
+  ipcRenderer.invoke('obtener-historial-carpetas');
+
+window.eliminarHistorialCarpeta = (folderId) =>
+  ipcRenderer.invoke('eliminar-historial-carpeta', folderId);
+
+window.limpiarHistorialCarpetas = () =>
+  ipcRenderer.invoke('limpiar-historial-carpetas');
 

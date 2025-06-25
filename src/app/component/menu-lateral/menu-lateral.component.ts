@@ -1,5 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Carpeta, CategoriaCarpetas } from '../../model/CategoriaCarpetasModel';
+import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
 
 @Component({
   selector: 'menu-lateral',
@@ -30,7 +31,7 @@ export class MenuLateralComponent {
       this.onClickCreate.emit(event);
     }
   }
-  
+
   clickDelete(event: any) {
     if (this.onClickEliminate && event) {
       this.onClickEliminate.emit(event);
@@ -39,5 +40,10 @@ export class MenuLateralComponent {
 
   formatId(texto: string): string {
     return texto.replace(/[\s^*@:.,'\\/-]/g, '');
+  }
+
+  goHome() {
+    //this.router.navigate(['/home'], { replaceUrl: true });
+   // this.router.navigate(['/home']);
   }
 }

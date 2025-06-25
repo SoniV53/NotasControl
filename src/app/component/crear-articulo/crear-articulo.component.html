@@ -13,9 +13,8 @@
         </div>
 
         <div class="flex-grow-1">
-          <label for="contenido" class="form-label fw-semibold">Contenido</label>
-          <textarea id="contenido" [(ngModel)]="contenido" class="form-control contenido-area" rows="15"
-            placeholder="Empieza a escribir tu artículo aquí..."></textarea>
+          <app-editor-formato [texto]="contenido" [isCreate]="true" (onChangeTextEmitter)="onChangeText($event)"></app-editor-formato>
+          <span style="font-size: 16px;">*</span>
         </div>
       </div>
 

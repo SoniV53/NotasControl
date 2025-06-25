@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { ElectronService } from '../../../../../electron/services/electron.service';
 import { AppComponent } from '../../../app.component';
 import { SelectorServiceService } from '../../../providers/selector-service.service';
-import { ViewportScroller } from '@angular/common';
+import { Location, ViewportScroller } from '@angular/common';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
@@ -20,7 +20,8 @@ export class ConfiguracionPageComponent {
     public myApp: AppComponent,
     public selectorSer: SelectorServiceService,
     public viewportScroller: ViewportScroller,
-    public router: Router
+    public router: Router,
+    public location: Location
   ) {
 
   }
@@ -43,5 +44,9 @@ export class ConfiguracionPageComponent {
         callback();
       }
     });
+  }
+
+  textoABoolean(valor: string): boolean {
+    return valor?.toLowerCase() === 'true';
   }
 }

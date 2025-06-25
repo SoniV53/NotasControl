@@ -15,6 +15,11 @@ import { ArticulosComponent } from './component/articulos/articulos.component';
 import { CrearArticuloComponent } from './component/crear-articulo/crear-articulo.component';
 import { CarpetasComponent } from './component/carpetas/carpetas.component';
 import { HomeComponent } from './ui/main/home/home.component';
+import { HerramientasEditorComponent } from './component/herramientas-editor/herramientas-editor.component';
+import { EditorFormatoComponent } from './component/editor-formato/editor-formato.component';
+import { TituloEditorComponent } from './component/titulo-editor/titulo-editor.component';
+import { DetalleArticuloPageComponent } from './ui/detalle-articulo-page/detalle-articulo-page.component';
+import { ItemArticuloComponent } from './component/item-articulo/item-articulo.component';
 
 @NgModule({
   declarations: [
@@ -29,7 +34,12 @@ import { HomeComponent } from './ui/main/home/home.component';
     ArticulosComponent,
     CrearArticuloComponent,
     CarpetasComponent,
-    HomeComponent
+    HomeComponent,
+    HerramientasEditorComponent,
+    EditorFormatoComponent,
+    TituloEditorComponent,
+    DetalleArticuloPageComponent,
+    ItemArticuloComponent
   ],
   imports: [
     BrowserModule,

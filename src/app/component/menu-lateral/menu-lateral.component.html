@@ -17,9 +17,8 @@
         <main>
             <ul class="nav flex-column">
                 <div *ngFor="let item of listadoCategoria" style="margin: 4px 8px;">
-                    <acordion-item [title]="item.categoria" [id]="formatId(item.categoria)"
-                        [listadoCarpetas]="item.carpetas" (onClickAction)="clickActionCarpeta($event)"
-                        (onClickCreate)="clickCreate(item?.id)"
+                    <acordion-item [categoria]="item" [id]="formatId(item.categoria)"
+                        (onClickAction)="clickActionCarpeta($event)" (onClickCreate)="clickCreate(item?.id)"
                         (onClickEliminate)="clickDelete(item?.id)"></acordion-item>
                 </div>
             </ul>

@@ -13,10 +13,10 @@ export class ElectronService {
   ipcRenderer = window.require?.('electron')?.ipcRenderer;
 
   // Categorías
-  crearCategoria(nombre: string) {
+  crearCategoria(nombre: string, ocultar: boolean) {
     return this.ipcRenderer.crearCategoria
-      ? this.ipcRenderer.crearCategoria(nombre)
-      : this.ipcRenderer.invoke('crear-categoria', nombre);
+      ? this.ipcRenderer.crearCategoria(nombre, ocultar.toString())
+      : this.ipcRenderer.invoke('crear-categoria', nombre, ocultar.toString());
   }
 
   obtenerCategorias() {
@@ -25,10 +25,10 @@ export class ElectronService {
       : this.ipcRenderer.invoke('obtener-categorias');
   }
 
-  actualizarCategoria(id: number, name: string) {
+  actualizarCategoria(id: number, name: string, ocultar: boolean) {
     return this.ipcRenderer.actualizarCategoria
-      ? this.ipcRenderer.actualizarCategoria(id, name)
-      : this.ipcRenderer.invoke('actualizar-categoria', id, name);
+      ? this.ipcRenderer.actualizarCategoria(id, name, ocultar.toString())
+      : this.ipcRenderer.invoke('actualizar-categoria', id, name, ocultar.toString());
   }
 
   eliminarCategoria(id: number) {
@@ -68,12 +68,10 @@ export class ElectronService {
   }
 
   // Artículos
-  crearArticulo(folderId: number | null, title: string, content: string) {
-    console.log({ titulo: title, contenido: content, folderId: folderId })
-
+  crearArticulo(folderId: number | null, title: string, content: string, ocultar: boolean) {
     return this.ipcRenderer.crearArticulo
-      ? this.ipcRenderer.crearArticulo(folderId, title, content)
-      : this.ipcRenderer.invoke('crear-articulo', folderId, title, content);
+      ? this.ipcRenderer.crearArticulo(folderId, title, content, ocultar.toString())
+      : this.ipcRenderer.invoke('crear-articulo', folderId, title, content, ocultar.toString());
   }
 
   obtenerArticulosPorCarpeta(folderId: number | undefined) {
@@ -88,10 +86,16 @@ export class ElectronService {
       : this.ipcRenderer.invoke('obtener-articulos');
   }
 
-  actualizarArticulo(id: number, title: string, content: string) {
+  actualizarArticulo(id: number, title: string, content: string, ocultar: boolean) {
     return this.ipcRenderer.actualizarArticulo
-      ? this.ipcRenderer.actualizarArticulo(id, title, content)
-      : this.ipcRenderer.invoke('actualizar-articulo', id, title, content);
+      ? this.ipcRenderer.actualizarArticulo(id, title, content, ocultar.toString())
+      : this.ipcRenderer.invoke('actualizar-articulo', id, title, content, ocultar.toString());
+  }
+
+  actualizarArticuloOcultar(id: number, ocultar: boolean) {
+    return this.ipcRenderer.actualizarArticulo
+      ? this.ipcRenderer.actualizarArticuloOcultar(id, ocultar.toString())
+      : this.ipcRenderer.invoke('actualizar-articulo-ocultar', id, ocultar.toString());
   }
 
   eliminarArticulo(id: number) {
@@ -99,4 +103,31 @@ export class ElectronService {
       ? this.ipcRenderer.eliminarArticulo(id)
       : this.ipcRenderer.invoke('eliminar-articulo', id);
   }
+
+  // Historial de Carpetas
+
+  agregarHistorialCarpeta(folderId: number) {
+    return this.ipcRenderer.agregarHistorialCarpeta
+      ? this.ipcRenderer.agregarHistorialCarpeta(folderId)
+      : this.ipcRenderer.invoke('agregar-historial-carpeta', folderId);
+  }
+
+  obtenerHistorialCarpetas() {
+    return this.ipcRenderer.obtenerHistorialCarpetas
+      ? this.ipcRenderer.obtenerHistorialCarpetas()
+      : this.ipcRenderer.invoke('obtener-historial-carpetas');
+  }
+
+  eliminarHistorialCarpeta(folderId: number) {
+    return this.ipcRenderer.eliminarHistorialCarpeta
+      ? this.ipcRenderer.eliminarHistorialCarpeta(folderId)
+      : this.ipcRenderer.invoke('eliminar-historial-carpeta', folderId);
+  }
+
+  limpiarHistorialCarpetas() {
+    return this.ipcRenderer.limpiarHistorialCarpetas
+      ? this.ipcRenderer.limpiarHistorialCarpetas()
+      : this.ipcRenderer.invoke('limpiar-historial-carpetas');
+  }
+
 }

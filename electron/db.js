@@ -8,7 +8,8 @@ const db = new Database(dbPath);
 db.prepare(`
   CREATE TABLE IF NOT EXISTS categories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    name TEXT NOT NULL UNIQUE
+    name TEXT NOT NULL UNIQUE,
+    ocultar TEXT
   )
 `).run();
 
@@ -25,29 +26,41 @@ db.prepare(`
 `).run();
 
 db.prepare(`
+  CREATE TABLE IF NOT EXISTS folder_history (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    folder_id INTEGER NOT NULL,
+    accessed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (folder_id) REFERENCES folders(id)
+  )
+`).run();
+
+db.prepare(`
   CREATE TABLE IF NOT EXISTS articles (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     folder_id INTEGER NOT NULL,
     title TEXT NOT NULL,
     content TEXT,
+    ocultar TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (folder_id) REFERENCES folders(id)
   )
 `).run();
 
+//db.prepare(`ALTER TABLE articles ADD COLUMN ocultar TEXT`).run();
+
 module.exports = {
 
   // === CATEGORÍAS ===
-  crearCategoria(nombre) {
-    return db.prepare('INSERT INTO categories (name) VALUES (?)').run(nombre);
+  crearCategoria(nombre, ocultar) {
+    return db.prepare('INSERT INTO categories (name,ocultar) VALUES (?,?)').run(nombre, ocultar);
   },
 
   obtenerCategorias() {
     return db.prepare('SELECT * FROM categories').all();
   },
-  actualizarCategoria(id, nombre) {
-    return db.prepare('UPDATE categories SET name = ? WHERE id = ?').run(nombre, id);
+  actualizarCategoria(id, nombre, ocultar) {
+    return db.prepare('UPDATE categories SET name = ?, ocultar = ? WHERE id = ?').run(nombre, ocultar, id);
   },
 
   eliminarCategoria(id) {
@@ -75,9 +88,9 @@ module.exports = {
 
 
   // === ARTÍCULOS ===
-  crearArticulo(folderId, title, content = '') {
+  crearArticulo(folderId, title, content = '', ocultar) {
     console.log(folderId)
-    return db.prepare('INSERT INTO articles (folder_id, title, content) VALUES (?, ?, ?)').run(folderId, title, content);
+    return db.prepare('INSERT INTO articles (folder_id, title, content,ocultar) VALUES (?, ?, ?, ?)').run(folderId, title, content, ocultar);
   },
 
   obtenerArticulosPorCarpeta(folderId) {
@@ -88,14 +101,48 @@ module.exports = {
     return db.prepare('SELECT * FROM articles ORDER BY created_at DESC').all();
   },
 
-  actualizarArticulo(id, title, content) {
+  actualizarArticulo(id, title, content, ocultar) {
     return db.prepare(`
     UPDATE articles
-    SET title = ?, content = ?, updated_at = CURRENT_TIMESTAMP
+    SET title = ?, content = ?, updated_at = CURRENT_TIMESTAMP, ocultar = ?,
     WHERE id = ?
-  `).run(title, content, id);
+  `).run(title, content, ocultar, id);
   },
+  actualizarArticuloOcultar(id, ocultar) {
+    return db.prepare(`
+    UPDATE articles
+    SET updated_at = CURRENT_TIMESTAMP, ocultar = ?
+    WHERE id = ?
+  `).run(ocultar, id);
+  },
+
   eliminarArticulo(id) {
     return db.prepare('DELETE FROM articles WHERE id = ?').run(id);
+  },
+  // === HISTORIAL DE CARPETAS ===
+
+  agregarHistorialCarpeta(folderId) {
+    return db.prepare(`
+      INSERT INTO folder_history (folder_id) VALUES (?)
+    `).run(folderId);
+  },
+
+  obtenerHistorialCarpetas() {
+    return db.prepare(`
+      SELECT fh.id, fh.folder_id, fh.accessed_at, f.name, f.category_id, f.created_at
+      FROM folder_history fh
+      JOIN folders f ON f.id = fh.folder_id
+      ORDER BY fh.accessed_at ASC
+    `).all();
+  },
+
+  eliminarHistorialCarpeta(folderId) {
+    return db.prepare(`
+      DELETE FROM folder_history WHERE folder_id = ?
+    `).run(folderId);
+  },
+
+  limpiarHistorialCarpetas() {
+    return db.prepare(`DELETE FROM folder_history`).run();
   }
 };

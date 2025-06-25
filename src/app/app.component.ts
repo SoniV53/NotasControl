@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, OnInit, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { ElectronService } from '../../electron/services/electron.service';
 import { Carpeta, CategoriaCarpetas } from './model/CategoriaCarpetasModel';
 import { SelectorServiceService } from './providers/selector-service.service';
@@ -12,7 +12,7 @@ declare var bootstrap: any;
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
-export class AppComponent implements OnInit, AfterViewInit {
+export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   listadoCategoria: CategoriaCarpetas[] = []
   listadoCate: any[] = []
   idCategoria: number = 0;
@@ -21,6 +21,7 @@ export class AppComponent implements OnInit, AfterViewInit {
   ];
   requestData: any = {};
   modal: any;
+  textoCarpeta: any = {};
 
   constructor(private electron: ElectronService, public selectorSer: SelectorServiceService, private router: Router) { }
 
@@ -39,7 +40,8 @@ export class AppComponent implements OnInit, AfterViewInit {
   onClickActionCarpeta(event: Carpeta) {
     console.log(event)
     this.router.navigate(['/inicio']);
-    this.selectorSer.setCarpeta(event);
+    this.selectorSer.clearHistorial();
+    this.selectorSer.addCarpeta(event);
   }
 
   clickCreate(event: any) {
@@ -78,28 +80,29 @@ export class AppComponent implements OnInit, AfterViewInit {
     try {
       this.clearListCategoria();
       this.listadoCate = await this.electron.obtenerCategorias();
-      this.listadoCategoria = [];
 
       for (const res of this.listadoCate) {
         const carpetas = await this.obtenerCarpeta(res.id);
-        this.listadoCategoria.push({ id: res.id, categoria: res.name, carpetas: carpetas });
+        this.listadoCategoria.push({ id: res.id, categoria: res.name, carpetas: carpetas, ocultar: this.textoABoolean(res.ocultar) });
       }
     } catch (error) {
       console.error(error);
     }
   }
 
+  textoABoolean(valor: string): boolean {
+    return valor?.toLowerCase() === 'true';
+  }
+
   async obtenerCarpeta(id: any): Promise<Carpeta[]> {
     try {
       const carpetas: any[] = await this.electron.obtenerCarpetaCategoria(id);
 
-      const carpetasLista: Carpeta[] = carpetas.map(res => ({
+      return carpetas.map(res => ({
         id: res.id,
         nombre: res.name,
         fechaCreacion: res.created_at
       }));
-
-      return carpetasLista;
     } catch (error) {
       console.error('Error al obtener carpetas:', error);
       return [];
@@ -115,9 +118,12 @@ export class AppComponent implements OnInit, AfterViewInit {
     try {
       console.log(value);
       console.log(this.idCategoria);
+
       if (this.idCategoria) {
         await this.electron.crearCarpeta(value.nombre, null, this.idCategoria);
-        this.obtenerCategoria();
+        await this.obtenerCategoria();
+
+        value.nombre = '';
       }
     } catch (error) {
       console.error('Error al gaurdar carpeta:', error);
@@ -146,6 +152,10 @@ export class AppComponent implements OnInit, AfterViewInit {
         callback();
       }
     });
+  }
+
+  ngOnDestroy(): void {
+   // this.agregarHistorial();
   }
 
 }

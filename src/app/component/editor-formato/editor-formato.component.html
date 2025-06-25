@@ -1,0 +1,17 @@
+<div #contenedor class="contenedor-editor">
+    <app-herramientas-editor *ngIf="mostrar"></app-herramientas-editor>
+
+    <div class="editor-wrapper">
+        <div #editor contenteditable="true" (focus)="onFocus()" (blur)="onBlur()" class="editor"
+            (input)="onChangeEditor()" style="border:1px solid gray; padding:10px; overflow-y: auto;"></div>
+    </div>
+
+
+    <div *ngIf="!isCreate mostrar">
+        <button (click)="guardarContenido()" style="margin-top: 10px;" [disabled]="!articulo?.isChange">Guardar</button>
+        <!-- <button (click)="pegarContenido()" style="margin-top: 10px;">Pegar</button> -->
+        <!-- <button (click)="copiarTexto()">Copiar texto</button> -->
+        <button (click)="copiarHTML()">Copiar Texto</button>
+    </div>
+</div>
+

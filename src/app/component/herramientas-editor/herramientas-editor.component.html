@@ -1,0 +1,35 @@
+<!-- <div >
+    <button (click)="exec('bold')">Negrita</button>
+    <button (click)="exec('italic')">Cursiva</button>
+    <button (click)="exec('underline')">Subrayado</button>
+    <button (click)="exec('insertUnorderedList')">Lista •</button>
+    <button (click)="exec('insertOrderedList')">Lista 1.</button>
+
+    <button (click)="cambiarSize(+1)">A+</button>
+    <button (click)="cambiarSize(-1)">A−</button>
+</div> -->
+
+<div style="margin-bottom: 10px;">
+    <div class="toolbar">
+        <button (click)="decreaseFont()">−</button>
+
+        <input type="number" [(ngModel)]="fontSize" min="1" class="font-size-input" />
+
+        <button (click)="increaseFont()">+</button>
+
+        <span class="divider"></span>
+
+        <button (click)="exec('bold')"><strong>B</strong></button>
+        <button (click)="exec('italic')"><em>I</em></button>
+        <button (click)="exec('insertUnorderedList')"><i class="fa-solid fa-list"></i></button>
+        <button (click)="exec('insertOrderedList')"><i class="fa-solid fa-list-ol"></i></button>
+        <button (click)="exec('underline')"><i class="fa-solid fa-underline"></i></button>
+
+        <div class="align-text">
+            <button (click)="alignText('left')" title="Alinear izquierda"><i class="fa-solid fa-align-left"></i></button>
+            <button (click)="alignText('center')" title="Centrar"><i class="fa-solid fa-align-justify"></i></button>
+            <button (click)="alignText('right')" title="Alinear derecha"><i class="fa-solid fa-align-right"></i></button>
+        </div>
+    </div>
+
+</div>

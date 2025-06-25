@@ -7,5 +7,6 @@ export interface Carpeta {
 export interface CategoriaCarpetas {
   id: number;
   categoria: string;
+  ocultar: boolean;
   carpetas: Carpeta[];
 }
