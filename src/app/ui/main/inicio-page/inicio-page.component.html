@@ -1,6 +1,11 @@
-<section>
+<div class="spinner-border" role="status" *ngIf="loading" style="margin: 24px;">
+  <span class="visually-hidden">Loading...</span>
+</div>
+
+
+<section *ngIf="rastroCarpeta.length > 0 && !loading">
     <header class="m-2">
-        <nav aria-label="breadcrumb" *ngIf="rastroCarpeta.length > 0">
+        <nav aria-label="breadcrumb" >
             <ol class="breadcrumb">
                 <li class="breadcrumb-item" *ngFor="let carpeta of rastroCarpeta; let i = index"
                     [class.active]="i === rastroCarpeta.length - 1"

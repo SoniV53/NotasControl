@@ -12,11 +12,14 @@ export class AcordionItemComponent extends ConfiguracionPageComponent implements
 
 
   @Input() categoria: CategoriaCarpetas | null = null;
+  @Input() isPage: boolean = false;
   @Output() onClickAction = new EventEmitter<Carpeta>()
   @Output() onClickCreate = new EventEmitter<any>()
   @Output() onClickEliminate = new EventEmitter<any>()
+  @Output() onChangeTextEmitter = new EventEmitter<any>()
 
   idAccordion = '';
+  titulo = '';
   idCollap = '';
   listadoCarpetas: Carpeta[] = [];
 
@@ -33,6 +36,7 @@ export class AcordionItemComponent extends ConfiguracionPageComponent implements
       this.idAccordion = 'accordion_' + this.categoria?.id;
       this.idCollap = 'collap_' + this.categoria?.id;
       this.listadoCarpetas = this.categoria?.carpetas;
+      this.titulo = this.categoria?.categoria;
     }
   }
 
@@ -84,11 +88,8 @@ export class AcordionItemComponent extends ConfiguracionPageComponent implements
   }
 
   actionClick() {
-    console.log("ACTUALIZACION PASO 0")
-    if (this.categoria) {
-
+    if (this.categoria && !this.isPage) {
       this.categoria.ocultar = !this.categoria?.ocultar;
-      console.log("ACTUALIZACION PASO 1 " + this.categoria.ocultar)
       this.actualizarEstado(this.categoria.ocultar);
     }
   }
@@ -97,9 +98,12 @@ export class AcordionItemComponent extends ConfiguracionPageComponent implements
     if (!this.categoria) return;
     try {
       await this.electron.actualizarCategoria(this.categoria?.id, this.categoria?.categoria, ocultar);
-      console.log("ACTUALIZACION PASO 2")
     } catch (error) {
       console.error(error);
     }
+  }
+
+  changeTextEmitter(event: any,id:any) {
+    this.onChangeTextEmitter.emit({id:id, value: event});
   }
 }

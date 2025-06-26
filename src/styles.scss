@@ -12,6 +12,13 @@
     align-items: center;
 }
 
+
+.justifybetween {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 section {
     display: grid;
     height: 99dvh;

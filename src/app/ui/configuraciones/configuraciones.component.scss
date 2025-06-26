@@ -1,0 +1,61 @@
+.config-btns {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+    margin: 20px;
+}
+
+.config-btns button {
+    flex: 1 1 200px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 1rem;
+    padding: 0.6rem 1.2rem;
+    border-radius: 8px;
+    transition: background-color 0.3s ease;
+    color: white;
+}
+
+.btn-create {
+    background-color: #0d6efd;
+    border: none;
+}
+
+.btn-create:hover {
+    background-color: #0b5ed7;
+}
+
+.btn-clear {
+    background-color: #dc3545;
+    border: none;
+}
+
+.btn-clear:hover {
+    background-color: #bb2d3b;
+}
+
+.btn-export {
+    background-color: #198754;
+    border: none;
+}
+
+.btn-export:hover {
+    background-color: #146c43;
+}
+
+.btn-import {
+    background-color: #6f42c1;
+    /* bootstrap purple */
+    border: none;
+}
+
+.btn-import:hover {
+    background-color: #59359c;
+}
+
+.btn-icon {
+    margin-right: 8px;
+    font-size: 1.2rem;
+}

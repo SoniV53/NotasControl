@@ -20,6 +20,7 @@ import { EditorFormatoComponent } from './component/editor-formato/editor-format
 import { TituloEditorComponent } from './component/titulo-editor/titulo-editor.component';
 import { DetalleArticuloPageComponent } from './ui/detalle-articulo-page/detalle-articulo-page.component';
 import { ItemArticuloComponent } from './component/item-articulo/item-articulo.component';
+import { TituloEditorCategoriaComponent } from './component/titulo-editor-categoria/titulo-editor-categoria.component';
 
 @NgModule({
   declarations: [
@@ -39,7 +40,8 @@ import { ItemArticuloComponent } from './component/item-articulo/item-articulo.c
     EditorFormatoComponent,
     TituloEditorComponent,
     DetalleArticuloPageComponent,
-    ItemArticuloComponent
+    ItemArticuloComponent,
+    TituloEditorCategoriaComponent
   ],
   imports: [
     BrowserModule,

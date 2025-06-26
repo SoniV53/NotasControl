@@ -7,7 +7,7 @@ import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/con
   templateUrl: './menu-lateral.component.html',
   styleUrl: './menu-lateral.component.scss'
 })
-export class MenuLateralComponent {
+export class MenuLateralComponent extends ConfiguracionPageComponent {
 
   @Input() listadoCategoria: CategoriaCarpetas[] = []
   @Output() onClickActionCarpeta = new EventEmitter<Carpeta>()
@@ -38,12 +38,14 @@ export class MenuLateralComponent {
     }
   }
 
-  formatId(texto: string): string {
-    return texto.replace(/[\s^*@:.,'\\/-]/g, '');
-  }
-
   goHome() {
     //this.router.navigate(['/home'], { replaceUrl: true });
-   // this.router.navigate(['/home']);
+    // this.router.navigate(['/home']);
+  }
+
+  changeTextEmitter(event: any) {
+    if (event.value && event.id) {
+      this.selectorSer.actualizarNombreCategoria(event.id, event.value);
+    }
   }
 }

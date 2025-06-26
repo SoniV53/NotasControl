@@ -1,17 +1,28 @@
-<!-- Button trigger modal -->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-    Crear Categoria
-</button>
+<div class="config-btns">
+    <button type="button" class="btn btn-create" data-bs-toggle="modal" data-bs-target="#exampleModal">
+        <i class="bi bi-plus-circle btn-icon"></i> Crear Categoría
+    </button>
 
-<button type="button" class="btn btn-primary" (click)="limpiarHistorial()">
-    Limpiar Historial
-</button>
+    <button type="button" class="btn btn-clear" (click)="limpiarHistorial()">
+        <i class="bi bi-trash btn-icon"></i> Limpiar Historial
+    </button>
 
+    <button type="button" class="btn btn-export" (click)="imporExporAtion(false)">
+        <i class="bi bi-box-arrow-up btn-icon"></i> Exportar DB
+    </button>
 
-<!-- <div style="height: 300px !important;">
-    <app-editor-formato></app-editor-formato>
-</div> -->
-<!-- <app-editor-formato></app-editor-formato> -->
+    <button type="button" class="btn btn-import" (click)="imporExporAtion(true)">
+        <i class="bi bi-box-arrow-in-down btn-icon"></i> Importar DB
+    </button>
+</div>
+
+<div class="m-3">
+    <label for="rutaDb" class="form-label">
+        Ingrese o pegue la ruta completa del archivo <strong>nombre.db</strong>
+    </label>
+    <input type="text" id="rutaDb" class="form-control" placeholder="Ejemplo: ruta/app.db"
+        [(ngModel)]="selectedFilePath" (input)="onChange($event)" />
+</div>
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -24,16 +35,16 @@
             <div class="modal-body">
                 <div class="container">
                     <label for="labCate">Categoria</label>
-                    <input type="text" [(ngModel)]="nombreCate" class="form-control mb-2" placeholder="Nueva categoría" />
+                    <input type="text" [(ngModel)]="nombreCate" class="form-control mb-2"
+                        placeholder="Nueva categoría" />
 
                 </div>
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-primary" data-bs-dismiss="modal" (click)="crearNuevaCategoria()">Guardar</button>
+                <button type="button" class="btn btn-primary" data-bs-dismiss="modal"
+                    (click)="crearNuevaCategoria()">Guardar</button>
             </div>
         </div>
     </div>
 </div>
-
-

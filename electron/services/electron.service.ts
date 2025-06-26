@@ -12,6 +12,27 @@ declare global {
 export class ElectronService {
   ipcRenderer = window.require?.('electron')?.ipcRenderer;
 
+  eliminarBaseDatos() {
+    return this.ipcRenderer.eliminarBaseDatos
+      ? this.ipcRenderer.eliminarBaseDatos()
+      : this.ipcRenderer.invoke('eliminar-base-datos');
+  }
+
+
+  // Exportar base de datos (copiar a destino)
+  exportarBaseDatos(destinoPath: string): Promise<any> {
+    return this.ipcRenderer.exportarBaseDatos
+      ? this.ipcRenderer.exportarBaseDatos(destinoPath)
+      : this.ipcRenderer.invoke('exportar-base-datos', destinoPath);
+  }
+
+  // Importar base de datos (sobrescribir con archivo externo)
+  importarBaseDatos(rutaArchivoDb: string) {
+    return this.ipcRenderer.importarBaseDatos
+      ? this.ipcRenderer.importarBaseDatos(rutaArchivoDb)
+      : this.ipcRenderer.invoke('importar-base-datos', rutaArchivoDb);
+  }
+
   // Categorías
   crearCategoria(nombre: string, ocultar: boolean) {
     return this.ipcRenderer.crearCategoria

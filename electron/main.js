@@ -1,9 +1,11 @@
 const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const db = require('./db');
+const { exportarBaseDatos, importarBaseDatos } = require('./db');
+let mainWindow;
 
 function createWindow() {
-  const win = new BrowserWindow({
+  mainWindow = new BrowserWindow({
     width: 1200,
     height: 800,
     menuBarVisible: false,
@@ -15,8 +17,8 @@ function createWindow() {
     }
   });
 
-  win.setAutoHideMenuBar(true);
-  win.setMenuBarVisibility(false);
+  mainWindow.setAutoHideMenuBar(true);
+  mainWindow.setMenuBarVisibility(false);
 
   const isDev = !app.isPackaged;
 
@@ -25,19 +27,17 @@ function createWindow() {
     : path.join(__dirname, '..', 'dist', 'control-notas', 'browser', 'browser', 'index.html');
 
   console.log('Cargando desde:', indexPath);
-
-  win.loadFile(indexPath).catch((err) => {
+  mainWindow.loadFile(indexPath).catch((err) => {
     console.error(' Error al cargar index.html:', err);
   });
 
-  //win.webContents.openDevTools();
+  mainWindow.webContents.openDevTools();
 
-  win.on("closed", () => {
+  mainWindow.on("closed", () => {
     window = null;
   });
 
 }
-
 
 app.whenReady().then(createWindow);
 
@@ -45,6 +45,14 @@ app.on('window-all-closed', () => {
   if (process.platform !== 'darwin') {
     app.quit();
   }
+});
+
+ipcMain.handle('exportar-base-datos', (event, destinoPath) => {
+  return exportarBaseDatos(destinoPath);
+});
+
+ipcMain.handle('importar-base-datos', (event, rutaArchivoDb) => {
+  return importarBaseDatos(rutaArchivoDb, mainWindow);
 });
 
 // === CATEGORÍA ===

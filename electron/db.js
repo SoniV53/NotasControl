@@ -1,9 +1,10 @@
+const fs = require('fs');
 const path = require('path');
-const { app } = require('electron');
+const { app, BrowserWindow } = require('electron');
 const Database = require('better-sqlite3');
 
 const dbPath = path.join(app.getPath('userData'), 'app.db');
-const db = new Database(dbPath);
+let db = new Database(dbPath);
 
 db.prepare(`
   CREATE TABLE IF NOT EXISTS categories (
@@ -21,7 +22,7 @@ db.prepare(`
     category_id INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (parent_id) REFERENCES folders(id),
-    FOREIGN KEY (category_id) REFERENCES categories(id)
+    FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
   )
 `).run();
 
@@ -30,7 +31,7 @@ db.prepare(`
     id INTEGER PRIMARY KEY AUTOINCREMENT,
     folder_id INTEGER NOT NULL,
     accessed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (folder_id) REFERENCES folders(id)
+    FOREIGN KEY (folder_id) REFERENCES folders(id) ON DELETE CASCADE
   )
 `).run();
 
@@ -43,14 +44,51 @@ db.prepare(`
     ocultar TEXT,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (folder_id) REFERENCES folders(id)
+    FOREIGN KEY (folder_id) REFERENCES folders(id) ON DELETE CASCADE
   )
 `).run();
+
+function exportarBaseDatos(destinoPath) {
+  const origen = dbPath; // corregido
+  try {
+    fs.copyFileSync(origen, destinoPath);
+    return { success: true, message: 'Base de datos exportada correctamente.' };
+  } catch (error) {
+    return { success: false, message: 'Error exportando la base de datos.', error: error.message };
+  }
+}
+
+function importarBaseDatos(rutaArchivoDb, mainWindow) {
+  try {
+    if (!fs.existsSync(rutaArchivoDb)) {
+      return { success: false, message: 'Archivo no encontrado.', error: 'Ruta inválida' };
+    }
+    if (db) db.close();
+    fs.copyFileSync(rutaArchivoDb, dbPath);
+    db = new Database(dbPath);
+
+    const isDev = !app.isPackaged;
+    const indexPath = isDev
+      ? path.join(__dirname, '../dist/control-notas/browser/index.html')
+      : path.join(__dirname, '..', 'dist', 'control-notas', 'browser', 'browser', 'index.html');
+
+    if (mainWindow && mainWindow.loadFile) {
+      mainWindow.loadFile(indexPath).catch(console.error);
+    }
+
+    return { success: true, message: 'Base de datos importada y recargada correctamente.' };
+  } catch (error) {
+    return { success: false, message: 'Error importando la base de datos.', error: error.message };
+  }
+}
 
 //db.prepare(`ALTER TABLE articles ADD COLUMN ocultar TEXT`).run();
 
 module.exports = {
-
+  db,
+  dbPath,
+  exportarBaseDatos,
+  importarBaseDatos,
   // === CATEGORÍAS ===
   crearCategoria(nombre, ocultar) {
     return db.prepare('INSERT INTO categories (name,ocultar) VALUES (?,?)').run(nombre, ocultar);
@@ -104,7 +142,7 @@ module.exports = {
   actualizarArticulo(id, title, content, ocultar) {
     return db.prepare(`
     UPDATE articles
-    SET title = ?, content = ?, updated_at = CURRENT_TIMESTAMP, ocultar = ?,
+    SET title = ?, content = ?, updated_at = CURRENT_TIMESTAMP, ocultar = ?
     WHERE id = ?
   `).run(title, content, ocultar, id);
   },
@@ -144,5 +182,7 @@ module.exports = {
 
   limpiarHistorialCarpetas() {
     return db.prepare(`DELETE FROM folder_history`).run();
-  }
+  },
+  dbPath,
+  db
 };

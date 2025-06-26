@@ -6,6 +6,8 @@ import { Location, ViewportScroller } from '@angular/common';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
 
+declare var bootstrap: any;
+
 @Component({
   selector: 'app-configuracion-page',
   templateUrl: './configuracion-page.component.html',
@@ -46,7 +48,41 @@ export class ConfiguracionPageComponent {
     });
   }
 
+  messageImportar(callback: () => void) {
+    Swal.fire({
+      title: 'Estas Seguro?',
+      text: '¡No podrás revertir esto!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'si, importar',
+    }).then((result) => {
+      if (result.isConfirmed) {
+        callback();
+      }
+    });
+  }
+
   textoABoolean(valor: string): boolean {
     return valor?.toLowerCase() === 'true';
+  }
+
+  mensajeToast(title: any) {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "bottom-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: title
+    });
   }
 }

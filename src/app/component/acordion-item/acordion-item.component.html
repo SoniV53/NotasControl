@@ -1,33 +1,40 @@
-<div class="accordion" [id]="idAccordion">
-    <div class="accordion-item">
-        <h2 class="accordion-header">
-            <button class="accordion-button" type="button" data-bs-toggle="collapse"
-                [attr.aria-expanded]="!this.categoria?.ocultar" [ngClass]="{'collapsed': !this.categoria?.ocultar}"
-                [attr.data-bs-target]="'#' + idCollap" [attr.aria-controls]="idCollap" (click)="actionClick()">
-                {{ this.categoria?.categoria }}
-            </button>
-        </h2>
-        <div [id]="idCollap" class="accordion-collapse collapse" [attr.data-bs-parent]="'#' + idAccordion"
-            [ngClass]="{'show': this.categoria?.ocultar}">
-            <div class="d-grid gap-2 d-md-block p-2">
-                <button type="button" class="btn btn-link" (click)="clickDelete($event)">Eliminar</button>
-                <button type="button" class="btn btn-link" (click)="clickCreate($event)">Crear Carpeta</button>
-            </div>
+<div class="card shadow-sm rounded-8" [id]="idAccordion" [ngClass]="{'min-content': !isPage}">
+    <div class="card-header d-flex align-items-center  border-bottom px-3 py-2 rounded-8">
 
-            <div class="accordion-body">
-                <ul class="list-group list-group-flush">
-                    <li class="list-group-item d-flex justify-content-between align-items-center"
-                        (click)="clickAction(item)" *ngFor="let item of listadoCarpetas">
-                        <span style="cursor: pointer;">
-                            {{ item?.nombre }}
-                        </span>
-                        <div class="justifyCenter">
-                            <p (click)="eliminarCarpeta(item, $event)"
-                                style="font-size: 20px; margin-bottom: 4px !important;  margin-left: 4px !important;">
-                                &times;</p>
-                        </div>
-                    </li>
-                </ul>
+        <!-- Título (flex-grow para ocupar espacio disponible) -->
+        <div class="flex-grow-1 text-truncate fw-semibold">
+            <app-titulo-editor-categoria [texto]="categoria?.categoria || ''" [categoria]="categoria"
+                (onChangeTextEmitter)="changeTextEmitter($event, categoria?.id)">
+            </app-titulo-editor-categoria>
+        </div>
+
+        <!-- Botón de mostrar/ocultar (siempre a la derecha, tamaño fijo) -->
+        <div class="d-flex justify-content-center align-items-center ms-3" *ngIf="!isPage">
+            <i class="fa-solid" [ngClass]="categoria?.ocultar ? 'fa-chevron-down' : 'fa-chevron-up'"
+                (click)="actionClick()"></i>
+        </div>
+
+    </div>
+
+    <div class="card-body position-relative" *ngIf="categoria?.ocultar || isPage">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center"
+                *ngFor="let item of listadoCarpetas" (click)="clickAction(item)">
+                <span class="text-truncate" style="cursor: pointer;">{{ item?.nombre }}</span>
+                <p (click)="eliminarCarpeta(item, $event)" class="mb-0 ms-2 fs-5 text-danger" style="cursor: pointer;">
+                    &times;</p>
+            </li>
+        </ul>
+        <!-- Botones de acción -->
+        <div [ngClass]="{'border-opciones': listadoCarpetas.length > 0}" class="justifyCenter">
+            <div class="d-flex align-items-center gap-2 ">
+                <button class="btn btn-sm btn-outline-danger" (click)="clickDelete($event)" title="Eliminar Categoría">
+                    <i class="fa-solid fa-trash"></i>
+                </button>
+
+                <button class="btn btn-sm btn-outline-secondary" (click)="clickCreate($event)" title="Crear Carpeta">
+                    <i class="fa-solid fa-folder-plus"></i>
+                </button>
             </div>
         </div>
     </div>

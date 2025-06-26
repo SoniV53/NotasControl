@@ -19,7 +19,7 @@
                 <div *ngFor="let item of listadoCategoria" style="margin: 4px 8px;">
                     <acordion-item [categoria]="item" [id]="formatId(item.categoria)"
                         (onClickAction)="clickActionCarpeta($event)" (onClickCreate)="clickCreate(item?.id)"
-                        (onClickEliminate)="clickDelete(item?.id)"></acordion-item>
+                        (onClickEliminate)="clickDelete(item?.id)" (onChangeTextEmitter)="changeTextEmitter($event)"></acordion-item>
                 </div>
             </ul>
         </main>

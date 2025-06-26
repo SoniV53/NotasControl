@@ -1,0 +1,6 @@
+<div class="title-h5">
+    <h5 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo" (click)="activarEdicion(tituloRef)"
+        (blur)="guardarTitulo(tituloRef)" (keydown.enter)="guardarTitulo(tituloRef); $event.preventDefault()"
+        (input)="onChangeEditor(tituloRef)"></h5>
+
+</div>

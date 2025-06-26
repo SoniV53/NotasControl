@@ -11,6 +11,7 @@ import { Articulo } from '../../../component/articulos/articulos.component';
 })
 export class InicioPageComponent extends ConfiguracionPageComponent implements OnInit {
   carpeta: Carpeta | null = null;
+  loading: boolean = true;
 
   rastroCarpeta: Carpeta[] = [];
   articulos: Articulo[] = [];
@@ -21,14 +22,19 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
 
 
   async ngOnInit() {
-    this.selectorSer.historialCarpetas$.subscribe(data => {
+    this.selectorSer.historialCarpetas$.subscribe(async data => {
+      this.loading = true;
       this.rastroCarpeta = data;
       const lastItem = this.rastroCarpeta[(this.rastroCarpeta.length - 1)]
-      this.entrarEnCarpeta(lastItem);
+      await this.entrarEnCarpeta(lastItem);
       this.carpeta = lastItem;
       this.viewportScroller.scrollToPosition([0, 0]);
-      this.obtenerArticulos();
-      this.obtenerFolderID();
+      await this.obtenerArticulos();
+      await this.obtenerFolderID();
+
+      this.loading = false;
+
+      this.agregarHistorial(data);
     })
   }
 
@@ -39,7 +45,6 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
     this.carpeta = this.rastroCarpeta[nivel];
     this.obtenerArticulos();
     this.obtenerFolderID();
-    this.agregarHistorial();
   }
 
   entrarEnCarpeta(carpeta: Carpeta) {
@@ -105,12 +110,10 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
     this.obtenerFolderID();
     this.viewportScroller.scrollToPosition([0, 0]);
     this.selectorSer.addCarpeta(event);
-    this.agregarHistorial();
   }
 
-  async agregarHistorial() {
+  async agregarHistorial(historialList:any[]) {
     try {
-      const historialList = this.selectorSer?.getHistorialActual();
       if (historialList) {
         this.electron.limpiarHistorialCarpetas();
         historialList.forEach(async element => {

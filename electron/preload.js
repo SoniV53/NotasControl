@@ -11,15 +11,22 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+window.eliminarBaseDatos = () =>
+  ipcRenderer.invoke('eliminar-base-datos');
+
+window.exportarBaseDatos = (destinoPath) => ipcRenderer.invoke('exportar-base-datos', destinoPath);
+window.importarBaseDatos = (rutaArchivoDb) => ipcRenderer.invoke('importar-base-datos', rutaArchivoDb);
+
+
 // === CATEGORÍA ===
-window.crearCategoria = (nombre,ocultar) =>
-  ipcRenderer.invoke('crear-categoria', nombre,ocultar);
+window.crearCategoria = (nombre, ocultar) =>
+  ipcRenderer.invoke('crear-categoria', nombre, ocultar);
 
 window.obtenerCategorias = () =>
   ipcRenderer.invoke('obtener-categorias');
 
-window.actualizarCategoria = (id, name,ocultar) =>
-  ipcRenderer.invoke('actualizar-categoria', id, name,ocultar);
+window.actualizarCategoria = (id, name, ocultar) =>
+  ipcRenderer.invoke('actualizar-categoria', id, name, ocultar);
 
 window.eliminarCategoria = (id) =>
   ipcRenderer.invoke('eliminar-categoria', id);
@@ -40,8 +47,8 @@ window.eliminarCarpeta = (id) =>
   ipcRenderer.invoke('eliminar-carpeta', id);
 
 // === ARTÍCULO ===
-window.crearArticulo = (folderId, title, content,ocultar) =>
-  ipcRenderer.invoke('crear-articulo', folderId, title, content,ocultar);
+window.crearArticulo = (folderId, title, content, ocultar) =>
+  ipcRenderer.invoke('crear-articulo', folderId, title, content, ocultar);
 
 window.obtenerArticulosPorCarpeta = (folderId) =>
   ipcRenderer.invoke('obtener-articulos-carpeta', folderId);
@@ -49,8 +56,8 @@ window.obtenerArticulosPorCarpeta = (folderId) =>
 window.obtenerArticulos = () =>
   ipcRenderer.invoke('obtener-articulos');
 
-window.actualizarArticulo = (id, title, content,ocultar) =>
-  ipcRenderer.invoke('actualizar-articulo', id, title, content,ocultar);
+window.actualizarArticulo = (id, title, content, ocultar) =>
+  ipcRenderer.invoke('actualizar-articulo', id, title, content, ocultar);
 
 window.actualizarArticuloOcultar = (id, ocultar) =>
   ipcRenderer.invoke('actualizar-articulo-ocultar', id, ocultar);

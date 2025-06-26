@@ -79,12 +79,15 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   async obtenerCategoria() {
     try {
       this.clearListCategoria();
+      this.selectorSer.limpiarCategorias();
       this.listadoCate = await this.electron.obtenerCategorias();
 
       for (const res of this.listadoCate) {
         const carpetas = await this.obtenerCarpeta(res.id);
         this.listadoCategoria.push({ id: res.id, categoria: res.name, carpetas: carpetas, ocultar: this.textoABoolean(res.ocultar) });
       }
+
+      this.selectorSer.setListadoCategoria(this.listadoCategoria);
     } catch (error) {
       console.error(error);
     }
