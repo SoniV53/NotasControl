@@ -1,17 +1,16 @@
 <div #contenedor class="contenedor-editor">
-    <app-herramientas-editor *ngIf="mostrar"></app-herramientas-editor>
+    <app-herramientas-editor (onClickTools)="onClickTools($event)" [articulo]="articulo"></app-herramientas-editor>
 
-    <div class="editor-wrapper">
+    <div class="editor-wrapper solo-imprimir" [id]="formatId('printArticuloId'+articulo?.id)">
         <div #editor contenteditable="true" (focus)="onFocus()" (blur)="onBlur()" class="editor"
             (input)="onChangeEditor()" style="border:1px solid gray; padding:10px; overflow-y: auto;"></div>
     </div>
 
 
-    <div *ngIf="!isCreate mostrar">
+    <!-- <div *ngIf="!isCreate mostrar">
         <button (click)="guardarContenido()" style="margin-top: 10px;" [disabled]="!articulo?.isChange">Guardar</button>
-        <!-- <button (click)="pegarContenido()" style="margin-top: 10px;">Pegar</button> -->
-        <!-- <button (click)="copiarTexto()">Copiar texto</button> -->
+       
         <button (click)="copiarHTML()">Copiar Texto</button>
-    </div>
+    </div> -->
 </div>
 

@@ -1,4 +1,9 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { Articulo } from '../articulos/articulos.component';
+
+export interface HerramientasData {
+  id: string
+}
 
 @Component({
   selector: 'app-herramientas-editor',
@@ -6,8 +11,10 @@ import { Component, ElementRef, ViewChild } from '@angular/core';
   styleUrl: './herramientas-editor.component.scss'
 })
 export class HerramientasEditorComponent {
+  @Input() articulo: Articulo | null = null;
   @ViewChild('editor') editor!: ElementRef;
-  fontSize: number = 11;
+  @Output() onClickTools = new EventEmitter<string>();
+  fontSize: number = 7;
 
   constructor() {
   }
@@ -99,5 +106,9 @@ export class HerramientasEditorComponent {
 
   alignText(alignment: 'left' | 'center' | 'right') {
     document.execCommand('justify' + alignment.charAt(0).toUpperCase() + alignment.slice(1), false);
+  }
+
+  clickTools(id: string) {
+    this.onClickTools.emit(id);
   }
 }

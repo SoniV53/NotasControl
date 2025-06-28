@@ -153,6 +153,13 @@ module.exports = {
     WHERE id = ?
   `).run(ocultar, id);
   },
+  actualizarTituloArticulo(id, title) {
+    return db.prepare(`
+    UPDATE articles
+    SET updated_at = CURRENT_TIMESTAMP, title = ?
+    WHERE id = ?
+  `).run(title, id);
+  },
 
   eliminarArticulo(id) {
     return db.prepare('DELETE FROM articles WHERE id = ?').run(id);

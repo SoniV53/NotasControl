@@ -12,6 +12,24 @@ declare global {
 export class ElectronService {
   ipcRenderer = window.require?.('electron')?.ipcRenderer;
 
+  imprimirPorId(id: string): void {
+    const elemento = document.getElementById(id);
+    if (!elemento) {
+      console.error(`Elemento con id "${id}" no encontrado.`);
+      return;
+    }
+
+    const contenidoHTML = elemento.innerHTML;
+
+    console.log('Contenido actual:', contenidoHTML);
+
+    return this.ipcRenderer.eliminarBaseDatos
+      ? this.ipcRenderer.imprimirContenido(contenidoHTML)
+      : this.ipcRenderer.invoke('imprimir-contenido',contenidoHTML);
+  }
+
+
+
   eliminarBaseDatos() {
     return this.ipcRenderer.eliminarBaseDatos
       ? this.ipcRenderer.eliminarBaseDatos()
@@ -111,6 +129,12 @@ export class ElectronService {
     return this.ipcRenderer.actualizarArticulo
       ? this.ipcRenderer.actualizarArticulo(id, title, content, ocultar.toString())
       : this.ipcRenderer.invoke('actualizar-articulo', id, title, content, ocultar.toString());
+  }
+
+  actualizarTituloArticulo(id: number, title: string) {
+    return this.ipcRenderer.actualizarArticulo
+      ? this.ipcRenderer.actualizarTituloArticulo(id, title)
+      : this.ipcRenderer.invoke('actualizar-articulo-titulo', id, title);
   }
 
   actualizarArticuloOcultar(id: number, ocultar: boolean) {

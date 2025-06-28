@@ -1,23 +1,23 @@
 <div class="card mb-3 shadow-sm rounded-4">
-    <div class="card-header d-flex justify-content-between align-items-center bg-primary text-white">
+    <div class="card-header d-flex justify-content-between align-items-center text-white">
         <div class="mb-0 flex-grow-1">
             <app-titulo-editor [texto]="articulo.title" [articulo]="articulo"
                 (onChangeTextEmitter)="onChangeTextEmitter($event,articulo)"></app-titulo-editor>
         </div>
 
         <button *ngIf="!isPage" class="btn btn-sm btn-outline-light ms-3" (click)="maxiContent(articulo)" [title]="'Ver artículo'">
-            <i class="fa-solid fa-expand"></i>
+            <i class="fa-solid fa-expand" style="color: #222020;"></i>
         </button>
 
         <button class="btn btn-sm btn-outline-light ms-3" (click)="ocultarContent(articulo)"
             [title]="!articulo.ocultar ? 'Ocultar artículo' : 'Monstrar artículo'">
-            <i class="fa-solid fa-minus" *ngIf="!articulo.ocultar"></i>
-            <i class="fa-solid fa-plus" *ngIf="articulo.ocultar"></i>
+            <i class="fa-solid fa-minus" *ngIf="!articulo.ocultar" style="color: #222020;"></i>
+            <i class="fa-solid fa-plus" *ngIf="articulo.ocultar" style="color: #222020;"></i>
         </button>
 
         <button class="btn btn-sm btn-outline-light ms-3" (click)="eliminarArticulo(articulo.id)"
             title="Eliminar artículo">
-            <i class="fas fa-times" style="color: #b98f8f;"></i>
+            <i class="fas fa-times" style="color: #5e2727;"></i>
         </button>
 
     </div>

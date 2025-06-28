@@ -85,4 +85,12 @@ export class ConfiguracionPageComponent {
       title: title
     });
   }
+
+  async scrollToTopById(id: string) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
 }

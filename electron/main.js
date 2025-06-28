@@ -13,7 +13,6 @@ function createWindow() {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: true,
       contextIsolation: false,
-      webviewTag: true,
     }
   });
 
@@ -54,6 +53,44 @@ ipcMain.handle('exportar-base-datos', (event, destinoPath) => {
 ipcMain.handle('importar-base-datos', (event, rutaArchivoDb) => {
   return importarBaseDatos(rutaArchivoDb, mainWindow);
 });
+
+
+ipcMain.handle('imprimir-contenido', async (event, contenidoHTML) => {
+  const printWindow = new BrowserWindow({
+    show: true,  
+    webPreferences: {
+      nodeIntegration: true
+    }
+  });
+
+  const htmlContent = `
+    <html>
+      <head>
+        <title>Imprimir</title>
+        <style>
+          body { font-family: Arial, sans-serif; margin: 40px; }
+        </style>
+      </head>
+      <body>${contenidoHTML}</body>
+    </html>
+  `;
+
+  await printWindow.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(htmlContent));
+
+  printWindow.webContents.on('did-finish-load', () => {
+    printWindow.webContents.print(
+      { silent: false, printBackground: true },
+      (success, failureReason) => {
+        if (!success) console.error('Error al imprimir:', failureReason);
+        printWindow.close();
+      }
+    );
+  });
+
+  return true;
+});
+
+
 
 // === CATEGORÍA ===
 ipcMain.handle('crear-categoria', (event, nombre, ocultar) => {
@@ -107,6 +144,10 @@ ipcMain.handle('obtener-articulos', (event) => {
 
 ipcMain.handle('actualizar-articulo', (event, id, title, content, ocultar) => {
   return db.actualizarArticulo(id, title, content, ocultar);
+});
+
+ipcMain.handle('actualizar-articulo-titulo', (event, id, title) => {
+  return db.actualizarTituloArticulo(id, title);
 });
 
 ipcMain.handle('actualizar-articulo-ocultar', (event, id, ocultar) => {

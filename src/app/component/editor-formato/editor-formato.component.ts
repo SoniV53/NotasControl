@@ -36,7 +36,7 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
     if (!this.articulo) return;
     try {
       const htmlContent = this.editor.nativeElement.innerHTML;
-      await this.electron.actualizarArticulo(this.articulo.id, this.articulo.title, htmlContent,this.articulo.ocultar);
+      await this.electron.actualizarArticulo(this.articulo.id, this.articulo.title, htmlContent, this.articulo.ocultar);
       this.articulo.isChange = false;
       this.articulo.content = htmlContent;
     } catch (error) {
@@ -79,6 +79,7 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
     console.log('El editor perdió el foco');
     const contenido = this.editor.nativeElement.innerHTML;
     console.log('Contenido actual:', contenido);
+    this.guardarContenido();
   }
 
   @HostListener('document:click', ['$event'])
@@ -94,6 +95,23 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
     navigator.clipboard.writeText(texto).then(() => {
       this.mensajeCopiar();
     });
+  }
+
+  onClickTools(event: any) {
+    switch (event) {
+      case 'copy':
+        this.copiarHTML();
+        break;
+      case 'save':
+        this.guardarContenido();
+        break;
+      case 'print':
+        this.imprimirPorId(this.formatId('printArticuloId' + this.articulo?.id));
+        break;
+
+      default:
+        break;
+    }
   }
 
   copiarHTML() {
@@ -131,4 +149,14 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
     });
   }
 
+
+  imprimirPorId(id: string): void {
+    const contenido = document.getElementById(id)?.innerHTML || '';
+    try {
+      this.electron.imprimirPorId(id)
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
 }

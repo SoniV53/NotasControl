@@ -112,7 +112,7 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
     this.selectorSer.addCarpeta(event);
   }
 
-  async agregarHistorial(historialList:any[]) {
+  async agregarHistorial(historialList: any[]) {
     try {
       if (historialList) {
         this.electron.limpiarHistorialCarpetas();
@@ -137,10 +137,14 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
   async crearArticulo() {
     if (!this.carpeta) return;
     try {
+      await this.scrollToTopById('articulosComponenteId');
       await this.electron.crearArticulo(this.carpeta.id, '', '', false);
       this.obtenerArticulos();
+
     } catch (err) {
       console.error('Error al crear artículo:', err);
     }
   }
+
+  
 }

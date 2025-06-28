@@ -16,6 +16,7 @@ window.eliminarBaseDatos = () =>
 
 window.exportarBaseDatos = (destinoPath) => ipcRenderer.invoke('exportar-base-datos', destinoPath);
 window.importarBaseDatos = (rutaArchivoDb) => ipcRenderer.invoke('importar-base-datos', rutaArchivoDb);
+window.imprimirContenido = (contenido) => ipcRenderer.invoke('imprimir-contenido', contenido);
 
 
 // === CATEGORÍA ===
@@ -61,6 +62,9 @@ window.actualizarArticulo = (id, title, content, ocultar) =>
 
 window.actualizarArticuloOcultar = (id, ocultar) =>
   ipcRenderer.invoke('actualizar-articulo-ocultar', id, ocultar);
+
+window.actualizarTituloArticulo = (id, titulo) =>
+  ipcRenderer.invoke('actualizar-articulo-titulo', id, titulo);
 
 window.eliminarArticulo = (id) =>
   ipcRenderer.invoke('eliminar-articulo', id);

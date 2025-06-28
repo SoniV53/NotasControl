@@ -3,7 +3,7 @@
     No hay artículos en esta carpeta.
   </div>
 
-  <div *ngFor="let articulo of articulos">
+  <div *ngFor="let articulo of articulos" id="articulosComponenteId">
     <app-item-articulo [articulo]="articulo" (onEliminarArticulo)="onEliminarArticulo($event)" [isMin]="true"></app-item-articulo>
   </div>
 </div>

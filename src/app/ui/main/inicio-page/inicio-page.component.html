@@ -3,7 +3,7 @@
 </div>
 
 
-<section *ngIf="rastroCarpeta.length > 0 && !loading">
+<section *ngIf="rastroCarpeta.length > 0 && !loading" >
     <header class="m-2">
         <nav aria-label="breadcrumb" >
             <ol class="breadcrumb">
@@ -24,13 +24,14 @@
             Carpeta </button>
 
     </header>
-    <main>
+    <main id="inicioMainId">
 
         <crear-articulo *ngIf="rastroCarpeta.length > 0 && carpeta" [folderId]="carpeta.id"
             (onClickAction)="onClickAction()" [modalId]="'crearArticuloId'" title="Crear Articulo"></crear-articulo>
 
         <app-articulos [articulos]="articulos"></app-articulos>
 
+        <!-- Boton Flotante -->
         <button
             class="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4 d-flex align-items-center justify-content-center"
             style="width: 56px; height: 56px; z-index: 1050;" (click)="crearArticulo()">
