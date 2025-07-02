@@ -10,19 +10,29 @@ import Swal from 'sweetalert2';
 })
 export class CarpetasComponent extends ConfiguracionPageComponent {
   @Input() carpetasListado: Carpeta[] = [];
+  @Input() isCategoria: boolean = false;
+  @Input() categoriaId: number = 0;
   @Output() onClickAction = new EventEmitter<any>()
 
   clickAction(event: any) {
     this.onClickAction.emit(event);
   }
 
-  async eliminarCarpeta(item: any,event: MouseEvent) {
-     event.stopPropagation();
+  async eliminarCarpeta(item: any, event: MouseEvent) {
+    event.stopPropagation();
     this.messageEliminar(async () => {
       try {
         await this.electron.eliminarCarpeta(item.id).then(() => {
           this.carpetasListado = this.carpetasListado.filter(c => c.id !== item.id);
         });
+
+        if (this.isCategoria) {
+          this.myApp.obtenerCategoria();
+
+          if (!this.carpetasListado?.length) {
+            this.selectorSer.clearListadoCarpetas();
+          }
+        }
 
         Swal.fire({
           title: "Se elimino Correctamente!",
@@ -40,5 +50,18 @@ export class CarpetasComponent extends ConfiguracionPageComponent {
       }
     })
   }
+
+  changeTextEmitter(event: any, carpeta: any) {
+    if (carpeta.nombre === event) {
+      return;
+    }
+    carpeta.nombre = event;
+    if (this.isCategoria) {
+      this.myApp.obtenerCategoria();
+    }
+    this.electron.actualizarCarpeta(carpeta.id, carpeta.nombre);
+  }
+
+
 }
 

@@ -9,9 +9,10 @@ import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/con
 })
 export class TituloEditorComponent extends ConfiguracionPageComponent implements AfterViewInit {
   @Input() texto: string = '';
-  @Input() articulo: Articulo | null = null;
+  @Input() numPage: number = 0;
   @Output() onChangeTextEmitter = new EventEmitter<string>();
   editandoTitulo = false;
+  enterPressed = false;
 
   @ViewChild('tituloRef') tituloRef!: ElementRef;
 
@@ -30,28 +31,38 @@ export class TituloEditorComponent extends ConfiguracionPageComponent implements
       tituloEl.innerText = this.texto;
     }
   }
+  activarEdicionR(tituloEl: HTMLElement, event: MouseEvent) {
+    event.preventDefault();
+    if (window.electron && window.electron.ipcRenderer) {
+      this.editandoTitulo = true;
+      if (!tituloEl.innerText.trim()) {
+        tituloEl.innerText = this.texto;
+      }
+    }
+  }
 
   guardarTitulo(tituloEl: HTMLElement) {
+    if (this.enterPressed) {
+      this.enterPressed = false;
+      return;
+    }
     this.texto = tituloEl.innerText.trim();
     this.onChangeTextEmitter.emit(this.texto);
     this.editandoTitulo = false;
-    this.updateTitle();
     if (!this.texto) {
       this.texto = '\u200B';
     }
   }
 
-  onChangeEditor(tituloEl: HTMLElement) {
-    this.texto = tituloEl.innerText.trim();
-    this.onChangeTextEmitter.emit(this.texto);
+  onEnterKey(tituloEl: HTMLElement) {
+    this.guardarTitulo(tituloEl);
+    this.enterPressed = true;
   }
 
-  async updateTitle() {
-    if (!this.articulo) return;
-    try {
-      await this.electron.actualizarTituloArticulo(this.articulo?.id, this.texto)
-    } catch (error) {
-      console.log(error);
-    }
+  onChangeEditor(tituloEl: HTMLElement) {
+    this.texto = tituloEl.innerText.trim();
+    //this.onChangeTextEmitter.emit(this.texto);
   }
+
+
 }

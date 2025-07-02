@@ -1,6 +1,9 @@
 <div class="d-flex">
-  <menu-lateral [listadoCategoria]="listadoCategoria" (onClickActionCarpeta)="onClickActionCarpeta($event)"
-    (onClickCreate)="clickCreate($event)" (onClickEliminate)="clickDelete($event)"></menu-lateral>
+  <!-- <menu-lateral [listadoCategoria]="listadoCategoria" (onClickActionCarpeta)="onClickActionCarpeta($event)"
+    (onClickCreate)="clickCreate($event)" (onClickEliminate)="clickDelete($event)"></menu-lateral> -->
+
+
+    <app-menu-lateral-izquierda></app-menu-lateral-izquierda>
   <div class="flex-fill">
     <router-outlet></router-outlet>
   </div>

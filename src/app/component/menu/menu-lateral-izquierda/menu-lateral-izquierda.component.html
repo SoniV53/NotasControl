@@ -1,0 +1,46 @@
+<div class="bg-dark text-white menu-lateral" *ngIf="isActive">
+    <section>
+        <header class="m-2">
+            <div class="container text-center">
+                <div class="row">
+                    <div class="col justifyCenter">
+                        <h4 (click)="goHome()">Menu</h4>
+                    </div>
+                    <div class="col">
+                        <div class="justifyRight" (click)="crearNuevaCategoria()">
+                            <i class="fa-solid fa-square-plus icono-menu-open"></i>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </header>
+        <main>
+            <ul class="nav flex-column">
+                <div *ngFor="let item of listadoCategoria" style="margin: 4px 8px;">
+                    <app-item-menu [itemSelect]="validarSeleccionId(item?.id || '',0)" [tipo]="0"
+                        [ocultar]="item.ocultar" [texto]="item.categoria" (onClickMore)="clickMore($event,item)"
+                        (onClickItem)="clickItem(item,0)"
+                        (onChangeTextEmitter)="changeTextEmitter($event,item,'')" (onClickItemCarpeta)="clickItemCarpeta(item, item?.carpetas?.length)"></app-item-menu>
+
+                    <div *ngIf="!item.ocultar">
+                        <div *ngFor="let carpeta of item.carpetas" style="margin: 4px 16px;" >
+                            <app-item-menu [itemSelect]="validarSeleccionId(carpeta?.id || '',1)" [tipo]="1"
+                                [texto]="carpeta.nombre" (onClickItem)="clickItem(carpeta,1)"
+                                (onChangeTextEmitter)="changeTextEmitter($event,carpeta,item.id)"></app-item-menu>
+                        </div>
+                    </div>
+                </div>
+
+
+            </ul>
+        </main>
+        <footer>
+            <a class="nav-link text-white m-2" routerLink="/configuracion">⚙️ Configuración</a>
+        </footer>
+    </section>
+
+</div>
+
+<div class="justifyRight icono-menu p-3 " (click)="toggleSidebar()" *ngIf="!isActive">
+    <i class="fas fa-bars"></i>
+</div>

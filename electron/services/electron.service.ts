@@ -1,178 +1,129 @@
 import { Injectable } from '@angular/core';
 
-declare global {
-  interface Window {
-    require: any;
-  }
-}
-
 @Injectable({
   providedIn: 'root',
 })
 export class ElectronService {
-  ipcRenderer = window.require?.('electron')?.ipcRenderer;
-
-  imprimirPorId(id: string): void {
-    const elemento = document.getElementById(id);
-    if (!elemento) {
-      console.error(`Elemento con id "${id}" no encontrado.`);
-      return;
-    }
-
-    const contenidoHTML = elemento.innerHTML;
-
-    console.log('Contenido actual:', contenidoHTML);
-
-    return this.ipcRenderer.eliminarBaseDatos
-      ? this.ipcRenderer.imprimirContenido(contenidoHTML)
-      : this.ipcRenderer.invoke('imprimir-contenido',contenidoHTML);
-  }
-
-
+  private electron = window.electron;
 
   eliminarBaseDatos() {
-    return this.ipcRenderer.eliminarBaseDatos
-      ? this.ipcRenderer.eliminarBaseDatos()
-      : this.ipcRenderer.invoke('eliminar-base-datos');
+    return this.electron.eliminarBaseDatos();
   }
 
-
-  // Exportar base de datos (copiar a destino)
-  exportarBaseDatos(destinoPath: string): Promise<any> {
-    return this.ipcRenderer.exportarBaseDatos
-      ? this.ipcRenderer.exportarBaseDatos(destinoPath)
-      : this.ipcRenderer.invoke('exportar-base-datos', destinoPath);
+  exportarBaseDatos(destinoPath: string) {
+    return this.electron.exportarBaseDatos(destinoPath);
   }
 
-  // Importar base de datos (sobrescribir con archivo externo)
   importarBaseDatos(rutaArchivoDb: string) {
-    return this.ipcRenderer.importarBaseDatos
-      ? this.ipcRenderer.importarBaseDatos(rutaArchivoDb)
-      : this.ipcRenderer.invoke('importar-base-datos', rutaArchivoDb);
+    return this.electron.importarBaseDatos(rutaArchivoDb);
+  }
+
+  // Parámetros
+  crearParametro(clave: string, valor: string) {
+    return this.electron.crearParametro(clave, valor);
+  }
+
+  obtenerParametros() {
+    return this.electron.obtenerParametros();
+  }
+
+  obtenerParametro(clave: string) {
+    return this.electron.obtenerParametro(clave);
+  }
+
+  actualizarParametro(clave: string, valor: string) {
+    return this.electron.actualizarParametro(clave, valor);
+  }
+
+  eliminarParametro(clave: string) {
+    return this.electron.eliminarParametro(clave);
   }
 
   // Categorías
   crearCategoria(nombre: string, ocultar: boolean) {
-    return this.ipcRenderer.crearCategoria
-      ? this.ipcRenderer.crearCategoria(nombre, ocultar.toString())
-      : this.ipcRenderer.invoke('crear-categoria', nombre, ocultar.toString());
+    return this.electron.crearCategoria(nombre, ocultar.toString());
   }
 
   obtenerCategorias() {
-    return this.ipcRenderer.obtenerCategorias
-      ? this.ipcRenderer.obtenerCategorias()
-      : this.ipcRenderer.invoke('obtener-categorias');
+    return this.electron.obtenerCategorias();
   }
 
   actualizarCategoria(id: number, name: string, ocultar: boolean) {
-    return this.ipcRenderer.actualizarCategoria
-      ? this.ipcRenderer.actualizarCategoria(id, name, ocultar.toString())
-      : this.ipcRenderer.invoke('actualizar-categoria', id, name, ocultar.toString());
+    return this.electron.actualizarCategoria(id, name, ocultar.toString());
   }
 
   eliminarCategoria(id: number) {
-    return this.ipcRenderer.eliminarCategoria
-      ? this.ipcRenderer.eliminarCategoria(id)
-      : this.ipcRenderer.invoke('eliminar-categoria', id);
+    return this.electron.eliminarCategoria(id);
   }
 
   // Carpetas
   crearCarpeta(nombre: string, parentId: number | null = null, categoryId: number | null = null) {
-    return this.ipcRenderer.crearCarpeta
-      ? this.ipcRenderer.crearCarpeta(nombre, parentId, categoryId)
-      : this.ipcRenderer.invoke('crear-carpeta', nombre, parentId, categoryId);
+    return this.electron.crearCarpeta(nombre, parentId, categoryId);
   }
 
   obtenerCarpetas(parentId: number | null = null) {
-    return this.ipcRenderer.obtenerCarpetas
-      ? this.ipcRenderer.obtenerCarpetas(parentId)
-      : this.ipcRenderer.invoke('obtener-carpetas', parentId);
+    return this.electron.obtenerCarpetas(parentId);
   }
+
   obtenerCarpetaCategoria(categoriaId: number | null = null) {
-    return this.ipcRenderer.obtenerCarpetas
-      ? this.ipcRenderer.obtenerCarpetasCategoria(categoriaId)
-      : this.ipcRenderer.invoke('obtener-carpetas-categoria', categoriaId);
+    return this.electron.obtenerCarpetasCategoria(categoriaId);
   }
 
   actualizarCarpeta(id: number, name: string) {
-    return this.ipcRenderer.actualizarCarpeta
-      ? this.ipcRenderer.actualizarCarpeta(id, name)
-      : this.ipcRenderer.invoke('actualizar-carpeta', id, name);
+    return this.electron.actualizarCarpeta(id, name);
   }
 
   eliminarCarpeta(id: number) {
-    return this.ipcRenderer.eliminarCarpeta
-      ? this.ipcRenderer.eliminarCarpeta(id)
-      : this.ipcRenderer.invoke('eliminar-carpeta', id);
+    return this.electron.eliminarCarpeta(id);
   }
 
   // Artículos
   crearArticulo(folderId: number | null, title: string, content: string, ocultar: boolean) {
-    return this.ipcRenderer.crearArticulo
-      ? this.ipcRenderer.crearArticulo(folderId, title, content, ocultar.toString())
-      : this.ipcRenderer.invoke('crear-articulo', folderId, title, content, ocultar.toString());
+    return this.electron.crearArticulo(folderId, title, content, ocultar.toString());
   }
 
-  obtenerArticulosPorCarpeta(folderId: number | undefined) {
-    return this.ipcRenderer.obtenerArticulosPorCarpeta
-      ? this.ipcRenderer.obtenerArticulosPorCarpeta(folderId)
-      : this.ipcRenderer.invoke('obtener-articulos-carpeta', folderId);
+  obtenerArticulosPorCarpeta(folderId?: number) {
+    return this.electron.obtenerArticulosPorCarpeta(folderId);
   }
 
   obtenerArticulos() {
-    return this.ipcRenderer.obtenerArticulos
-      ? this.ipcRenderer.obtenerArticulos()
-      : this.ipcRenderer.invoke('obtener-articulos');
+    return this.electron.obtenerArticulos();
   }
 
   actualizarArticulo(id: number, title: string, content: string, ocultar: boolean) {
-    return this.ipcRenderer.actualizarArticulo
-      ? this.ipcRenderer.actualizarArticulo(id, title, content, ocultar.toString())
-      : this.ipcRenderer.invoke('actualizar-articulo', id, title, content, ocultar.toString());
+    return this.electron.actualizarArticulo(id, title, content, ocultar.toString());
   }
 
   actualizarTituloArticulo(id: number, title: string) {
-    return this.ipcRenderer.actualizarArticulo
-      ? this.ipcRenderer.actualizarTituloArticulo(id, title)
-      : this.ipcRenderer.invoke('actualizar-articulo-titulo', id, title);
+    return this.electron.actualizarTituloArticulo(id, title);
   }
 
   actualizarArticuloOcultar(id: number, ocultar: boolean) {
-    return this.ipcRenderer.actualizarArticulo
-      ? this.ipcRenderer.actualizarArticuloOcultar(id, ocultar.toString())
-      : this.ipcRenderer.invoke('actualizar-articulo-ocultar', id, ocultar.toString());
+    return this.electron.actualizarArticuloOcultar(id, ocultar.toString());
   }
 
   eliminarArticulo(id: number) {
-    return this.ipcRenderer.eliminarArticulo
-      ? this.ipcRenderer.eliminarArticulo(id)
-      : this.ipcRenderer.invoke('eliminar-articulo', id);
+    return this.electron.eliminarArticulo(id);
   }
 
   // Historial de Carpetas
-
-  agregarHistorialCarpeta(folderId: number) {
-    return this.ipcRenderer.agregarHistorialCarpeta
-      ? this.ipcRenderer.agregarHistorialCarpeta(folderId)
-      : this.ipcRenderer.invoke('agregar-historial-carpeta', folderId);
+  agregarHistorial(key: number,tipo:string) {
+    return this.electron.agregarHistorial(key,tipo);
   }
 
   obtenerHistorialCarpetas() {
-    return this.ipcRenderer.obtenerHistorialCarpetas
-      ? this.ipcRenderer.obtenerHistorialCarpetas()
-      : this.ipcRenderer.invoke('obtener-historial-carpetas');
+    return this.electron.obtenerHistorialCarpetas();
+  }
+  obtenerHistorial() {
+    return this.electron.obtenerHistorial();
   }
 
-  eliminarHistorialCarpeta(folderId: number) {
-    return this.ipcRenderer.eliminarHistorialCarpeta
-      ? this.ipcRenderer.eliminarHistorialCarpeta(folderId)
-      : this.ipcRenderer.invoke('eliminar-historial-carpeta', folderId);
+  eliminarHistorial(key: number) {
+    return this.electron.eliminarHistorial(key);
   }
 
-  limpiarHistorialCarpetas() {
-    return this.ipcRenderer.limpiarHistorialCarpetas
-      ? this.ipcRenderer.limpiarHistorialCarpetas()
-      : this.ipcRenderer.invoke('limpiar-historial-carpetas');
+  limpiarHistorial() {
+    return this.electron.limpiarHistorial();
   }
 
 }

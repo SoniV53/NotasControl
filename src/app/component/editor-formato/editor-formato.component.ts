@@ -22,7 +22,6 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
 
 
   ngAfterViewInit(): void {
-    console.log(this.articulo);
     this.pegarContenido();
   }
 
@@ -153,7 +152,21 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
   imprimirPorId(id: string): void {
     const contenido = document.getElementById(id)?.innerHTML || '';
     try {
-      this.electron.imprimirPorId(id)
+      // const printContent = document.getElementById(id);
+      // const WindowPrt = window.open('', '', 'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0');
+      // WindowPrt?.document.write(printContent?.innerHTML || '');
+      // WindowPrt?.document.close();
+      // WindowPrt?.focus();
+      // WindowPrt?.print();
+      // WindowPrt?.close();
+
+      let originalContents = document.body.innerHTML;
+
+      document.body.innerHTML = contenido;
+
+      window.print();
+
+      document.body.innerHTML = originalContents;
     } catch (error) {
       console.log(error);
     }

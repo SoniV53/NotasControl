@@ -70,6 +70,8 @@ export class AcordionItemComponent extends ConfiguracionPageComponent implements
           this.listadoCarpetas = this.listadoCarpetas.filter(c => c.id !== item.id);
         });
 
+        this.myApp.obtenerCategoria();
+        this.router.navigate(['/home']);
         Swal.fire({
           title: "Se elimino Correctamente!",
           icon: "success",

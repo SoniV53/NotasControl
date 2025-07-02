@@ -2,6 +2,7 @@ const { app, BrowserWindow, ipcMain } = require('electron');
 const path = require('path');
 const db = require('./db');
 const { exportarBaseDatos, importarBaseDatos } = require('./db');
+const ContextMenuHandler = require('./herramientas/ContextMenuHandler');
 let mainWindow;
 
 function createWindow() {
@@ -11,8 +12,10 @@ function createWindow() {
     menuBarVisible: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,
-      contextIsolation: false,
+      nodeIntegration: false,
+      contextIsolation: true,
+      backgroundThrottling: false,
+      enableRemoteModule: false,
     }
   });
 
@@ -33,9 +36,11 @@ function createWindow() {
   mainWindow.webContents.openDevTools();
 
   mainWindow.on("closed", () => {
-    window = null;
+    mainWindow = null;
   });
 
+  const contextMenu = new ContextMenuHandler();
+  contextMenu.setup();
 }
 
 app.whenReady().then(createWindow);
@@ -54,42 +59,27 @@ ipcMain.handle('importar-base-datos', (event, rutaArchivoDb) => {
   return importarBaseDatos(rutaArchivoDb, mainWindow);
 });
 
+// === PARÁMETROS ===
 
-ipcMain.handle('imprimir-contenido', async (event, contenidoHTML) => {
-  const printWindow = new BrowserWindow({
-    show: true,  
-    webPreferences: {
-      nodeIntegration: true
-    }
-  });
-
-  const htmlContent = `
-    <html>
-      <head>
-        <title>Imprimir</title>
-        <style>
-          body { font-family: Arial, sans-serif; margin: 40px; }
-        </style>
-      </head>
-      <body>${contenidoHTML}</body>
-    </html>
-  `;
-
-  await printWindow.loadURL('data:text/html;charset=utf-8,' + encodeURIComponent(htmlContent));
-
-  printWindow.webContents.on('did-finish-load', () => {
-    printWindow.webContents.print(
-      { silent: false, printBackground: true },
-      (success, failureReason) => {
-        if (!success) console.error('Error al imprimir:', failureReason);
-        printWindow.close();
-      }
-    );
-  });
-
-  return true;
+ipcMain.handle('crear-parametro', (event, clave, valor) => {
+  return db.crearParametro(clave, valor);
 });
 
+ipcMain.handle('obtener-parametros', () => {
+  return db.obtenerParametros();
+});
+
+ipcMain.handle('obtener-parametro', (event, clave) => {
+  return db.obtenerParametroPorClave(clave);
+});
+
+ipcMain.handle('actualizar-parametro', (event, clave, valor) => {
+  return db.actualizarParametro(clave, valor);
+});
+
+ipcMain.handle('eliminar-parametro', (event, clave) => {
+  return db.eliminarParametro(clave);
+});
 
 
 // === CATEGORÍA ===
@@ -160,18 +150,21 @@ ipcMain.handle('eliminar-articulo', (event, id) => {
 
 // === HISTORIAL DE CARPETAS ===
 
-ipcMain.handle('agregar-historial-carpeta', (event, folderId) => {
-  return db.agregarHistorialCarpeta(folderId);
+ipcMain.handle('agregar-historial', (event, key,tipo) => {
+  return db.agregarHistorial(key,tipo);
 });
 
 ipcMain.handle('obtener-historial-carpetas', () => {
   return db.obtenerHistorialCarpetas();
 });
-
-ipcMain.handle('eliminar-historial-carpeta', (event, folderId) => {
-  return db.eliminarHistorialCarpeta(folderId);
+ipcMain.handle('obtener-historial', () => {
+  return db.obtenerHistorial();
 });
 
-ipcMain.handle('limpiar-historial-carpetas', () => {
-  return db.limpiarHistorialCarpetas();
+ipcMain.handle('eliminar-historial', (event, key) => {
+  return db.eliminarHistorial(key);
+});
+
+ipcMain.handle('limpiar-historial', () => {
+  return db.limpiarHistorial();
 });

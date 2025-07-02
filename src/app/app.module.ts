@@ -21,6 +21,11 @@ import { TituloEditorComponent } from './component/titulo-editor/titulo-editor.c
 import { DetalleArticuloPageComponent } from './ui/detalle-articulo-page/detalle-articulo-page.component';
 import { ItemArticuloComponent } from './component/item-articulo/item-articulo.component';
 import { TituloEditorCategoriaComponent } from './component/titulo-editor-categoria/titulo-editor-categoria.component';
+import { NgxPrintModule } from 'ngx-print';
+import { ItemMenuComponent } from './component/menu/item-menu/item-menu.component';
+import { MenuLateralIzquierdaComponent } from './component/menu/menu-lateral-izquierda/menu-lateral-izquierda.component';
+import { InicioCategoriaComponent } from './ui/main/inicio-categoria/inicio-categoria.component';
+import { RightClickDirective } from './directive/RightClickDirective';
 
 @NgModule({
   declarations: [
@@ -41,13 +46,19 @@ import { TituloEditorCategoriaComponent } from './component/titulo-editor-catego
     TituloEditorComponent,
     DetalleArticuloPageComponent,
     ItemArticuloComponent,
-    TituloEditorCategoriaComponent
+    TituloEditorCategoriaComponent,
+    ItemMenuComponent,
+    MenuLateralIzquierdaComponent,
+    InicioCategoriaComponent,
+    RightClickDirective  
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     FormsModule,
+    NgxPrintModule 
   ],
+  exports: [RightClickDirective],
   providers: [],
   bootstrap: [AppComponent],
 })

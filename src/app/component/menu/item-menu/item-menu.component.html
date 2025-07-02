@@ -1,0 +1,18 @@
+<div class="unidad-item" [ngClass]="{'unidad-item-select':itemSelect}">
+    <span class="unidad-icon">
+        <div class="icon-arraw" (click)="clickMore()" *ngIf="tipo != 1">
+            <i class="fa-solid fa-caret-right" *ngIf="ocultar"></i>
+            <i class="fa-solid fa-caret-down" *ngIf="!ocultar"></i>
+        </div>
+        <i class="fa-solid fa-layer-group" (click)="clickItem()" *ngIf="tipo != 1"></i>
+        <i class="fa-solid fa-folder-open" (click)="clickItem()" *ngIf="tipo === 1"></i>
+    </span>
+
+     <div (click)="clickItem()">
+        <app-titulo-editor [texto]="texto" (onChangeTextEmitter)="changeTextEmitter($event)"></app-titulo-editor>
+    </div>
+
+    <span class="unidad-close justifyCenter" (click)="clickItemCarpeta()" *ngIf="tipo === 0">
+        <i class="fa-solid fa-folder-plus"></i>
+    </span>
+</div>

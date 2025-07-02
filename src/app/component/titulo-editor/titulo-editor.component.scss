@@ -1,10 +1,41 @@
-.title-h5 {
+h5 {
+    color: rgb(255, 255, 255);
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
     min-width: 100px;
+    cursor: pointer;
+}
 
-    h5 {
-        flex: 1;
-        margin: 0;
-        color: rgb(29, 28, 28);
-        font-size: 14px;
-    }
+h5[contenteditable="true"] {
+  cursor: text;
+}
+
+h4 {
+    color: rgb(15, 15, 15);
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 140px;
+    min-width: 50px;
+    cursor: pointer;
+}
+
+h4[contenteditable="true"] {
+  cursor: text;
+}
+
+h3 {
+    color: rgb(15, 15, 15);
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: 220px;
+    min-width: 50px;
+    cursor: pointer;
+}
+
+h3[contenteditable="true"] {
+  cursor: text;
 }

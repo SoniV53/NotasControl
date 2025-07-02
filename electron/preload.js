@@ -11,74 +11,96 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
-window.eliminarBaseDatos = () =>
-  ipcRenderer.invoke('eliminar-base-datos');
+contextBridge.exposeInMainWorld('electron', {
+  eliminarBaseDatos: () => ipcRenderer.invoke('eliminar-base-datos'),
+  exportarBaseDatos: (destinoPath) => ipcRenderer.invoke('exportar-base-datos', destinoPath),
+  importarBaseDatos: (rutaArchivoDb) => ipcRenderer.invoke('importar-base-datos', rutaArchivoDb),
 
-window.exportarBaseDatos = (destinoPath) => ipcRenderer.invoke('exportar-base-datos', destinoPath);
-window.importarBaseDatos = (rutaArchivoDb) => ipcRenderer.invoke('importar-base-datos', rutaArchivoDb);
-window.imprimirContenido = (contenido) => ipcRenderer.invoke('imprimir-contenido', contenido);
+  ipcRenderer: {
+    invoke: (channel, ...args) => ipcRenderer.invoke(channel, ...args),
+  },
 
+  // === PARÁMETROS ===
+  crearParametro: (clave, valor) =>
+    ipcRenderer.invoke('crear-parametro', clave, valor),
 
-// === CATEGORÍA ===
-window.crearCategoria = (nombre, ocultar) =>
-  ipcRenderer.invoke('crear-categoria', nombre, ocultar);
+  obtenerParametros: () =>
+    ipcRenderer.invoke('obtener-parametros'),
 
-window.obtenerCategorias = () =>
-  ipcRenderer.invoke('obtener-categorias');
+  obtenerParametro: (clave) =>
+    ipcRenderer.invoke('obtener-parametro', clave),
 
-window.actualizarCategoria = (id, name, ocultar) =>
-  ipcRenderer.invoke('actualizar-categoria', id, name, ocultar);
+  actualizarParametro: (clave, valor) =>
+    ipcRenderer.invoke('actualizar-parametro', clave, valor),
 
-window.eliminarCategoria = (id) =>
-  ipcRenderer.invoke('eliminar-categoria', id);
-// === CARPETA ===
-window.crearCarpeta = (nombre, parentId = null, categoryId = null) =>
-  ipcRenderer.invoke('crear-carpeta', nombre, parentId, categoryId);
+  eliminarParametro: (clave) =>
+    ipcRenderer.invoke('eliminar-parametro', clave),
 
-window.obtenerCarpetas = (parentId = null) =>
-  ipcRenderer.invoke('obtener-carpetas', parentId);
+  // === CATEGORÍA ===
+  crearCategoria: (nombre, ocultar) =>
+    ipcRenderer.invoke('crear-categoria', nombre, ocultar),
 
-window.obtenerCarpetasCategoria = (categoriaId = null) =>
-  ipcRenderer.invoke('obtener-carpetas-categoria', categoriaId);
+  obtenerCategorias: () =>
+    ipcRenderer.invoke('obtener-categorias'),
 
-window.actualizarCarpeta = (id, name) =>
-  ipcRenderer.invoke('actualizar-carpeta', id, name);
+  actualizarCategoria: (id, name, ocultar) =>
+    ipcRenderer.invoke('actualizar-categoria', id, name, ocultar),
 
-window.eliminarCarpeta = (id) =>
-  ipcRenderer.invoke('eliminar-carpeta', id);
+  eliminarCategoria: (id) =>
+    ipcRenderer.invoke('eliminar-categoria', id),
 
-// === ARTÍCULO ===
-window.crearArticulo = (folderId, title, content, ocultar) =>
-  ipcRenderer.invoke('crear-articulo', folderId, title, content, ocultar);
+  // === CARPETA ===
+  crearCarpeta: (nombre, parentId = null, categoryId = null) =>
+    ipcRenderer.invoke('crear-carpeta', nombre, parentId, categoryId),
 
-window.obtenerArticulosPorCarpeta = (folderId) =>
-  ipcRenderer.invoke('obtener-articulos-carpeta', folderId);
+  obtenerCarpetas: (parentId = null) =>
+    ipcRenderer.invoke('obtener-carpetas', parentId),
 
-window.obtenerArticulos = () =>
-  ipcRenderer.invoke('obtener-articulos');
+  obtenerCarpetasCategoria: (categoriaId = null) =>
+    ipcRenderer.invoke('obtener-carpetas-categoria', categoriaId),
 
-window.actualizarArticulo = (id, title, content, ocultar) =>
-  ipcRenderer.invoke('actualizar-articulo', id, title, content, ocultar);
+  actualizarCarpeta: (id, name) =>
+    ipcRenderer.invoke('actualizar-carpeta', id, name),
 
-window.actualizarArticuloOcultar = (id, ocultar) =>
-  ipcRenderer.invoke('actualizar-articulo-ocultar', id, ocultar);
+  eliminarCarpeta: (id) =>
+    ipcRenderer.invoke('eliminar-carpeta', id),
 
-window.actualizarTituloArticulo = (id, titulo) =>
-  ipcRenderer.invoke('actualizar-articulo-titulo', id, titulo);
+  // === ARTÍCULO ===
+  crearArticulo: (folderId, title, content, ocultar) =>
+    ipcRenderer.invoke('crear-articulo', folderId, title, content, ocultar),
 
-window.eliminarArticulo = (id) =>
-  ipcRenderer.invoke('eliminar-articulo', id);
+  obtenerArticulosPorCarpeta: (folderId) =>
+    ipcRenderer.invoke('obtener-articulos-carpeta', folderId),
 
-// === HISTORIAL DE CARPETAS ===
-window.agregarHistorialCarpeta = (folderId) =>
-  ipcRenderer.invoke('agregar-historial-carpeta', folderId);
+  obtenerArticulos: () =>
+    ipcRenderer.invoke('obtener-articulos'),
 
-window.obtenerHistorialCarpetas = () =>
-  ipcRenderer.invoke('obtener-historial-carpetas');
+  actualizarArticulo: (id, title, content, ocultar) =>
+    ipcRenderer.invoke('actualizar-articulo', id, title, content, ocultar),
 
-window.eliminarHistorialCarpeta = (folderId) =>
-  ipcRenderer.invoke('eliminar-historial-carpeta', folderId);
+  actualizarArticuloOcultar: (id, ocultar) =>
+    ipcRenderer.invoke('actualizar-articulo-ocultar', id, ocultar),
 
-window.limpiarHistorialCarpetas = () =>
-  ipcRenderer.invoke('limpiar-historial-carpetas');
+  actualizarTituloArticulo: (id, titulo) =>
+    ipcRenderer.invoke('actualizar-articulo-titulo', id, titulo),
+
+  eliminarArticulo: (id) =>
+    ipcRenderer.invoke('eliminar-articulo', id),
+
+  // === HISTORIAL DE CARPETAS ===
+  agregarHistorial: (key,tipo) =>
+    ipcRenderer.invoke('agregar-historial', key,tipo),
+
+  obtenerHistorialCarpetas: () =>
+    ipcRenderer.invoke('obtener-historial-carpetas'),
+
+  obtenerHistorial: () =>
+    ipcRenderer.invoke('obtener-historial'),
+
+  eliminarHistorial: (key) =>
+    ipcRenderer.invoke('eliminar-historial', key),
+
+  limpiarHistorial: () =>
+    ipcRenderer.invoke('limpiar-historial'),
+});
 

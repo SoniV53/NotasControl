@@ -64,7 +64,6 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
         created_at: res.created_at,
         updated_at: res.updated_at
       }));
-      console.log(articulos);
     } catch (error) {
       console.log(error);
     }
@@ -73,7 +72,6 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
   async obtenerFolderID() {
     try {
       const carpetas: any[] = await this.electron.obtenerCarpetas(this.carpeta?.id);
-      console.log(carpetas)
 
       this.carpetas = carpetas.map(res => ({
         id: res.id,
@@ -91,11 +89,10 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
 
   async crearCarpeta(value: any) {
     try {
-      console.log(this.requestData)
       if (this.carpeta?.id) {
         await this.electron.crearCarpeta(this.requestData.nombre, this.carpeta?.id);
         this.obtenerFolderID();
-
+        value.nombre = '';
       }
     } catch (error) {
       console.error('Error al gaurdar carpeta:', error);
@@ -115,9 +112,9 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
   async agregarHistorial(historialList: any[]) {
     try {
       if (historialList) {
-        this.electron.limpiarHistorialCarpetas();
+        this.electron.limpiarHistorial();
         historialList.forEach(async element => {
-          this.electron.agregarHistorialCarpeta(element.id);
+          this.myApp.agregarHistorial(element.id, 1);
         });
       }
     } catch (error) {
@@ -130,7 +127,6 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
   }
 
   onClickClose(event: any) {
-    console.log(event);
     this.isOpen = event;
   }
 

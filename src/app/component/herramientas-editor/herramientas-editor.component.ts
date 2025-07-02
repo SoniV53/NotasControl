@@ -12,6 +12,7 @@ export interface HerramientasData {
 })
 export class HerramientasEditorComponent {
   @Input() articulo: Articulo | null = null;
+  @Input() printSectionId: string = '';
   @ViewChild('editor') editor!: ElementRef;
   @Output() onClickTools = new EventEmitter<string>();
   fontSize: number = 7;

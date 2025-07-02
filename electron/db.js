@@ -21,17 +21,16 @@ db.prepare(`
     parent_id INTEGER,
     category_id INTEGER,
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (parent_id) REFERENCES folders(id),
+    FOREIGN KEY (parent_id) REFERENCES folders(id) ON DELETE CASCADE , 
     FOREIGN KEY (category_id) REFERENCES categories(id) ON DELETE CASCADE
   )
 `).run();
 
 db.prepare(`
-  CREATE TABLE IF NOT EXISTS folder_history (
+  CREATE TABLE IF NOT EXISTS histories (
     id INTEGER PRIMARY KEY AUTOINCREMENT,
-    folder_id INTEGER NOT NULL,
-    accessed_at DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (folder_id) REFERENCES folders(id) ON DELETE CASCADE
+    key INTEGER NOT NULL,
+    tipo TEXT
   )
 `).run();
 
@@ -45,6 +44,14 @@ db.prepare(`
     created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME DEFAULT CURRENT_TIMESTAMP,
     FOREIGN KEY (folder_id) REFERENCES folders(id) ON DELETE CASCADE
+  )
+`).run();
+
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS parametros (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    key TEXT NOT NULL UNIQUE,
+    value TEXT
   )
 `).run();
 
@@ -89,6 +96,27 @@ module.exports = {
   dbPath,
   exportarBaseDatos,
   importarBaseDatos,
+  // === PARÁMETROS ===
+  crearParametro(clave, valor) {
+    return db.prepare('INSERT INTO parametros (key, value) VALUES (?, ?)').run(clave, valor);
+  },
+
+  obtenerParametros() {
+    return db.prepare('SELECT * FROM parametros').all();
+  },
+
+  obtenerParametroPorClave(clave) {
+    return db.prepare('SELECT * FROM parametros WHERE key = ?').get(clave);
+  },
+
+  actualizarParametro(clave, valor) {
+    return db.prepare('UPDATE parametros SET value = ? WHERE key = ?').run(valor, clave);
+  },
+
+  eliminarParametro(clave) {
+    return db.prepare('DELETE FROM parametros WHERE key = ?').run(clave);
+  },
+
   // === CATEGORÍAS ===
   crearCategoria(nombre, ocultar) {
     return db.prepare('INSERT INTO categories (name,ocultar) VALUES (?,?)').run(nombre, ocultar);
@@ -117,7 +145,7 @@ module.exports = {
     return db.prepare('SELECT * FROM folders WHERE category_id IS ?').all(categoriaId);
   },
   actualizarCarpeta(id, nombre) {
-    return db.prepare('UPDATE folders SET name = ? WHERE id = ?').run(name, id);
+    return db.prepare('UPDATE folders SET name = ? WHERE id = ?').run(nombre, id);
   },
 
   eliminarCarpeta(id) {
@@ -127,7 +155,6 @@ module.exports = {
 
   // === ARTÍCULOS ===
   crearArticulo(folderId, title, content = '', ocultar) {
-    console.log(folderId)
     return db.prepare('INSERT INTO articles (folder_id, title, content,ocultar) VALUES (?, ?, ?, ?)').run(folderId, title, content, ocultar);
   },
 
@@ -164,31 +191,41 @@ module.exports = {
   eliminarArticulo(id) {
     return db.prepare('DELETE FROM articles WHERE id = ?').run(id);
   },
-  // === HISTORIAL DE CARPETAS ===
+  // === HISTORIAL ===
 
-  agregarHistorialCarpeta(folderId) {
+  agregarHistorial(key, tipo) {
     return db.prepare(`
-      INSERT INTO folder_history (folder_id) VALUES (?)
-    `).run(folderId);
+      INSERT INTO histories (key,tipo) VALUES (?,?)
+    `).run(key, tipo);
   },
 
   obtenerHistorialCarpetas() {
     return db.prepare(`
-      SELECT fh.id, fh.folder_id, fh.accessed_at, f.name, f.category_id, f.created_at
-      FROM folder_history fh
-      JOIN folders f ON f.id = fh.folder_id
-      ORDER BY fh.accessed_at ASC
-    `).all();
+    SELECT 
+      h.id, 
+      h.key AS folder_id, 
+      h.tipo,
+      f.name, 
+      f.category_id, 
+      f.created_at
+    FROM histories h
+    JOIN folders f ON f.id = h.key
+    WHERE h.tipo = 'carpeta'
+    ORDER BY h.id ASC
+  `).all();
+  },
+  obtenerHistorial() {
+    return db.prepare('SELECT * FROM histories').all();
   },
 
-  eliminarHistorialCarpeta(folderId) {
+  eliminarHistorial(key) {
     return db.prepare(`
-      DELETE FROM folder_history WHERE folder_id = ?
-    `).run(folderId);
+      DELETE FROM histories WHERE key = ?
+    `).run(key);
   },
 
-  limpiarHistorialCarpetas() {
-    return db.prepare(`DELETE FROM folder_history`).run();
+  limpiarHistorial() {
+    return db.prepare(`DELETE FROM histories`).run();
   },
   dbPath,
   db

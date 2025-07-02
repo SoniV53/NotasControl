@@ -1,11 +1,15 @@
 <div class="card mb-3 shadow-sm rounded-4">
-    <div class="card-header d-flex justify-content-between align-items-center text-white">
-        <div class="mb-0 flex-grow-1">
-            <app-titulo-editor [texto]="articulo.title" [articulo]="articulo"
-                (onChangeTextEmitter)="onChangeTextEmitter($event,articulo)"></app-titulo-editor>
+    <div class="card-header d-flex justify-content-between align-items-center text-white rounded-4">
+        <div class="mb-0 flex-grow-1 folder-item ">
+            <!-- <app-titulo-editor [texto]="articulo.title" [articulo]="articulo"
+                (onChangeTextEmitter)="onChangeTextEmitter($event,articulo)"></app-titulo-editor> -->
+            <app-titulo-editor [texto]="articulo.title || ''" (onChangeTextEmitter)="changeTextEmitter($event, articulo)"
+                [numPage]="2">
+            </app-titulo-editor>
         </div>
 
-        <button *ngIf="!isPage" class="btn btn-sm btn-outline-light ms-3" (click)="maxiContent(articulo)" [title]="'Ver artículo'">
+        <button *ngIf="!isPage" class="btn btn-sm btn-outline-light ms-3" (click)="maxiContent(articulo)"
+            [title]="'Ver artículo'">
             <i class="fa-solid fa-expand" style="color: #222020;"></i>
         </button>
 
@@ -23,7 +27,7 @@
     </div>
 
     <div class="card-body position-relative" *ngIf="!articulo.ocultar">
-        <div [ngClass]="{'cont-min':isMin,'cont-max':!isMin}" >
+        <div [ngClass]="{'cont-min':isMin,'cont-max':!isMin}">
             <app-editor-formato [articulo]="articulo"></app-editor-formato>
         </div>
 

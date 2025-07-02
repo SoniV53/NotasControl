@@ -41,14 +41,17 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
   }
 
   maxiContent(item: Articulo) {
+    item.ocultar = false;
+    this.actualizarArticulo(item.ocultar);
     const par = JSON.stringify(item);
     this.router.navigate(['/detalle-articulo-page'], {
       state: { articulo: item }
     });
   }
 
-  onChangeTextEmitter(event: any, item: Articulo) {
+  changeTextEmitter(event: any, item: Articulo) {
     item.title = event;
+    this.electron.actualizarTituloArticulo(item.id,item.title)
   }
 
   datePrint(articulo: Articulo): Date {
@@ -68,4 +71,6 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
       });
     }
   }
+
+  
 }

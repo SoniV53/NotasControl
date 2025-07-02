@@ -22,7 +22,6 @@ export class ArticulosComponent extends ConfiguracionPageComponent implements On
   @Input() articulos: Articulo[] = [];
 
   ngOnInit(): void {
-    console.log(this.articulos);
   }
 
 

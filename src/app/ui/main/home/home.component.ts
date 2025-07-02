@@ -18,10 +18,11 @@ export class HomeComponent extends ConfiguracionPageComponent implements OnInit,
 
 
   async ngOnInit() {
-    await this.obtenerHistorial();
+
     this.selectorSer.listadoCategoria$.subscribe(async data => {
       if (data) {
         this.listadoCategoria = data;
+        await this.obtenerHistorial();
       }
     })
   }
@@ -30,18 +31,35 @@ export class HomeComponent extends ConfiguracionPageComponent implements OnInit,
   async obtenerHistorial() {
     try {
       this.loading = true;
-      const historialList: any[] = await this.electron.obtenerHistorialCarpetas();
-      if (historialList?.length > 0) {
-        const parcer = historialList.map(res => ({
-          id: res.folder_id,
-          nombre: res.name,
-          fechaCreacion: res.created_at
-        }));
-        this.selectorSer.clearHistorial();
-        this.selectorSer.setHistorial(parcer);
-        this.router.navigate(['/inicio']);
-        console.log("HISTORIAL: " + JSON.stringify(parcer))
+      const historial: any = await this.electron.obtenerHistorial();
+      if (historial) {
+        const hist = historial[0];
+        if (hist?.tipo === 'categoria') {
+          this.selectorMenuPint(this.listadoCategoria, hist.key, 0);
+          this.router.navigate(['/inicio-categoria'],
+            {
+              queryParams: {
+                categoriaId: hist.key,
+              }
+            }
+          );
+        } else {
+          const historialList: any[] = await this.electron.obtenerHistorialCarpetas();
+          if (historialList?.length > 0) {
+            const parcer = historialList.map(res => ({
+              id: res.folder_id,
+              nombre: res.name,
+              fechaCreacion: res.created_at
+            }));
+            this.pintItemMenu(parcer[0].id, 1);
+            this.selectorSer.clearHistorial();
+            this.selectorSer.setHistorial(parcer);
+            this.router.navigate(['/inicio']);
+          }
+        }
       }
+
+
       this.loading = false;
 
     } catch (error) {

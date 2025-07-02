@@ -37,8 +37,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  onClickActionCarpeta(event: Carpeta) {
-    console.log(event)
+  onClickActionCarpeta(event: any) {
+    this.selectorSer.setItemSeleccionId({ id: event.id, tipo: 1 })
     this.router.navigate(['/inicio']);
     this.selectorSer.clearHistorial();
     this.selectorSer.addCarpeta(event);
@@ -51,7 +51,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async clickDelete(event: any) {
     this.idCategoria = event;
-    this.messageEliminar(async () => {
+    await this.messageEliminar(async () => {
       this.eliminarCategoria()
     })
   }
@@ -119,9 +119,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async crearEspe(value: any) {
     try {
-      console.log(value);
-      console.log(this.idCategoria);
-
       if (this.idCategoria) {
         await this.electron.crearCarpeta(value.nombre, null, this.idCategoria);
         await this.obtenerCategoria();
@@ -155,6 +152,17 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         callback();
       }
     });
+  }
+
+  async agregarHistorial(id:any,tipo:number) {
+    try {
+      this.electron.limpiarHistorial();
+      const tipoText = tipo == 0 ? 'categoria' : 'carpeta'
+      this.electron.agregarHistorial(id, tipoText);
+      
+    } catch (error) {
+      console.log(error);
+    }
   }
 
   ngOnDestroy(): void {

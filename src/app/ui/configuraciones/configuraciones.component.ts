@@ -20,7 +20,6 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
   }
 
   onChange(event: any) {
-    console.log(event);
     this.selectorSer.selectedFilePath = event.data;
   }
 
@@ -41,7 +40,7 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
 
   async limpiarHistorial() {
     try {
-      await this.electron.limpiarHistorialCarpetas();
+      await this.electron.limpiarHistorial();
       this.mensajeToast('Se limpio correctamente');
     } catch (error) {
       console.log(error);

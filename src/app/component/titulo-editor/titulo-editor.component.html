@@ -1,6 +1,27 @@
-<div class="title-h5">
-    <h5 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo" (click)="activarEdicion(tituloRef)"
-        (blur)="guardarTitulo(tituloRef)" (keydown.enter)="guardarTitulo(tituloRef); $event.preventDefault()"
-        (input)="onChangeEditor(tituloRef)"></h5>
+<div *ngIf="numPage == 0">
+    <h5 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo"
+        (contextmenu)="activarEdicionR(tituloRef,$event)" (blur)="guardarTitulo(tituloRef)"
+        (keydown.enter)="guardarTitulo(tituloRef); $event.preventDefault()" (input)="onChangeEditor(tituloRef)"></h5>
+</div>
 
+<div *ngIf="numPage === 1">
+    <!-- <h4 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo"
+        (contextmenu)="activarEdicionR(tituloRef,$event)" (blur)="guardarTitulo(tituloRef)"
+        (keydown.enter)="guardarTitulo(tituloRef); $event.preventDefault()" (input)="onChangeEditor(tituloRef)"></h4> -->
+
+    <h4 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo"
+        (contextmenu)="activarEdicionR(tituloRef,$event)"
+        (keydown.enter)="onEnterKey(tituloRef); $event.preventDefault()" (blur)="guardarTitulo(tituloRef)"
+        (input)="onChangeEditor(tituloRef)"></h4>
+</div>
+
+<div *ngIf="numPage === 2">
+    <!-- <h4 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo"
+        (contextmenu)="activarEdicionR(tituloRef,$event)" (blur)="guardarTitulo(tituloRef)"
+        (keydown.enter)="guardarTitulo(tituloRef); $event.preventDefault()" (input)="onChangeEditor(tituloRef)"></h4> -->
+
+    <h3 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo"
+        (contextmenu)="activarEdicionR(tituloRef,$event)"
+        (keydown.enter)="onEnterKey(tituloRef); $event.preventDefault()" (blur)="guardarTitulo(tituloRef)"
+        (input)="onChangeEditor(tituloRef)"></h3>
 </div>

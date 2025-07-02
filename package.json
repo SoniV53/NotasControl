@@ -25,6 +25,7 @@
     "better-sqlite3": "^11.10.0",
     "bootstrap": "^5.3.7",
     "bootstrap-icons": "^1.13.1",
+    "ngx-print": "^3.1.0",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.22.1",
     "tslib": "^2.3.0",

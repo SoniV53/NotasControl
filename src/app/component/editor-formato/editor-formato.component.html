@@ -1,9 +1,9 @@
-<div #contenedor class="contenedor-editor">
-    <app-herramientas-editor (onClickTools)="onClickTools($event)" [articulo]="articulo"></app-herramientas-editor>
+<div #contenedor class="contenedor-editor" >
+    <app-herramientas-editor (onClickTools)="onClickTools($event)" [articulo]="articulo" [printSectionId]="formatId('printArticuloId'+articulo?.id)"></app-herramientas-editor>
 
     <div class="editor-wrapper solo-imprimir" [id]="formatId('printArticuloId'+articulo?.id)">
         <div #editor contenteditable="true" (focus)="onFocus()" (blur)="onBlur()" class="editor"
-            (input)="onChangeEditor()" style="border:1px solid gray; padding:10px; overflow-y: auto;"></div>
+            (input)="onChangeEditor()" style="border:0px solid gray; padding:10px; overflow-y: auto;"></div>
     </div>
 
 

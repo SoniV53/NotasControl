@@ -4,7 +4,8 @@ import { AppComponent } from '../../../app.component';
 import { SelectorServiceService } from '../../../providers/selector-service.service';
 import { Location, ViewportScroller } from '@angular/common';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CategoriaCarpetas } from '../../../model/CategoriaCarpetasModel';
 
 declare var bootstrap: any;
 
@@ -23,7 +24,8 @@ export class ConfiguracionPageComponent {
     public selectorSer: SelectorServiceService,
     public viewportScroller: ViewportScroller,
     public router: Router,
-    public location: Location
+    public location: Location,
+    public route: ActivatedRoute
   ) {
 
   }
@@ -93,4 +95,14 @@ export class ConfiguracionPageComponent {
     }
   }
 
+  selectorMenuPint(listado:CategoriaCarpetas[], id:number,tipo:number) {
+    this.selectorSer.setItemSeleccionId({ id: id.toString(), tipo: tipo })
+    const carpeta = listado.find(res => res.id == id)?.carpetas;
+    this.selectorSer.clearListadoCarpetas();
+    this.selectorSer.setListadoCarpetas(carpeta || [])
+  }
+
+  pintItemMenu(id:number,tipo:number){
+    this.selectorSer.setItemSeleccionId({ id: id.toString(), tipo: tipo })
+  }
 }

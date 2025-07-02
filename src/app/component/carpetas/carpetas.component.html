@@ -1,13 +1,17 @@
-<div class="row g-3 justify-content-start">
-    <div *ngFor="let item of carpetasListado" class="col-6 col-sm-4 col-md-3 col-lg-2">
-        <div class="item-carpeta p-1 h-100 d-flex align-items-center justify-content-between">
-            <h4 class="mb-0 flex-grow-1" (click)="clickAction(item)" style="cursor: pointer;">
-                {{ item?.nombre }}
-            </h4>
-            <div class="justifyCenter">
-                <p (click)="eliminarCarpeta(item,$event)" style="font-size: 20px; margin-bottom: 4px !important;  margin-left: 4px !important;"> &times;</p>
-            </div>
-
-        </div>
+<div class="row row-cols-auto g-2 justify-content-start">
+  <div *ngFor="let item of carpetasListado" class="col">
+    <div class="folder-item" (dblclick)="clickAction(item)">
+      <div class="folder-icon">
+        <i class="fas fa-folder"></i>
+      </div>
+      <app-titulo-editor 
+        [texto]="item?.nombre || ''" 
+        (onChangeTextEmitter)="changeTextEmitter($event, item)"
+        [numPage]="1">
+      </app-titulo-editor>
+      <div class="folder-menu m-2" (click)="eliminarCarpeta(item, $event)">
+        x
+      </div>
     </div>
+  </div>
 </div>
