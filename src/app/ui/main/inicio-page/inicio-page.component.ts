@@ -18,6 +18,7 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
   carpetas: Carpeta[] = [];
 
   requestData: any = {};
+  articulo: Articulo | null = null;
   isOpen = false;
 
 
@@ -135,12 +136,11 @@ export class InicioPageComponent extends ConfiguracionPageComponent implements O
     try {
       await this.scrollToTopById('articulosComponenteId');
       await this.electron.crearArticulo(this.carpeta.id, '', '', false);
-      this.obtenerArticulos();
-
+      await this.obtenerArticulos();
+      //this.seleccionarArticulo(this.articulos[0]);
     } catch (err) {
       console.error('Error al crear artículo:', err);
     }
   }
 
-  
 }

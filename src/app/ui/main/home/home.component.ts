@@ -1,6 +1,7 @@
-import { AfterViewInit, Component, OnChanges, OnInit, SimpleChanges } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, OnChanges, OnInit, SimpleChanges, ViewChild } from '@angular/core';
 import { ConfiguracionPageComponent } from '../configuracion-page/configuracion-page.component';
 import { Carpeta, CategoriaCarpetas } from '../../../model/CategoriaCarpetasModel';
+import { AtributosTitulo } from '../../../providers/atribuitos/EnumAtributos';
 
 @Component({
   selector: 'app-home',
@@ -10,7 +11,11 @@ import { Carpeta, CategoriaCarpetas } from '../../../model/CategoriaCarpetasMode
 export class HomeComponent extends ConfiguracionPageComponent implements OnInit, AfterViewInit {
 
   listadoCategoria: CategoriaCarpetas[] = []
+  filterListadoCategoria: CategoriaCarpetas[] = []
+  modelSearch: string = '';
   loading: boolean = true;
+  filterSelect = '';
+  idItem = '';
 
   ngAfterViewInit(): void {
 
@@ -22,6 +27,7 @@ export class HomeComponent extends ConfiguracionPageComponent implements OnInit,
     this.selectorSer.listadoCategoria$.subscribe(async data => {
       if (data) {
         this.listadoCategoria = data;
+        this.filterListadoCategoria = await this.filtrarCategoria(this.filterSelect);
         await this.obtenerHistorial();
       }
     })
@@ -71,5 +77,47 @@ export class HomeComponent extends ConfiguracionPageComponent implements OnInit,
     if (event.value && event.id) {
       this.selectorSer.actualizarNombreCategoria(event.id, event.value);
     }
+  }
+
+  filtrarCategoria(tipo?: string): CategoriaCarpetas[] {
+    const actual = this.listadoCategoria;
+
+    return actual.filter(item => {
+      const coincideCategoria = item.categoria.toLowerCase().includes(this.modelSearch.toLowerCase());
+
+      if (!coincideCategoria) {
+        return false;
+      }
+
+      if (!tipo) {
+        return true;
+      }
+
+      if (item.attr && item.attr.length > 0) {
+        return item.attr.some(attr => {
+          if (attr.titulo === AtributosTitulo.VisibleMenu) {
+            return tipo === 'show'
+              ? attr.value === 'true'
+              : attr.value === 'false';
+          }
+          return false;
+        });
+      }
+      return false;
+    });
+  }
+
+  async selectFilter(tipo: string) {
+    this.filterSelect = tipo === this.filterSelect ? '' : tipo;
+    this.filterListadoCategoria = this.filtrarCategoria(this.filterSelect);
+    //await this.scrollToTopByIdEnd('mainCategoriasId')
+  }
+
+  onChange(event: any) {
+    this.filterListadoCategoria = this.filtrarCategoria(this.filterSelect);
+  }
+
+  async onChangeHidden(event:any){
+    this.idItem = event;
   }
 }

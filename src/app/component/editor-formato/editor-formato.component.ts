@@ -26,9 +26,7 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.isCreate && this.texto) {
-      this.editor.nativeElement.innerHTML = this.texto;
-    }
+    this.pegarContenido();
   }
 
   async guardarContenido() {
@@ -51,10 +49,12 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
 
 
   pegarContenido() {
-    if (this.articulo) {
-      this.editor.nativeElement.innerHTML = this.articulo.content;
-    } else if (this.isCreate && this.texto) {
-      this.editor.nativeElement.innerHTML = this.texto;
+    if (this.editor) {
+      if (this.articulo) {
+        this.editor.nativeElement.innerHTML = this.articulo.content;
+      } else if (this.isCreate && this.texto) {
+        this.editor.nativeElement.innerHTML = this.texto;
+      }
     }
   }
 

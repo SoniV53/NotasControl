@@ -2,6 +2,8 @@ import { AfterViewInit, Component, EventEmitter, Input, input, OnInit, Output } 
 import { Carpeta, CategoriaCarpetas } from '../../model/CategoriaCarpetasModel';
 import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
 import Swal from 'sweetalert2';
+import { AtributosTitulo } from '../../providers/atribuitos/EnumAtributos';
+import { Tipos } from '../../providers/atribuitos/Atributos';
 
 @Component({
   selector: 'acordion-item',
@@ -12,16 +14,19 @@ export class AcordionItemComponent extends ConfiguracionPageComponent implements
 
 
   @Input() categoria: CategoriaCarpetas | null = null;
+  @Input() id: any;
   @Input() isPage: boolean = false;
   @Output() onClickAction = new EventEmitter<Carpeta>()
   @Output() onClickCreate = new EventEmitter<any>()
   @Output() onClickEliminate = new EventEmitter<any>()
   @Output() onChangeTextEmitter = new EventEmitter<any>()
+  @Output() onChangeHidden = new EventEmitter<any>()
 
   idAccordion = '';
   titulo = '';
   idCollap = '';
   listadoCarpetas: Carpeta[] = [];
+  visibleInMenu: boolean = true;
 
   ngOnInit(): void {
     if (this.categoria) {
@@ -31,12 +36,15 @@ export class AcordionItemComponent extends ConfiguracionPageComponent implements
     }
   }
 
-  ngAfterViewInit(): void {
+  async ngAfterViewInit() {
     if (this.categoria) {
       this.idAccordion = 'accordion_' + this.categoria?.id;
       this.idCollap = 'collap_' + this.categoria?.id;
       this.listadoCarpetas = this.categoria?.carpetas;
       this.titulo = this.categoria?.categoria;
+
+      const result = await this.listadoVisibleUnique(AtributosTitulo.VisibleMenu, this.categoria.attr || []);
+      this.visibleInMenu = this.textoABoolean(result.value);
     }
   }
 
@@ -105,7 +113,17 @@ export class AcordionItemComponent extends ConfiguracionPageComponent implements
     }
   }
 
-  changeTextEmitter(event: any,id:any) {
-    this.onChangeTextEmitter.emit({id:id, value: event});
+  changeTextEmitter(event: any, id: any) {
+    this.onChangeTextEmitter.emit({ id: id, value: event });
+  }
+
+  async updateOcultarMenu(event: any) {
+    if (this.categoria) {
+      await this.onChangeHidden.emit(this.id);
+      this.visibleInMenu = !this.visibleInMenu;
+      await this.myApp.actualizarAtributo(AtributosTitulo.VisibleMenu, this.visibleInMenu.toString(), Tipos.Categoria, this.categoria.id.toString());
+      this.selectorSer.actualizarAtributoCategoria(this.categoria.id, AtributosTitulo.VisibleMenu, this.visibleInMenu.toString());
+
+    }
   }
 }

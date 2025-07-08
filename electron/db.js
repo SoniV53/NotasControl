@@ -55,6 +55,16 @@ db.prepare(`
   )
 `).run();
 
+db.prepare(`
+  CREATE TABLE IF NOT EXISTS atributos (
+    id INTEGER PRIMARY KEY AUTOINCREMENT,
+    tipo TEXT,
+    key TEXT,
+    titulo TEXT,
+    value TEXT
+  )
+`).run();
+
 function exportarBaseDatos(destinoPath) {
   const origen = dbPath; // corregido
   try {
@@ -159,7 +169,7 @@ module.exports = {
   },
 
   obtenerArticulosPorCarpeta(folderId) {
-    return db.prepare('SELECT * FROM articles WHERE folder_id = ? ORDER BY created_at DESC').all(folderId);
+    return db.prepare('SELECT * FROM articles WHERE folder_id = ? ORDER BY created_at ASC').all(folderId);
   },
 
   obtenerArticulos() {
@@ -227,6 +237,25 @@ module.exports = {
   limpiarHistorial() {
     return db.prepare(`DELETE FROM histories`).run();
   },
-  dbPath,
-  db
+  // === ATRIBUTOS ===
+
+  crearAtributo(tipo, key, titulo, value) {
+    return db.prepare('INSERT INTO atributos (tipo, key,titulo, value) VALUES (?, ?, ?, ?)').run(tipo, key, titulo, value);
+  },
+
+  obtenerAtributos() {
+    return db.prepare('SELECT * FROM atributos').all();
+  },
+
+  obtenerAtributosPorTipo(tipo, key) {
+    return db.prepare('SELECT * FROM atributos WHERE tipo = ? AND key = ?').all(tipo, key);
+  },
+
+  actualizarAtributo(id, tipo, key, value) {
+    return db.prepare('UPDATE atributos SET tipo = ?, key = ?, value = ? WHERE id = ?').run(tipo, key, value, id);
+  },
+
+  eliminarAtributo(id) {
+    return db.prepare('DELETE FROM atributos WHERE id = ?').run(id);
+  }
 };

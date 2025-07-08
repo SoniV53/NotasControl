@@ -15,12 +15,28 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
 
   selectedFilePath: string = '';
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.obtenerPath();
     this.selectedFilePath = this.selectorSer.selectedFilePath;
   }
 
+  async obtenerPath() {
+    if (this.selectorSer.selectedFilePath) {
+      return;
+    }
+    try {
+      const params = await this.electron.obtenerParametro('URL_DB');
+      console.log(params.value)
+      console.log(params)
+      this.selectorSer.selectedFilePath = params.value;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   onChange(event: any) {
-    this.selectorSer.selectedFilePath = event.data;
+    console.log(event)
+   // this.selectorSer.selectedFilePath = event.data;
   }
 
   async crearNuevaCategoria() {
@@ -50,8 +66,14 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
   async imporExporAtion(isImportar: boolean) {
     if (!this.selectedFilePath) return;
     if (!isImportar) {
-      this.electron.exportarBaseDatos(this.selectedFilePath).then(res => {
+      this.electron.exportarBaseDatos(this.selectedFilePath).then(async res => {
         this.mensajeToast(res?.message);
+        const params = await this.electron.obtenerParametro('URL_DB');
+        if (!params) {
+          this.electron.crearParametro("URL_DB", this.selectedFilePath.toString());
+        } else {
+          this.electron.actualizarParametro("URL_DB", this.selectedFilePath.toString());
+        }
       })
         .catch(error => {
           console.error('Error:', error);
@@ -61,6 +83,8 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
         this.electron.importarBaseDatos(this.selectedFilePath);
       })
     }
+
+    this.selectorSer.selectedFilePath = this.selectedFilePath;
   }
 
 

@@ -11,6 +11,24 @@ window.addEventListener('DOMContentLoaded', () => {
   }
 });
 
+// === ATRIBUTOS ===
+const atributosAPI = {
+  crearAtributo: (tipo, key,titulo, value) =>
+    ipcRenderer.invoke('crear-atributo', tipo, key, titulo, value),
+
+  obtenerAtributos: () =>
+    ipcRenderer.invoke('obtener-atributos'),
+
+  obtenerAtributosPorTipo: (tipo,key) =>
+    ipcRenderer.invoke('obtener-atributos-por-tipo', tipo,key),
+
+  actualizarAtributo: (id, tipo, key, value) =>
+    ipcRenderer.invoke('actualizar-atributo', id, tipo, key, value),
+
+  eliminarAtributo: (id) =>
+    ipcRenderer.invoke('eliminar-atributo', id),
+};
+
 contextBridge.exposeInMainWorld('electron', {
   eliminarBaseDatos: () => ipcRenderer.invoke('eliminar-base-datos'),
   exportarBaseDatos: (destinoPath) => ipcRenderer.invoke('exportar-base-datos', destinoPath),
@@ -102,5 +120,21 @@ contextBridge.exposeInMainWorld('electron', {
 
   limpiarHistorial: () =>
     ipcRenderer.invoke('limpiar-historial'),
+    // === HISTORIAL DE CARPETAS ===
+  agregarHistorial: (key,tipo) =>
+    ipcRenderer.invoke('agregar-historial', key,tipo),
+
+  obtenerHistorialCarpetas: () =>
+    ipcRenderer.invoke('obtener-historial-carpetas'),
+
+  obtenerHistorial: () =>
+    ipcRenderer.invoke('obtener-historial'),
+
+  eliminarHistorial: (key) =>
+    ipcRenderer.invoke('eliminar-historial', key),
+
+  limpiarHistorial: () =>
+    ipcRenderer.invoke('limpiar-historial'),
+  atributos: atributosAPI,
 });
 

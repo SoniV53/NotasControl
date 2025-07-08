@@ -1,10 +1,16 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { Carpeta, CategoriaCarpetas } from '../model/CategoriaCarpetasModel';
+import { AtributosTitulo } from './atribuitos/EnumAtributos';
 
 export interface ItemSeleccionado {
   id: string;
   tipo: number;
+}
+
+export interface CarpetaArticuloSelect {
+  carpetaId: number;
+  articuloId: number;
 }
 
 @Injectable({
@@ -12,6 +18,7 @@ export interface ItemSeleccionado {
 })
 export class SelectorServiceService {
   public selectedFilePath = '';
+  private scrollPosY: number = 0;
   private historialCarpetas = new BehaviorSubject<Carpeta[]>([]);
   private listadoCategoria = new BehaviorSubject<CategoriaCarpetas[]>([]);
   private listadoCarpetas = new BehaviorSubject<Carpeta[]>([]);
@@ -22,7 +29,25 @@ export class SelectorServiceService {
   public itemSeleccionId$: Observable<ItemSeleccionado | null> = this.itemSeleccionId.asObservable();
   public listadoCarpetas$: Observable<Carpeta[]> = this.listadoCarpetas.asObservable();
 
-  constructor() { }
+  public historialSelectorArti: CarpetaArticuloSelect[] = [];
+
+  obtenerArticuloCarpeta(carpetaId: number) {
+    if (this.historialSelectorArti) {
+      return this.historialSelectorArti.find(res => res.carpetaId == carpetaId)?.articuloId;
+    }
+    return -1;
+  }
+
+  setArticuloCarpeta(item: CarpetaArticuloSelect) {
+    if (this.historialCarpetas) {
+      const exisSele = this.historialSelectorArti.find(res => res.carpetaId == item.carpetaId);
+      if (exisSele) {
+        exisSele.articuloId = item.articuloId;
+        return;
+      }
+      this.historialSelectorArti.push(item)
+    }
+  }
 
   public setItemSeleccionId(item: ItemSeleccionado): void {
     this.itemSeleccionId.next(item);
@@ -92,9 +117,30 @@ export class SelectorServiceService {
     this.listadoCategoria.next(actualizado);
   }
 
+  actualizarAtributoCategoria(
+    categoriaId: number,
+    titulo: AtributosTitulo,
+    nuevoValor: string | boolean
+  ): void {
+    const actual = this.listadoCategoria.getValue();
+    const actualizado = actual.map(categoria => {
+      if (categoria.id === categoriaId && categoria.attr) {
+        const nuevosAttr = categoria.attr.map(attr =>
+          attr.titulo === titulo
+            ? { ...attr, value: nuevoValor }
+            : attr
+        );
+        return { ...categoria, attr: nuevosAttr };
+      }
+      return categoria;
+    });
+
+    this.listadoCategoria.next(actualizado);
+  }
+
   actualizarNombreCarpeta(idCategoria: number, idCarpeta: number, nuevoNombre: string): void {
     const actual = this.listadoCategoria.getValue();
-    
+
     const actualizado = actual.map(categoria => {
       if (categoria.id === idCategoria) {
         const carpetasActualizadas = categoria.carpetas.map(carpeta =>
@@ -121,4 +167,21 @@ export class SelectorServiceService {
     this.listadoCategoria.next([]);
   }
 
+
+  // async guardarScrollVentana(id: string) {
+  //   const el = document.getElementById(id);
+  //   if (el) {
+  //     this.scrollPosY = el.scrollTop;
+  //   }
+  // }
+
+  // async restaurarScrollVentana(id: string) {
+  //   const el = document.getElementById(id);
+  //   if (el) {
+  //     el.scrollTo({
+  //       top: this.scrollPosY,
+  //       behavior: 'smooth'
+  //     });
+  //   }
+  // }
 }

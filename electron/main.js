@@ -8,7 +8,7 @@ let mainWindow;
 function createWindow() {
   mainWindow = new BrowserWindow({
     width: 1200,
-    height: 800,
+    height: 900,
     menuBarVisible: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
@@ -33,7 +33,10 @@ function createWindow() {
     console.error(' Error al cargar index.html:', err);
   });
 
-  mainWindow.webContents.openDevTools();
+  if (isDev) {
+    mainWindow.webContents.openDevTools();
+  }
+  
 
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -167,4 +170,26 @@ ipcMain.handle('eliminar-historial', (event, key) => {
 
 ipcMain.handle('limpiar-historial', () => {
   return db.limpiarHistorial();
+});
+
+// === ATRIBUTOS ===
+
+ipcMain.handle('crear-atributo', (event, tipo, key, titulo, value) => {
+  return db.crearAtributo(tipo, key, titulo, value );
+});
+
+ipcMain.handle('obtener-atributos', () => {
+  return db.obtenerAtributos();
+});
+
+ipcMain.handle('obtener-atributos-por-tipo', (event, tipo,key) => {
+  return db.obtenerAtributosPorTipo(tipo,key);
+});
+
+ipcMain.handle('actualizar-atributo', (event, id, tipo, key, value) => {
+  return db.actualizarAtributo(id, tipo, key, value);
+});
+
+ipcMain.handle('eliminar-atributo', (event, id) => {
+  return db.eliminarAtributo(id);
 });

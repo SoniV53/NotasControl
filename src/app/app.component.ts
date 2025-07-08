@@ -4,6 +4,7 @@ import { Carpeta, CategoriaCarpetas } from './model/CategoriaCarpetasModel';
 import { SelectorServiceService } from './providers/selector-service.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ATRIBUTOS_LISTA_CATEGORIA, Tipos } from './providers/atribuitos/Atributos';
 
 declare var bootstrap: any;
 
@@ -84,9 +85,13 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
       for (const res of this.listadoCate) {
         const carpetas = await this.obtenerCarpeta(res.id);
-        this.listadoCategoria.push({ id: res.id, categoria: res.name, carpetas: carpetas, ocultar: this.textoABoolean(res.ocultar) });
+        await this.creacionAtributosCategoria(res.id.toString());
+        const result = await this.obtenerAtributos(Tipos.Categoria, res?.id.toString() || '');
+        this.listadoCategoria.push({ id: res.id, categoria: res.name, carpetas: carpetas, ocultar: this.textoABoolean(res.ocultar),attr:result});
       }
 
+      const co = await this.electron.obtenerAtributos();
+      console.log(co);
       this.selectorSer.setListadoCategoria(this.listadoCategoria);
     } catch (error) {
       console.error(error);
@@ -154,19 +159,51 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  async agregarHistorial(id:any,tipo:number) {
+  async agregarHistorial(id: any, tipo: number) {
     try {
       this.electron.limpiarHistorial();
       const tipoText = tipo == 0 ? 'categoria' : 'carpeta'
       this.electron.agregarHistorial(id, tipoText);
-      
+
     } catch (error) {
       console.log(error);
     }
   }
 
   ngOnDestroy(): void {
-   // this.agregarHistorial();
+    // this.agregarHistorial();
   }
 
+  async creacionAtributosCategoria(categoryId: string) {
+    const listaAtr: any[] = await this.electron.obtenerAtributosPorTipo(Tipos.Categoria, categoryId) || [];
+    if (listaAtr) {
+      ATRIBUTOS_LISTA_CATEGORIA.forEach(res => {
+        if (!this.isExistAtribute(listaAtr, res.titulo)) {
+          console.log(res)
+          this.electron.crearAtributo(Tipos.Categoria, categoryId, res.titulo, res.value.toString())
+        }
+      })
+    }
+  }
+
+  async obtenerAtributos(tipo: Tipos, key: any): Promise<any[]> {
+    const listaAtr: any[] = await this.electron.obtenerAtributosPorTipo(tipo, key) || [];
+    return listaAtr || [];
+  }
+
+  async actualizarAtributo(titulo: string, value: string, tipo: Tipos, key: any) {
+    const listaAtr: any[] = await this.electron.obtenerAtributosPorTipo(tipo, key) || [];
+    if (listaAtr) {
+      listaAtr.forEach(res => {
+        if (titulo === res.titulo) {
+          this.electron.actualizarAtributo(res.id, tipo, key, value.toString());
+          return;
+        }
+      });
+    }
+  }
+
+  isExistAtribute(listado: any[], value: any) {
+    return listado.some(res => res.titulo === value);
+  }
 }

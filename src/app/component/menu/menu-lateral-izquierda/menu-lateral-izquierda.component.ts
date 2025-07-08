@@ -3,6 +3,8 @@ import { ConfiguracionPageComponent } from '../../../ui/main/configuracion-page/
 import { Carpeta, CategoriaCarpetas, CATEGORIAS_DUMMY } from '../../../model/CategoriaCarpetasModel';
 import Swal from 'sweetalert2';
 import { ItemSeleccionado } from '../../../providers/selector-service.service';
+import { ATRIBUTOS_LISTA_CATEGORIA, Tipos } from '../../../providers/atribuitos/Atributos';
+import { AtributosTitulo } from '../../../providers/atribuitos/EnumAtributos';
 
 @Component({
   selector: 'app-menu-lateral-izquierda',
@@ -24,9 +26,16 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
   ngOnInit(): void {
     //this.listadoCategoria = CATEGORIAS_DUMMY;
     this.selectorSer.listadoCategoria$.subscribe(async data => {
-       this.listadoCategoria = data || [];
+      this.listadoCategoria = [];
+      data.forEach(async res => {
+        const result = await this.listadoVisibleUnique(AtributosTitulo.VisibleMenu,res?.attr || []);
+        if (this.textoABoolean(result.value)) {
+          this.listadoCategoria.push(res);
+        }
+      })
     })
   }
+
 
   ngAfterViewInit(): void {
     this.selectorSer.itemSeleccionId$.subscribe(data => {
@@ -62,7 +71,7 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
   async goHome() {
     try {
       await this.electron.limpiarHistorial();
-      await this.pintItemMenu(-1,-1);
+      await this.pintItemMenu(-1, -1);
       this.router.navigate(['/home']);
     } catch (error) {
       console.log(error);

@@ -107,8 +107,8 @@ export class ElectronService {
   }
 
   // Historial de Carpetas
-  agregarHistorial(key: number,tipo:string) {
-    return this.electron.agregarHistorial(key,tipo);
+  agregarHistorial(key: number, tipo: string) {
+    return this.electron.agregarHistorial(key, tipo);
   }
 
   obtenerHistorialCarpetas() {
@@ -126,4 +126,25 @@ export class ElectronService {
     return this.electron.limpiarHistorial();
   }
 
+
+  // === Atributos ===
+  crearAtributo(tipo: string, key: string, titulo: string, value: string) {
+    return this.electron.atributos.crearAtributo(tipo, key, titulo, value);
+  }
+
+  obtenerAtributos() {
+    return this.electron.atributos.obtenerAtributos();
+  }
+
+  obtenerAtributosPorTipo(tipo: string,key:string) {
+    return this.electron.atributos.obtenerAtributosPorTipo(tipo,key);
+  }
+
+  actualizarAtributo(id: number, tipo: string, key: string, value: string) {
+    return this.electron.atributos.actualizarAtributo(id, tipo, key, value);
+  }
+
+  eliminarAtributo(id: number) {
+    return this.electron.atributos.eliminarAtributo(id);
+  }
 }

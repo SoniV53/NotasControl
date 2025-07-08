@@ -3,7 +3,25 @@
     No hay artículos en esta carpeta.
   </div>
 
-  <div *ngFor="let articulo of articulos" id="articulosComponenteId">
-    <app-item-articulo [articulo]="articulo" (onEliminarArticulo)="onEliminarArticulo($event)" [isMin]="true"></app-item-articulo>
-  </div>
+
+  <nav aria-label="Page navigation" *ngIf="articulo" style="overflow-x: auto;">
+    <ul class="pagination">
+      <li class="page-item" *ngFor="let articulo of articulos;let i = index"
+        [ngClass]="{'active': articuloId(articulo.id)}">
+        <a class="page-link" (click)="seleccionarArticulo(articulo)" style="cursor: pointer;">{{i + 1}}</a>
+      </li>
+    </ul>
+  </nav>
+
+  <app-item-articulo *ngIf="articulo" [articulo]="articulo" (onEliminarArticulo)="onEliminarArticulo($event)"
+    [isMin]="true"></app-item-articulo>
+
+  <!-- <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%"
+    data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary p-3 rounded-2" tabindex="0">
+    <div *ngFor="let articulo of articulos" id="articulosComponenteId">
+      
+    </div>
+  </div> -->
+
+
 </div>

@@ -1,4 +1,4 @@
-export {};
+export { };
 
 declare global {
   interface Window {
@@ -36,11 +36,20 @@ declare global {
       actualizarTituloArticulo(id: number, titulo: string): Promise<any>;
       eliminarArticulo(id: number): Promise<any>;
 
-      agregarHistorial(key: number,tipo:any): Promise<any>;
+      agregarHistorial(key: number, tipo: any): Promise<any>;
       obtenerHistorialCarpetas(): Promise<any>;
       obtenerHistorial(): Promise<any>;
       eliminarHistorial(key: number): Promise<any>;
       limpiarHistorial(): Promise<any>;
+
+      // === Atributos ===
+      atributos: {
+        crearAtributo(tipo: string, key: string, titulo: string, value: string): Promise<any>;
+        obtenerAtributos(): Promise<any>;
+        obtenerAtributosPorTipo(tipo: string,key:string): Promise<any>;
+        actualizarAtributo(id: number, tipo: string, key: string, value: string): Promise<any>;
+        eliminarAtributo(id: number): Promise<any>;
+      };
     };
   }
 }

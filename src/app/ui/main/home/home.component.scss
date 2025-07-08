@@ -1,0 +1,14 @@
+.filter-hidden {
+    margin-right: 16px;
+    border-radius: 8px;
+    overflow: hidden;
+
+    i {
+        background-color: rgb(245, 245, 245);
+        padding: 8px;
+    }
+
+    .select {
+        background-color: rgb(175, 219, 233);
+    }
+}
