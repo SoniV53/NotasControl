@@ -60,7 +60,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   async eliminarCategoria() {
     try {
       await this.electron.eliminarCategoria(this.idCategoria);
-      this.obtenerCategoria();
+      this.selectorSer.eliminarCategoria(this.idCategoria);
+      const attr: any[] = await this.electron.obtenerAtributosPorTipo(Tipos.Categoria, this.idCategoria.toString());
+      console.log(attr);
+      if (attr) {
+        attr.forEach(async res => {
+         await this.electron.eliminarAtributo(res.id);
+        })
+      }
+
+      //this.obtenerCategoria();
       Swal.fire({
         title: "Se elimino Correctamente!",
         icon: "success",
@@ -87,11 +96,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         const carpetas = await this.obtenerCarpeta(res.id);
         await this.creacionAtributosCategoria(res.id.toString());
         const result = await this.obtenerAtributos(Tipos.Categoria, res?.id.toString() || '');
-        this.listadoCategoria.push({ id: res.id, categoria: res.name, carpetas: carpetas, ocultar: this.textoABoolean(res.ocultar),attr:result});
+        this.listadoCategoria.push({ id: res.id, categoria: res.name, carpetas: carpetas, ocultar: this.textoABoolean(res.ocultar), attr: result });
       }
 
-      const co = await this.electron.obtenerAtributos();
-      console.log(co);
       this.selectorSer.setListadoCategoria(this.listadoCategoria);
     } catch (error) {
       console.error(error);
@@ -122,11 +129,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.listadoCategoria = [];
   }
 
-  async crearEspe(value: any) {
+  async crearCarpe(value: any) {
     try {
       if (this.idCategoria) {
-        await this.electron.crearCarpeta(value.nombre, null, this.idCategoria);
-        await this.obtenerCategoria();
+        const res = await this.electron.crearCarpeta(value.nombre, null, this.idCategoria);
+        let carp: Carpeta = {
+          id: res?.lastInsertRowid,
+          nombre: value.nombre,
+          fechaCreacion: ''
+        }
+        this.selectorSer.agregarCarpetaCategoria(this.idCategoria, carp);
 
         value.nombre = '';
       }
@@ -201,6 +213,12 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
         }
       });
     }
+  }
+
+  async agregarAtributosCategoria(categoriaId: any) {
+    await this.creacionAtributosCategoria(categoriaId.toString());
+    const result = await this.obtenerAtributos(Tipos.Categoria, categoriaId.toString() || '');
+    return result;
   }
 
   isExistAtribute(listado: any[], value: any) {

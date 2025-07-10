@@ -77,8 +77,7 @@ export class AcordionItemComponent extends ConfiguracionPageComponent implements
         await this.electron.eliminarCarpeta(item.id).then(() => {
           this.listadoCarpetas = this.listadoCarpetas.filter(c => c.id !== item.id);
         });
-
-        this.myApp.obtenerCategoria();
+        this.selectorSer.eliminarCarpetaCategoria(this.categoria?.id || 0,item.id);
         this.router.navigate(['/home']);
         Swal.fire({
           title: "Se elimino Correctamente!",

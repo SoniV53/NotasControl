@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ConfiguracionPageComponent } from '../main/configuracion-page/configuracion-page.component';
 import Swal from 'sweetalert2';
+import { CategoriaCarpetas } from '../../model/CategoriaCarpetasModel';
 
 declare var bootstrap: any;
 
@@ -26,9 +27,7 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
     }
     try {
       const params = await this.electron.obtenerParametro('URL_DB');
-      console.log(params.value)
-      console.log(params)
-      this.selectorSer.selectedFilePath = params.value;
+      this.selectorSer.selectedFilePath = params?.value;
     } catch (error) {
       console.error(error);
     }
@@ -36,14 +35,25 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
 
   onChange(event: any) {
     console.log(event)
-   // this.selectorSer.selectedFilePath = event.data;
+    // this.selectorSer.selectedFilePath = event.data;
   }
 
   async crearNuevaCategoria() {
     try {
-      await this.electron.crearCategoria(this.nombreCate, false);
+      const res = await this.electron.crearCategoria(this.nombreCate, false);
+      const attr = await this.myApp.agregarAtributosCategoria(res?.lastInsertRowid);
+      const cate: CategoriaCarpetas = {
+        id: res?.lastInsertRowid,
+        categoria: this.nombreCate,
+        ocultar: false,
+        carpetas: [],
+        attr: attr
+      }
+
+      this.selectorSer.agregarCategoria(cate);
+
       this.nombreCate = '';
-      this.myApp.obtenerCategoria();
+      //this.myApp.obtenerCategoria();
     } catch (error) {
       console.error(error);
       Swal.fire({

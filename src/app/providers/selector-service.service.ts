@@ -157,6 +157,36 @@ export class SelectorServiceService {
     this.listadoCategoria.next(actualizado);
   }
 
+  agregarCarpetaCategoria(idCategoria: number, carpeta: Carpeta): void {
+    if (carpeta && carpeta.id) {
+      const actualList = this.listadoCategoria.getValue();
+
+      const categoria = actualList.find(res => res.id === idCategoria);
+
+      if (categoria) {
+        if (!categoria.carpetas) {
+          categoria.carpetas = [];
+        }
+
+        categoria.carpetas.push(carpeta);
+      }
+
+      this.listadoCategoria.next(actualList);
+    }
+  }
+
+
+  eliminarCarpetaCategoria(idCategoria: number, idCarpeta: number): void {
+    const actualList = this.listadoCategoria.getValue();
+    const categoria = actualList.find(res => res.id === idCategoria);
+
+    if (categoria && categoria.carpetas) {
+      categoria.carpetas = categoria.carpetas.filter(carpeta => carpeta.id !== idCarpeta);
+    }
+
+    this.listadoCategoria.next(actualList);
+  }
+
   eliminarCategoria(id: number): void {
     const actual = this.listadoCategoria.getValue();
     const filtrado = actual.filter(c => c.id !== id);
@@ -167,7 +197,19 @@ export class SelectorServiceService {
     this.listadoCategoria.next([]);
   }
 
+  obtenerIdMaximoCategoria(): number {
+    const listado = this.listadoCategoria.getValue();
 
+    if (listado.length === 0) {
+      return 0; // Si no hay categorías, devuelves 0 o lo que prefieras como base
+    }
+
+    // Encuentra el ID máximo
+    const ids = listado.map(categoria => categoria.id);
+    const idMaximo = Math.max(...ids);
+
+    return idMaximo;
+  }
   // async guardarScrollVentana(id: string) {
   //   const el = document.getElementById(id);
   //   if (el) {

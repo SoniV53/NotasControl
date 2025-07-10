@@ -1,5 +1,6 @@
 import { AfterViewInit, Component, OnInit } from '@angular/core';
 import { ConfiguracionPageComponent } from '../configuracion-page/configuracion-page.component';
+import { Carpeta } from '../../../model/CategoriaCarpetasModel';
 
 @Component({
   selector: 'inicio-categoria',
@@ -34,8 +35,13 @@ export class InicioCategoriaComponent extends ConfiguracionPageComponent impleme
   async crearCarpeta(value: any) {
     try {
       if (this.categoriaId) {
-        await this.electron.crearCarpeta(this.requestData.nombre, null, this.categoriaId);
-        await this.myApp.obtenerCategoria();
+        const res = await this.electron.crearCarpeta(this.requestData.nombre, null, this.categoriaId);
+        let carp:Carpeta = {
+          id: res?.lastInsertRowid,
+          nombre: this.requestData.nombre,
+          fechaCreacion: ''
+        }
+        this.selectorSer.agregarCarpetaCategoria(this.categoriaId,carp);
         value.nombre = '';
         const carpeta = this.myApp.listadoCategoria.find(res => res.id == this.categoriaId)?.carpetas;
         this.selectorSer.clearListadoCarpetas();

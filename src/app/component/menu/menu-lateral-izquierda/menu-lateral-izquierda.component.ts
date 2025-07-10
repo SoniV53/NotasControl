@@ -15,6 +15,7 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
 
 
   listadoCategoria: CategoriaCarpetas[] = []
+  listadoCarpetas: Carpeta[] = []
   @Output() onClickActionCarpeta = new EventEmitter<Carpeta>()
   @Output() onClickCreate = new EventEmitter<any>()
   @Output() onClickEliminate = new EventEmitter<any>()
@@ -28,7 +29,7 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
     this.selectorSer.listadoCategoria$.subscribe(async data => {
       this.listadoCategoria = [];
       data.forEach(async res => {
-        const result = await this.listadoVisibleUnique(AtributosTitulo.VisibleMenu,res?.attr || []);
+        const result = await this.listadoVisibleUnique(AtributosTitulo.VisibleMenu, res?.attr || []);
         if (this.textoABoolean(result.value)) {
           this.listadoCategoria.push(res);
         }
@@ -90,8 +91,14 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
 
   async clickItemCarpeta(item: any, length: any) {
     try {
-      await this.electron.crearCarpeta('Carpeta ' + length, null, item?.id);
-      await this.myApp.obtenerCategoria();
+      const name = `Carpeta ${length}`
+      const res = await this.electron.crearCarpeta(name, null, item?.id);
+      let carp: Carpeta = {
+        id: res?.lastInsertRowid,
+        nombre: name,
+        fechaCreacion: ''
+      }
+      this.selectorSer.agregarCarpetaCategoria(item?.id, carp);
 
       const carpeta = this.listadoCategoria.find(res => res.id === item?.id)?.carpetas;
       this.selectorSer.clearListadoCarpetas();
@@ -108,8 +115,22 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
 
   async crearNuevaCategoria() {
     try {
-      await this.electron.crearCategoria('Categoria ' + this.listadoCategoria.length, false);
-      this.myApp.obtenerCategoria();
+      const num = this.selectorSer.obtenerIdMaximoCategoria();
+      const res = await this.electron.crearCategoria(`Categoria ${num}`, false);
+
+      const attr = await this.myApp.agregarAtributosCategoria(res?.lastInsertRowid);
+
+      const cate: CategoriaCarpetas = {
+        id: res?.lastInsertRowid,
+        categoria: `Categoria ${num}`,
+        ocultar: false,
+        carpetas: [],
+        attr: attr
+      }
+
+      this.selectorSer.agregarCategoria(cate);
+
+      // this.myApp.obtenerCategoria();
     } catch (error) {
       console.error(error);
       Swal.fire({

@@ -14,7 +14,7 @@ export class HomeComponent extends ConfiguracionPageComponent implements OnInit,
   filterListadoCategoria: CategoriaCarpetas[] = []
   modelSearch: string = '';
   loading: boolean = true;
-  filterSelect = '';
+  filterSelect = 'show';
   idItem = '';
 
   ngAfterViewInit(): void {

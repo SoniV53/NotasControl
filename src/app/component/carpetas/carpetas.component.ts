@@ -27,7 +27,7 @@ export class CarpetasComponent extends ConfiguracionPageComponent {
         });
 
         if (this.isCategoria) {
-          this.myApp.obtenerCategoria();
+          this.selectorSer.eliminarCarpetaCategoria(this.categoriaId,item.id);
 
           if (!this.carpetasListado?.length) {
             this.selectorSer.clearListadoCarpetas();
@@ -57,7 +57,7 @@ export class CarpetasComponent extends ConfiguracionPageComponent {
     }
     carpeta.nombre = event;
     if (this.isCategoria) {
-      this.myApp.obtenerCategoria();
+      this.selectorSer.actualizarNombreCarpeta(this.categoriaId,carpeta.id,carpeta.nombre);
     }
     this.electron.actualizarCarpeta(carpeta.id, carpeta.nombre);
   }
