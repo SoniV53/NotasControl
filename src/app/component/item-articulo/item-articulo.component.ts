@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
 import { Articulo } from '../articulos/articulos.component';
 import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
 import Swal from 'sweetalert2';
@@ -8,7 +8,8 @@ import Swal from 'sweetalert2';
   templateUrl: './item-articulo.component.html',
   styleUrl: './item-articulo.component.scss'
 })
-export class ItemArticuloComponent extends ConfiguracionPageComponent implements OnInit {
+export class ItemArticuloComponent extends ConfiguracionPageComponent implements OnInit, OnChanges {
+
 
   @Input() articulo: Articulo = {
     id: 0,
@@ -26,6 +27,10 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
   ngOnInit(): void {
   }
 
+  ngOnChanges(changes: any): void {
+    //this.articulo = changes.articulo;
+  }
+
   eliminarArticulo(id: number) {
     this.onEliminarArticulo.emit(id);
   }
@@ -41,14 +46,17 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
   }
 
   maxiContent(item: Articulo) {
+    item.ocultar = false;
+    this.actualizarArticulo(item.ocultar);
     const par = JSON.stringify(item);
     this.router.navigate(['/detalle-articulo-page'], {
       state: { articulo: item }
     });
   }
 
-  onChangeTextEmitter(event: any, item: Articulo) {
+  changeTextEmitter(event: any, item: Articulo) {
     item.title = event;
+    this.electron.actualizarTituloArticulo(item.id, item.title)
   }
 
   datePrint(articulo: Articulo): Date {
@@ -68,4 +76,6 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
       });
     }
   }
+
+
 }

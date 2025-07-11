@@ -4,6 +4,7 @@ import { Carpeta, CategoriaCarpetas } from './model/CategoriaCarpetasModel';
 import { SelectorServiceService } from './providers/selector-service.service';
 import Swal from 'sweetalert2';
 import { Router } from '@angular/router';
+import { ATRIBUTOS_LISTA_CATEGORIA, Tipos } from './providers/atribuitos/Atributos';
 
 declare var bootstrap: any;
 
@@ -37,8 +38,8 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
 
-  onClickActionCarpeta(event: Carpeta) {
-    console.log(event)
+  onClickActionCarpeta(event: any) {
+    this.selectorSer.setItemSeleccionId({ id: event.id, tipo: 1 })
     this.router.navigate(['/inicio']);
     this.selectorSer.clearHistorial();
     this.selectorSer.addCarpeta(event);
@@ -51,7 +52,7 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
   async clickDelete(event: any) {
     this.idCategoria = event;
-    this.messageEliminar(async () => {
+    await this.messageEliminar(async () => {
       this.eliminarCategoria()
     })
   }
@@ -59,7 +60,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
   async eliminarCategoria() {
     try {
       await this.electron.eliminarCategoria(this.idCategoria);
-      this.obtenerCategoria();
+      this.selectorSer.eliminarCategoria(this.idCategoria);
+      const attr: any[] = await this.electron.obtenerAtributosPorTipo(Tipos.Categoria, this.idCategoria.toString());
+      console.log(attr);
+      if (attr) {
+        attr.forEach(async res => {
+         await this.electron.eliminarAtributo(res.id);
+        })
+      }
+
+      //this.obtenerCategoria();
       Swal.fire({
         title: "Se elimino Correctamente!",
         icon: "success",
@@ -76,6 +86,29 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  async eliminarCarpeta(item: any, categoriaId:number) {
+    this.messageEliminar(async () => {
+      try {
+        await this.electron.eliminarCarpeta(item.id)
+        await this.selectorSer.eliminarCarpetaCategoria(categoriaId,item.id);
+        this.router.navigate(['/home']);
+        Swal.fire({
+          title: "Se elimino Correctamente!",
+          icon: "success",
+          draggable: true
+        });
+
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          title: "Elimine Articulos Antes y Carpetas",
+          icon: "error",
+          draggable: true
+        });
+      }
+    })
+  }
+
   async obtenerCategoria() {
     try {
       this.clearListCategoria();
@@ -84,7 +117,9 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
 
       for (const res of this.listadoCate) {
         const carpetas = await this.obtenerCarpeta(res.id);
-        this.listadoCategoria.push({ id: res.id, categoria: res.name, carpetas: carpetas, ocultar: this.textoABoolean(res.ocultar) });
+        await this.creacionAtributosCategoria(res.id.toString());
+        const result = await this.obtenerAtributos(Tipos.Categoria, res?.id.toString() || '');
+        this.listadoCategoria.push({ id: res.id, categoria: res.name, carpetas: carpetas, ocultar: this.textoABoolean(res.ocultar), attr: result });
       }
 
       this.selectorSer.setListadoCategoria(this.listadoCategoria);
@@ -117,14 +152,16 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     this.listadoCategoria = [];
   }
 
-  async crearEspe(value: any) {
+  async crearCarpe(value: any) {
     try {
-      console.log(value);
-      console.log(this.idCategoria);
-
       if (this.idCategoria) {
-        await this.electron.crearCarpeta(value.nombre, null, this.idCategoria);
-        await this.obtenerCategoria();
+        const res = await this.electron.crearCarpeta(value.nombre, null, this.idCategoria);
+        let carp: Carpeta = {
+          id: res?.lastInsertRowid,
+          nombre: value.nombre,
+          fechaCreacion: ''
+        }
+        this.selectorSer.agregarCarpetaCategoria(this.idCategoria, carp);
 
         value.nombre = '';
       }
@@ -157,8 +194,57 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     });
   }
 
-  ngOnDestroy(): void {
-   // this.agregarHistorial();
+  async agregarHistorial(id: any, tipo: number) {
+    try {
+      this.electron.limpiarHistorial();
+      const tipoText = tipo == 0 ? 'categoria' : 'carpeta'
+      this.electron.agregarHistorial(id, tipoText);
+
+    } catch (error) {
+      console.log(error);
+    }
   }
 
+  ngOnDestroy(): void {
+    // this.agregarHistorial();
+  }
+
+  async creacionAtributosCategoria(categoryId: string) {
+    const listaAtr: any[] = await this.electron.obtenerAtributosPorTipo(Tipos.Categoria, categoryId) || [];
+    if (listaAtr) {
+      ATRIBUTOS_LISTA_CATEGORIA.forEach(res => {
+        if (!this.isExistAtribute(listaAtr, res.titulo)) {
+          console.log(res)
+          this.electron.crearAtributo(Tipos.Categoria, categoryId, res.titulo, res.value.toString())
+        }
+      })
+    }
+  }
+
+  async obtenerAtributos(tipo: Tipos, key: any): Promise<any[]> {
+    const listaAtr: any[] = await this.electron.obtenerAtributosPorTipo(tipo, key) || [];
+    return listaAtr || [];
+  }
+
+  async actualizarAtributo(titulo: string, value: string, tipo: Tipos, key: any) {
+    const listaAtr: any[] = await this.electron.obtenerAtributosPorTipo(tipo, key) || [];
+    if (listaAtr) {
+      listaAtr.forEach(res => {
+        if (titulo === res.titulo) {
+          this.electron.actualizarAtributo(res.id, tipo, key, value.toString());
+          return;
+        }
+      });
+    }
+  }
+
+  async agregarAtributosCategoria(categoriaId: any) {
+    await this.creacionAtributosCategoria(categoriaId.toString());
+    const result = await this.obtenerAtributos(Tipos.Categoria, categoriaId.toString() || '');
+    return result;
+  }
+
+  isExistAtribute(listado: any[], value: any) {
+    return listado.some(res => res.titulo === value);
+  }
 }

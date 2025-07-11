@@ -49,7 +49,6 @@ export class CrearArticuloComponent {
   }
 
   onChangeText(event: any) {
-    console.log(event)
     if (event) {
       this.contenido = event;
     }

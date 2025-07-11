@@ -17,7 +17,7 @@
     </div>
 
     <div class="card-body position-relative" *ngIf="categoria?.ocultar || isPage">
-        <ul class="list-group list-group-flush">
+        <ul class="list-group list-group-flush hide-scrollbar" style="overflow-y: auto; height: 200px;">
             <li class="list-group-item d-flex justify-content-between align-items-center"
                 *ngFor="let item of listadoCarpetas" (click)="clickAction(item)">
                 <span class="text-truncate" style="cursor: pointer;">{{ item?.nombre }}</span>
@@ -34,6 +34,11 @@
 
                 <button class="btn btn-sm btn-outline-secondary" (click)="clickCreate($event)" title="Crear Carpeta">
                     <i class="fa-solid fa-folder-plus"></i>
+                </button>
+
+                <button class="btn btn-sm btn-outline-secondary" (click)="updateOcultarMenu($event)" [title]="visibleInMenu ? 'Ocultar Categoria Menu' : 'Ver Categoria en Menu'">
+                    <i class="fa-solid fa-eye-slash" *ngIf="!visibleInMenu"></i>
+                    <i class="fa-solid fa-eye" *ngIf="visibleInMenu"></i>
                 </button>
             </div>
         </div>

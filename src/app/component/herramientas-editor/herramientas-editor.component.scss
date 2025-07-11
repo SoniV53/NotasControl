@@ -44,3 +44,17 @@ button:hover {
     border-radius: 8px;
     padding: 1px;
 }
+
+@media print {
+  body * {
+    visibility: visible;
+  }
+  #printArticuloId16, #printArticuloId16 * {
+    visibility: visible;
+  }
+  #printArticuloId16 {
+    position: absolute;
+    left: 0;
+    top: 0;
+  }
+}

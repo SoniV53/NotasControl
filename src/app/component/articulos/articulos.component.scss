@@ -1,0 +1,9 @@
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px; 
+}
+
+.page-item {
+  flex: 0 0 auto; 
+}

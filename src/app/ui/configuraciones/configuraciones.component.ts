@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { ConfiguracionPageComponent } from '../main/configuracion-page/configuracion-page.component';
 import Swal from 'sweetalert2';
+import { CategoriaCarpetas } from '../../model/CategoriaCarpetasModel';
 
 declare var bootstrap: any;
 
@@ -15,20 +16,44 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
 
   selectedFilePath: string = '';
 
-  ngOnInit(): void {
+  async ngOnInit() {
+    await this.obtenerPath();
     this.selectedFilePath = this.selectorSer.selectedFilePath;
   }
 
+  async obtenerPath() {
+    if (this.selectorSer.selectedFilePath) {
+      return;
+    }
+    try {
+      const params = await this.electron.obtenerParametro('URL_DB');
+      this.selectorSer.selectedFilePath = params?.value;
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   onChange(event: any) {
-    console.log(event);
-    this.selectorSer.selectedFilePath = event.data;
+    console.log(event)
+    // this.selectorSer.selectedFilePath = event.data;
   }
 
   async crearNuevaCategoria() {
     try {
-      await this.electron.crearCategoria(this.nombreCate, false);
+      const res = await this.electron.crearCategoria(this.nombreCate, false);
+      const attr = await this.myApp.agregarAtributosCategoria(res?.lastInsertRowid);
+      const cate: CategoriaCarpetas = {
+        id: res?.lastInsertRowid,
+        categoria: this.nombreCate,
+        ocultar: false,
+        carpetas: [],
+        attr: attr
+      }
+
+      this.selectorSer.agregarCategoria(cate);
+
       this.nombreCate = '';
-      this.myApp.obtenerCategoria();
+      //this.myApp.obtenerCategoria();
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -41,7 +66,7 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
 
   async limpiarHistorial() {
     try {
-      await this.electron.limpiarHistorialCarpetas();
+      await this.electron.limpiarHistorial();
       this.mensajeToast('Se limpio correctamente');
     } catch (error) {
       console.log(error);
@@ -51,8 +76,14 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
   async imporExporAtion(isImportar: boolean) {
     if (!this.selectedFilePath) return;
     if (!isImportar) {
-      this.electron.exportarBaseDatos(this.selectedFilePath).then(res => {
+      this.electron.exportarBaseDatos(this.selectedFilePath).then(async res => {
         this.mensajeToast(res?.message);
+        const params = await this.electron.obtenerParametro('URL_DB');
+        if (!params) {
+          this.electron.crearParametro("URL_DB", this.selectedFilePath.toString());
+        } else {
+          this.electron.actualizarParametro("URL_DB", this.selectedFilePath.toString());
+        }
       })
         .catch(error => {
           console.error('Error:', error);
@@ -62,6 +93,8 @@ export class ConfiguracionesComponent extends ConfiguracionPageComponent impleme
         this.electron.importarBaseDatos(this.selectedFilePath);
       })
     }
+
+    this.selectorSer.selectedFilePath = this.selectedFilePath;
   }
 
 

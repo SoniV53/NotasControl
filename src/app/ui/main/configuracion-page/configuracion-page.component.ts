@@ -4,7 +4,10 @@ import { AppComponent } from '../../../app.component';
 import { SelectorServiceService } from '../../../providers/selector-service.service';
 import { Location, ViewportScroller } from '@angular/common';
 import Swal from 'sweetalert2';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+import { CategoriaCarpetas } from '../../../model/CategoriaCarpetasModel';
+import { ATRIBUTOS_LISTA_CATEGORIA, Tipos } from '../../../providers/atribuitos/Atributos';
+import { AtributosTitulo } from '../../../providers/atribuitos/EnumAtributos';
 
 declare var bootstrap: any;
 
@@ -14,6 +17,7 @@ declare var bootstrap: any;
   styleUrl: './configuracion-page.component.scss'
 })
 export class ConfiguracionPageComponent {
+  private savedPosition: [number, number] = [0, 0];
 
   //this.router.navigate(['/carpeta', id]);
 
@@ -23,7 +27,8 @@ export class ConfiguracionPageComponent {
     public selectorSer: SelectorServiceService,
     public viewportScroller: ViewportScroller,
     public router: Router,
-    public location: Location
+    public location: Location,
+    public route: ActivatedRoute,
   ) {
 
   }
@@ -90,6 +95,53 @@ export class ConfiguracionPageComponent {
     const element = document.getElementById(id);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
+  async scrollToTopByIdEnd(id: string) {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'end' });
+    }
+  }
+
+  selectorMenuPint(listado: CategoriaCarpetas[], id: number, tipo: number) {
+    this.selectorSer.setItemSeleccionId({ id: id.toString(), tipo: tipo })
+    const carpeta = listado.find(res => res.id == id)?.carpetas;
+    this.selectorSer.clearListadoCarpetas();
+    this.selectorSer.setListadoCarpetas(carpeta || [])
+  }
+
+  pintItemMenu(id: number, tipo: number) {
+    this.selectorSer.setItemSeleccionId({ id: id.toString(), tipo: tipo })
+  }
+
+  obtenerTituloAtrinbuto(titulo: string) {
+    return ATRIBUTOS_LISTA_CATEGORIA.find(va => va.titulo = titulo)?.titulo
+  }
+
+  async listadoVisibleUnique(attr: AtributosTitulo, listaAttr: any[]) {
+    if (listaAttr) {
+      const find = await listaAttr.find(res => res.titulo === attr);
+      return find;
+    }
+  }
+
+
+  guardarScroll() {
+    this.savedPosition = this.viewportScroller.getScrollPosition();
+    console.log('Posición guardada:', this.savedPosition);
+  }
+
+  restaurarScroll() {
+    this.viewportScroller.scrollToPosition(this.savedPosition);
+    console.log('Scroll restaurado:', this.savedPosition);
+  }
+
+  async irAAnchor(id: string) {
+    if (id) {
+      console.log(id)
+      await this.viewportScroller.scrollToAnchor(id);
     }
   }
 

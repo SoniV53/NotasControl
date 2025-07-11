@@ -1,20 +1,34 @@
 <div class="spinner-border" role="status" *ngIf="loading" style="margin: 24px;">
-  <span class="visually-hidden">Loading...</span>
+    <span class="visually-hidden">Loading...</span>
 </div>
 
 <section *ngIf="!loading">
     <header>
         <configuraciones></configuraciones>
+        <div class="justifyRight">
+            <div class="filter-hidden">
+                <i class="fa-solid fa-eye" (click)="selectFilter('show')"
+                    [ngClass]="{'select':this.filterSelect === 'show'}"></i>
+                <i class="fa-solid fa-eye-slash " (click)="selectFilter('hidden')"
+                    [ngClass]="{'select':this.filterSelect === 'hidden'}"></i>
+            </div>
+        </div>
+
+
+        <div class="m-3">
+            <input type="text" id="rutaDb" class="form-control" placeholder="Buscar Categoria" [(ngModel)]="modelSearch"
+                (input)="onChange($event)" />
+        </div>
     </header>
     <main class="m-4">
 
         <div class="row ">
-            <div class="col-6 " *ngFor="let item of listadoCategoria">
+            <div class="col-6 " *ngFor="let item of filterListadoCategoria">
                 <div class="mb-2">
                     <acordion-item [categoria]="item" [id]="formatId(item.categoria)"
                         (onClickAction)="myApp.onClickActionCarpeta($event)"
                         (onClickCreate)="myApp.clickCreate(item?.id)" (onClickEliminate)="myApp.clickDelete(item?.id)"
-                        [isPage]="true" (onChangeTextEmitter)="changeTextEmitter($event)" ></acordion-item>
+                        [isPage]="true" (onChangeTextEmitter)="changeTextEmitter($event)" (onChangeHidden)="onChangeHidden($event)"></acordion-item>
                 </div>
             </div>
         </div>

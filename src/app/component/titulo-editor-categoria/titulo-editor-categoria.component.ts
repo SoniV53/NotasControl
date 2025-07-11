@@ -43,7 +43,7 @@ export class TituloEditorCategoriaComponent  extends ConfiguracionPageComponent{
       try {
         await this.electron.actualizarCategoria(this.categoria.id,this.texto,this.categoria.ocultar);
       } catch (error) {
-        console.log()
+        console.log(error)
       }
     }
     this.onChangeTextEmitter.emit(this.texto);

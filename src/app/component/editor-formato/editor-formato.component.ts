@@ -22,14 +22,11 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
 
 
   ngAfterViewInit(): void {
-    console.log(this.articulo);
     this.pegarContenido();
   }
 
   ngOnChanges(changes: SimpleChanges) {
-    if (this.isCreate && this.texto) {
-      this.editor.nativeElement.innerHTML = this.texto;
-    }
+    this.pegarContenido();
   }
 
   async guardarContenido() {
@@ -52,10 +49,12 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
 
 
   pegarContenido() {
-    if (this.articulo) {
-      this.editor.nativeElement.innerHTML = this.articulo.content;
-    } else if (this.isCreate && this.texto) {
-      this.editor.nativeElement.innerHTML = this.texto;
+    if (this.editor) {
+      if (this.articulo) {
+        this.editor.nativeElement.innerHTML = this.articulo.content;
+      } else if (this.isCreate && this.texto) {
+        this.editor.nativeElement.innerHTML = this.texto;
+      }
     }
   }
 
@@ -78,7 +77,6 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
   onBlur() {
     console.log('El editor perdió el foco');
     const contenido = this.editor.nativeElement.innerHTML;
-    console.log('Contenido actual:', contenido);
     this.guardarContenido();
   }
 
@@ -102,6 +100,9 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
       case 'copy':
         this.copiarHTML();
         break;
+      case 'copy2':
+        this.copiarHTMLV2();
+        break;
       case 'save':
         this.guardarContenido();
         break;
@@ -115,21 +116,50 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
   }
 
   copiarHTML() {
-    const html = this.editor.nativeElement.innerHTML;
+    const textoLimpio = this.editor.nativeElement.innerText.trim();
 
-    const listener = (e: ClipboardEvent) => {
-      e.clipboardData?.setData('text/html', html);
-      e.clipboardData?.setData('text/plain', this.editor.nativeElement.innerText);
-      e.preventDefault();
-    };
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textoLimpio).then(() => {
+        this.mensajeCopiar();
+      }).catch(err => {
+        console.error('Error copiando: ', err);
+      });
+    } else {
+      const listener = (e: ClipboardEvent) => {
+        e.clipboardData?.setData('text/plain', textoLimpio);
+        e.preventDefault();
+      };
 
-    document.addEventListener('copy', listener);
-    document.execCommand('copy');
-    document.removeEventListener('copy', listener);
+      document.addEventListener('copy', listener);
+      document.execCommand('copy');
+      document.removeEventListener('copy', listener);
 
-    this.mensajeCopiar();
+      this.mensajeCopiar();
+    }
   }
 
+  copiarHTMLV2() {
+    const texto = this.editor.nativeElement.innerText;
+    const textoLimpio = texto.replace(/\u200B/g, '').replace(/\s+/g, ' ').trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textoLimpio).then(() => {
+        this.mensajeCopiar();
+      }).catch(err => {
+        console.error('Error copiando: ', err);
+      });
+    } else {
+      const listener = (e: ClipboardEvent) => {
+        e.clipboardData?.setData('text/plain', textoLimpio);
+        e.preventDefault();
+      };
+
+      document.addEventListener('copy', listener);
+      document.execCommand('copy');
+      document.removeEventListener('copy', listener);
+
+      this.mensajeCopiar();
+    }
+  }
 
   mensajeCopiar() {
     const Toast = Swal.mixin({
@@ -153,10 +183,43 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
   imprimirPorId(id: string): void {
     const contenido = document.getElementById(id)?.innerHTML || '';
     try {
-      this.electron.imprimirPorId(id)
+      // const printContent = document.getElementById(id);
+      // const WindowPrt = window.open('', '', 'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0');
+      // WindowPrt?.document.write(printContent?.innerHTML || '');
+      // WindowPrt?.document.close();
+      // WindowPrt?.focus();
+      // WindowPrt?.print();
+      // WindowPrt?.close();
+
+      let originalContents = document.body.innerHTML;
+
+      document.body.innerHTML = contenido;
+
+      window.print();
+
+      document.body.innerHTML = originalContents;
     } catch (error) {
       console.log(error);
     }
 
+  }
+
+
+  onEditorKeydown(event: KeyboardEvent) {
+    if (event.key === 'Tab') {
+      event.preventDefault();
+
+      const selection = window.getSelection();
+      if (!selection?.rangeCount) return;
+
+      const range = selection.getRangeAt(0);
+      const tabNode = document.createTextNode('\u00a0\u00a0\u00a0\u00a0');
+      range.insertNode(tabNode);
+
+      range.setStartAfter(tabNode);
+      range.collapse(true);
+      selection.removeAllRanges();
+      selection.addRange(range);
+    }
   }
 }
