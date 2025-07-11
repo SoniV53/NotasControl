@@ -18,20 +18,22 @@
             <ul class="nav flex-column">
                 <div *ngFor="let item of listadoCategoria" style="margin: 4px 8px;">
                     <app-item-menu [itemSelect]="validarSeleccionId(item?.id || '',0)" [tipo]="0"
-                        [ocultar]="item.ocultar" [texto]="item.categoria" (onClickMore)="clickMore($event,item)"
-                        (onClickItem)="clickItem(item,0)"
-                        (onChangeTextEmitter)="changeTextEmitter($event,item,'')" (onClickItemCarpeta)="clickItemCarpeta(item, item?.carpetas?.length)"></app-item-menu>
+                        [itemId]="'itemMenuCate'+item.id" [ocultar]="item.ocultar" [texto]="item.categoria"
+                        (onClickMore)="clickMore($event,item)" (onClickItem)="clickItem(item,0)"
+                        (onChangeTextEmitter)="changeTextEmitter($event,item,'')"
+                        (onClickItemCarpeta)="clickItemCarpeta(item, item?.carpetas?.length)"
+                        (onClickActionDrow)="clickActionDrow($event,item)"></app-item-menu>
 
                     <div *ngIf="!item.ocultar">
-                        <div *ngFor="let carpeta of item.carpetas" style="margin: 4px 16px;" >
+                        <div *ngFor="let carpeta of item.carpetas" style="margin: 4px 16px;">
                             <app-item-menu [itemSelect]="validarSeleccionId(carpeta?.id || '',1)" [tipo]="1"
-                                [texto]="carpeta.nombre" (onClickItem)="clickItem(carpeta,1)"
+                                [itemId]="'itemMenuCarp'+carpeta.id" [texto]="carpeta.nombre"
+                                (onClickItem)="clickItem(carpeta,1)"
+                                (onClickActionDrow)="clickActionDrow($event,carpeta,item.id)"
                                 (onChangeTextEmitter)="changeTextEmitter($event,carpeta,item.id)"></app-item-menu>
                         </div>
                     </div>
                 </div>
-
-
             </ul>
         </main>
         <footer>

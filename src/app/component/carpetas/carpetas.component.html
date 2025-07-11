@@ -1,17 +1,20 @@
 <div class="row row-cols-auto g-2 justify-content-start">
   <div *ngFor="let item of carpetasListado" class="col">
-    <div class="folder-item" (dblclick)="clickAction(item)">
-      <div class="folder-icon">
-        <i class="fas fa-folder"></i>
+    <div class="btn-group" [id]="'listCarpetaId'+item.id" data-bs-toggle="dropdown" (contextmenu)="activarEdicionR($event,item)">
+      <div class="folder-item" (click)="clickAction(item)">
+        <div class="folder-icon">
+          <i class="fas fa-folder"></i>
+        </div>
+        <app-titulo-editor [texto]="item?.nombre || ''" (onChangeTextEmitter)="changeTextEmitter($event, item)"
+          [numPage]="1" [editandoTitulo]="editandoTitulo">
+        </app-titulo-editor>
       </div>
-      <app-titulo-editor 
-        [texto]="item?.nombre || ''" 
-        (onChangeTextEmitter)="changeTextEmitter($event, item)"
-        [numPage]="1">
-      </app-titulo-editor>
-      <div class="folder-menu m-2" (click)="eliminarCarpeta(item, $event)">
-        x
-      </div>
+
+
+      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+        <li><a class="dropdown-item" (click)="clickActionDrow('editar')" style="cursor: pointer;">Editar</a></li>
+        <li><a class="dropdown-item" (click)="clickActionDrow('eliminar')" style="cursor: pointer;">Eliminar</a></li>
+      </ul>
     </div>
   </div>
 </div>

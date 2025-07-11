@@ -86,6 +86,29 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
+  async eliminarCarpeta(item: any, categoriaId:number) {
+    this.messageEliminar(async () => {
+      try {
+        await this.electron.eliminarCarpeta(item.id)
+        await this.selectorSer.eliminarCarpetaCategoria(categoriaId,item.id);
+        this.router.navigate(['/home']);
+        Swal.fire({
+          title: "Se elimino Correctamente!",
+          icon: "success",
+          draggable: true
+        });
+
+      } catch (error) {
+        console.error(error);
+        Swal.fire({
+          title: "Elimine Articulos Antes y Carpetas",
+          icon: "error",
+          draggable: true
+        });
+      }
+    })
+  }
+
   async obtenerCategoria() {
     try {
       this.clearListCategoria();

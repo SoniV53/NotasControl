@@ -34,6 +34,7 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
           this.listadoCategoria.push(res);
         }
       })
+      console.log(this.listadoCategoria)
     })
   }
 
@@ -182,6 +183,21 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
       x: event.clientX,
       y: event.clientY
     });
+  }
+
+  clickActionDrow(tipo: string, item: any, categoriaId: number = 0) {
+    switch (tipo) {
+      case 'eliminar':
+        if (!categoriaId) {
+          this.myApp.clickDelete(item?.id)
+        } else {
+          this.myApp.eliminarCarpeta(item,categoriaId)
+        }
+        break;
+
+      default:
+        break;
+    }
   }
 
 }

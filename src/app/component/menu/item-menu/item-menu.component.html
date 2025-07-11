@@ -1,18 +1,27 @@
-<div class="unidad-item" [ngClass]="{'unidad-item-select':itemSelect}">
-    <span class="unidad-icon">
-        <div class="icon-arraw" (click)="clickMore()" *ngIf="tipo != 1">
-            <i class="fa-solid fa-caret-right" *ngIf="ocultar"></i>
-            <i class="fa-solid fa-caret-down" *ngIf="!ocultar"></i>
-        </div>
-        <i class="fa-solid fa-layer-group" (click)="clickItem()" *ngIf="tipo != 1"></i>
-        <i class="fa-solid fa-folder-open" (click)="clickItem()" *ngIf="tipo === 1"></i>
-    </span>
+<div class="btn-group">
+    <div class="unidad-item" [ngClass]="{'unidad-item-select':itemSelect}" [id]="itemId" data-bs-toggle="dropdown"
+        (contextmenu)="activarEdicionR($event)">
+        <span class="unidad-icon">
+            <div class="icon-arraw" (click)="clickMore()" *ngIf="tipo != 1">
+                <i class="fa-solid fa-caret-right" *ngIf="ocultar"></i>
+                <i class="fa-solid fa-caret-down" *ngIf="!ocultar"></i>
+            </div>
+            <i class="fa-solid fa-layer-group" (click)="clickItem()" *ngIf="tipo != 1"></i>
+            <i class="fa-solid fa-folder-open" (click)="clickItem()" *ngIf="tipo === 1"></i>
+        </span>
 
-     <div (click)="clickItem()">
-        <app-titulo-editor [texto]="texto" (onChangeTextEmitter)="changeTextEmitter($event)"></app-titulo-editor>
+        <div (click)="clickItem()">
+            <app-titulo-editor [texto]="texto" (onChangeTextEmitter)="changeTextEmitter($event)" [editandoTitulo]="editandoTitulo"></app-titulo-editor>
+        </div>
+
+        <span class="unidad-close justifyCenter" (click)="clickItemCarpeta()" *ngIf="tipo === 0">
+            <i class="fa-solid fa-folder-plus"></i>
+        </span>
     </div>
 
-    <span class="unidad-close justifyCenter" (click)="clickItemCarpeta()" *ngIf="tipo === 0">
-        <i class="fa-solid fa-folder-plus"></i>
-    </span>
+
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start" >
+        <li><a class="dropdown-item" (click)="clickActionDrow('editar')" style="cursor: pointer;">Editar</a></li>
+        <li><a class="dropdown-item" (click)="clickActionDrow('eliminar')" style="cursor: pointer;">Eliminar</a></li>
+    </ul>
 </div>

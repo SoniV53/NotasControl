@@ -1,17 +1,30 @@
-<div class="container mt-3">
+<div class="container mt-3" style="overflow-y: none;">
   <div *ngIf="articulos.length === 0" class="alert alert-secondary text-center">
     No hay artículos en esta carpeta.
   </div>
 
 
-  <nav aria-label="Page navigation" *ngIf="articulo" style="overflow-x: auto;">
-    <ul class="pagination">
-      <li class="page-item" *ngFor="let articulo of articulos;let i = index"
-        [ngClass]="{'active': articuloId(articulo.id)}">
-        <a class="page-link" (click)="seleccionarArticulo(articulo)" style="cursor: pointer;">{{i + 1}}</a>
-      </li>
-    </ul>
-  </nav>
+  <div>
+    <nav aria-label="Page navigation" *ngIf="articulo">
+      <ul class="pagination flex-wrap">
+        <div *ngFor="let articulo of articulos;let i = index">
+          <div class="btn-group">
+            <li class="page-item" data-bs-toggle="dropdown" [id]="'drowItemArtId'+articulo.id"
+              [ngClass]="{'active': articuloId(articulo.id)}" (contextmenu)="activarEdicionR($event,articulo)">
+              <a class="page-link" (click)="seleccionarArticulo(articulo)" style="cursor: pointer;">{{i + 1}}</a>
+            </li>
+
+            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+              <li><a class="dropdown-item" (click)="clickActionDrow('eliminar')" style="cursor: pointer;">Eliminar</a>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+      </ul>
+    </nav>
+  </div>
 
   <app-item-articulo *ngIf="articulo" [articulo]="articulo" (onEliminarArticulo)="onEliminarArticulo($event)"
     [isMin]="true"></app-item-articulo>

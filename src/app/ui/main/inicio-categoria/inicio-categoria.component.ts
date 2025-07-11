@@ -19,9 +19,7 @@ export class InicioCategoriaComponent extends ConfiguracionPageComponent impleme
     });
 
     this.selectorSer.listadoCarpetas$.subscribe(async data => {
-      if (data) {
-        this.carpetas = data;
-      }
+      this.carpetas = data;
     })
   }
 

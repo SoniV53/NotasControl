@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnChanges, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Articulo } from '../articulos/articulos.component';
 import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
 
@@ -7,22 +7,22 @@ import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/con
   templateUrl: './titulo-editor.component.html',
   styleUrl: './titulo-editor.component.scss'
 })
-export class TituloEditorComponent extends ConfiguracionPageComponent implements AfterViewInit {
+export class TituloEditorComponent extends ConfiguracionPageComponent implements AfterViewInit, OnChanges {
+
   @Input() texto: string = '';
   @Input() numPage: number = 0;
   @Output() onChangeTextEmitter = new EventEmitter<string>();
-  editandoTitulo = false;
+  @Input() editandoTitulo = false;
   enterPressed = false;
 
   @ViewChild('tituloRef') tituloRef!: ElementRef;
 
   ngAfterViewInit() {
-    if (!this.texto) {
-      this.texto = '\u200B';
-    }
-    if (this.tituloRef?.nativeElement) {
-      this.tituloRef.nativeElement.innerText = this.texto;
-    }
+    this.pegarContenido();
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.pegarContenido();
   }
 
   activarEdicion(tituloEl: HTMLElement) {
@@ -38,6 +38,17 @@ export class TituloEditorComponent extends ConfiguracionPageComponent implements
       if (!tituloEl.innerText.trim()) {
         tituloEl.innerText = this.texto;
       }
+    }
+  }
+
+  
+
+  pegarContenido() {
+    if (!this.texto) {
+      this.texto = '\u200B';
+    }
+    if (this.tituloRef?.nativeElement) {
+      this.tituloRef.nativeElement.innerText = this.texto;
     }
   }
 

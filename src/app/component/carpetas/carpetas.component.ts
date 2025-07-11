@@ -2,6 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Carpeta } from '../../model/CategoriaCarpetasModel';
 import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
 import Swal from 'sweetalert2';
+import { Dropdown } from 'bootstrap';
 
 @Component({
   selector: 'app-carpetas',
@@ -14,26 +15,19 @@ export class CarpetasComponent extends ConfiguracionPageComponent {
   @Input() categoriaId: number = 0;
   @Output() onClickAction = new EventEmitter<any>()
 
+  carpetaSelec: any;
+  editandoTitulo = false;
+
   clickAction(event: any) {
     this.onClickAction.emit(event);
   }
 
-  async eliminarCarpeta(item: any, event: MouseEvent) {
-    event.stopPropagation();
+  async eliminarCarpeta(item: any) {
     this.messageEliminar(async () => {
       try {
         await this.electron.eliminarCarpeta(item.id).then(() => {
           this.carpetasListado = this.carpetasListado.filter(c => c.id !== item.id);
         });
-
-        if (this.isCategoria) {
-          this.selectorSer.eliminarCarpetaCategoria(this.categoriaId,item.id);
-
-          if (!this.carpetasListado?.length) {
-            this.selectorSer.clearListadoCarpetas();
-          }
-        }
-
         Swal.fire({
           title: "Se elimino Correctamente!",
           icon: "success",
@@ -57,11 +51,39 @@ export class CarpetasComponent extends ConfiguracionPageComponent {
     }
     carpeta.nombre = event;
     if (this.isCategoria) {
-      this.selectorSer.actualizarNombreCarpeta(this.categoriaId,carpeta.id,carpeta.nombre);
+      this.selectorSer.actualizarNombreCarpeta(this.categoriaId, carpeta.id, carpeta.nombre);
     }
     this.electron.actualizarCarpeta(carpeta.id, carpeta.nombre);
   }
 
+  activarEdicionR(event: MouseEvent, carpeta: any) {
+    this.carpetaSelec = carpeta;
+    event.preventDefault();
+    if (window.electron && window.electron.ipcRenderer && carpeta) {
+      const id = `listCarpetaId${carpeta.id}`
+      const toggleButton = document.getElementById(id)!;
+      const dropdown = new Dropdown(toggleButton);
+      dropdown.toggle();
+    }
+  }
 
+  async clickActionDrow(tipo: string) {
+    switch (tipo) {
+      case 'editar':
+        this.editandoTitulo = true;
+        break;
+      case 'eliminar':
+        if (this.isCategoria) {
+          await this.myApp.eliminarCarpeta(this.carpetaSelec,this.categoriaId);
+        } else {
+          this.eliminarCarpeta(this.carpetaSelec);
+        }
+        break;
+
+      default:
+        break;
+    }
+
+  }
 }
 

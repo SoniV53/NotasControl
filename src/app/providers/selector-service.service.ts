@@ -178,10 +178,10 @@ export class SelectorServiceService {
 
   eliminarCarpetaCategoria(idCategoria: number, idCarpeta: number): void {
     const actualList = this.listadoCategoria.getValue();
-    const categoria = actualList.find(res => res.id === idCategoria);
+    const categoria = actualList.find(res => res.id.toString() === idCategoria.toString());
 
     if (categoria && categoria.carpetas) {
-      categoria.carpetas = categoria.carpetas.filter(carpeta => carpeta.id !== idCarpeta);
+      categoria.carpetas = categoria.carpetas.filter(carpeta => carpeta.id.toString() !== idCarpeta.toString());
     }
 
     this.listadoCategoria.next(actualList);

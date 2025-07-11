@@ -4,6 +4,7 @@
             <button (click)="clickTools('save')" [disabled]="!articulo?.isChange"><i
                     class="fa-solid fa-floppy-disk"></i></button>
             <button (click)="clickTools('copy')"><i class="fa-solid fa-copy"></i></button>
+            <button (click)="clickTools('copy2')"><i class="fa-solid fa-object-ungroup"></i></button>
             <!-- <button (click)="clickTools('print')"><i class="fa-solid fa-print"></i></button> -->
             <button [printSectionId]="printSectionId" ngxPrint [openNewTab]="false" [closeWindow]="true"
                 [previewOnly]="false" [printTitle]="articulo?.title || ''" [useExistingCss]="true"><i
