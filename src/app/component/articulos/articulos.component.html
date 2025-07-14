@@ -9,7 +9,7 @@
       <ul class="pagination flex-wrap">
         <div *ngFor="let articulo of articulos;let i = index">
           <div class="btn-group">
-            <li class="page-item" data-bs-toggle="dropdown" [id]="'drowItemArtId'+articulo.id"
+            <li class="page-item" data-bs-toggle="dropdown" [id]="'drowItemArtId'+articulo.id" aria-expanded="false"
               [ngClass]="{'active': articuloId(articulo.id)}" (contextmenu)="activarEdicionR($event,articulo)">
               <a class="page-link" (click)="seleccionarArticulo(articulo)" style="cursor: pointer;">{{i + 1}}</a>
             </li>

@@ -80,13 +80,13 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
     this.guardarContenido();
   }
 
-  @HostListener('document:click', ['$event'])
-  clickFuera(event: MouseEvent) {
-    const clickedInside = this.contenedorRef.nativeElement.contains(event.target);
-    if (!clickedInside) {
-      this.mostrar = false;
-    }
-  }
+  // @HostListener('document:click', ['$event'])
+  // clickFuera(event: MouseEvent) {
+  //   const clickedInside = this.contenedorRef.nativeElement.contains(event.target);
+  //   if (!clickedInside) {
+  //     this.mostrar = false;
+  //   }
+  // }
 
   copiarTexto() {
     const texto = this.editor.nativeElement.innerText;

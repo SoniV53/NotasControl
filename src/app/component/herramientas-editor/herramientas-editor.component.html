@@ -1,4 +1,6 @@
 <div style="margin-bottom: 10px;">
+
+
     <div class="toolbar">
         <div class="align-text">
             <button (click)="clickTools('save')" [disabled]="!articulo?.isChange"><i
@@ -26,6 +28,27 @@
         <button (click)="exec('insertUnorderedList')"><i class="fa-solid fa-list"></i></button>
         <button (click)="exec('insertOrderedList')"><i class="fa-solid fa-list-ol"></i></button>
         <button (click)="exec('underline')"><i class="fa-solid fa-underline"></i></button>
+        <button (click)="exec2('check')"><i class="fa-solid fa-square-check"></i></button>
+
+        <div class="btn-group dropup" [id]="'tableIdView'" 
+            (contextmenu)="activarEdicionR($event)">
+            <button (click)="exec2('table')"> <i class="fa-solid fa-table"></i> </button>
+
+            <ul class="dropdown-menu p-3">
+                <li>
+                    <label>Columnas:
+                        <input type="range" class="form-range" min="2" max="5" [(ngModel)]="columnas">
+                    </label>
+                </li>
+                <li>
+                    <label>Filas:
+                        <input type="range" class="form-range" min="2" max="5" [(ngModel)]="filas">
+                    </label>
+                </li>
+            </ul>
+        </div>
+
+        <!-- <button (click)="abrirModalTabla()"><i class="fa-solid fa-table"></i></button> -->
 
         <div class="align-text">
             <button (click)="alignText('left')" title="Alinear izquierda"><i
@@ -37,3 +60,31 @@
     </div>
 
 </div>
+
+<!-- 
+<div class="modal" tabindex="-1" id="modalTableid" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Modal title</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <h5>Insertar tabla</h5>
+                <label>Columnas:
+                    <input type="number" [(ngModel)]="columnas" min="1" />
+                </label>
+                <label>Filas:
+                    <input type="number" [(ngModel)]="filas" min="1" />
+                </label>
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-primary" (click)="insertarTabla()">Insertar</button>
+                <button type="button" class="btn btn-secondary" (click)="cerrarModalTabla()"
+                    data-bs-dismiss="modal">Cancelar</button>
+            </div>
+        </div>
+    </div>
+</div> -->

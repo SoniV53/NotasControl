@@ -1,5 +1,7 @@
 import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@angular/core';
 import { Articulo } from '../articulos/articulos.component';
+import { Modal } from 'bootstrap';
+import { Dropdown } from 'bootstrap';
 
 export interface HerramientasData {
   id: string
@@ -17,11 +19,59 @@ export class HerramientasEditorComponent {
   @Output() onClickTools = new EventEmitter<string>();
   fontSize: number = 7;
 
+  mostrarModalTabla = false;
+  filas = 2;
+  columnas = 2;
+
+
   constructor() {
   }
 
   exec(cmd: string) {
     document.execCommand(cmd, false, '');
+  }
+  exec2(cmd: string) {
+    let fragmentoHtml = '';
+    switch (cmd) {
+      case 'check':
+        fragmentoHtml = `<input class="form-check-input" type="checkbox" value="" >`
+        break;
+      case 'table':
+        //fragmentoHtml = this.generateTable();
+        fragmentoHtml = this.generateTable2(this.filas, this.columnas);
+        break;
+
+      default:
+        break;
+    }
+
+    document.execCommand('insertHTML', false, fragmentoHtml);
+  }
+
+  generateTable() {
+    return `<table class="table">
+      <thead class="table-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">colum 1</th>
+          <th scope="col">colum 2</th>
+          <th scope="col">colum 3</th>
+          <th scope="col">colum 4</th>
+          <th scope="col">colum 5</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">\u200B</th>
+          <td>\u200B</td>
+          <td>\u200B</td>
+          <td>\u200B</td>
+          <td>\u200B</td>
+          <td>\u200B</td>
+        </tr>
+      </tbody>
+    </table>`
+
   }
 
   execFormat(command: string, value: string) {
@@ -60,14 +110,6 @@ export class HerramientasEditorComponent {
     selection.addRange(newRange);
   }
 
-  onFocus() {
-    console.log('El editor tiene foco');
-  }
-
-  onBlur() {
-    console.log('El editor perdió el foco');
-    const contenido = this.editor.nativeElement.innerHTML;
-  }
 
   copiarTexto() {
     const texto = this.editor.nativeElement.innerText;
@@ -111,5 +153,56 @@ export class HerramientasEditorComponent {
 
   clickTools(id: string) {
     this.onClickTools.emit(id);
+  }
+
+
+  abrirModalTabla() {
+    const modalElement = document.getElementById('modalTableid');
+    if (modalElement) {
+      const myModal = new Modal(modalElement);
+      myModal.show();
+    }
+  }
+
+  cerrarModalTabla() {
+    this.mostrarModalTabla = false;
+  }
+
+  insertarTabla() {
+    // const htmlTabla = this.generateTable(this.filas, this.columnas);
+    // document.execCommand('insertHTML', false, htmlTabla);
+    // this.cerrarModalTabla();
+  }
+
+  generateTable2(rows: number, cols: number): string {
+    let thead = '<thead class="table-dark"><tr>';
+    for (let c = 0; c < cols; c++) {
+      thead += `<th>Col ${c + 1}</th>`;
+    }
+    thead += '</tr></thead>';
+
+    let tbody = '<tbody>';
+    for (let r = 0; r < rows; r++) {
+      tbody += '<tr>';
+      for (let c = 0; c < cols; c++) {
+        tbody += `<td>\u200B</td>`;
+      }
+      tbody += '</tr>';
+    }
+    tbody += '</tbody>';
+
+    return `<table class="table">${thead}${tbody}</table>`;
+  }
+
+
+  activarEdicionR(event: MouseEvent) {
+
+    event.preventDefault();
+    if (window.electron && window.electron.ipcRenderer) {
+      console.log("CLICK")
+      const toggleButton = document.getElementById('tableIdView')!;
+      const dropdown = new Dropdown(toggleButton);
+      dropdown.toggle();
+    }
   }
 }

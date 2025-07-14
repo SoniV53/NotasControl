@@ -42,11 +42,11 @@ export class ArticulosComponent extends ConfiguracionPageComponent implements On
       } else {
         this.seleccionarArticulo(this.articulos[0]);
       }
-    }
 
-    if (this.articulos.length > this.numList) {
-      this.seleccionarArticulo(this.articulos[(this.articulos.length - 1)]);
-      this.numList = this.articulos.length;
+      if (this.numList != 0 &&  this.articulos.length > this.numList) {
+        this.seleccionarArticulo(this.articulos[(this.articulos.length - 1)]);
+        this.numList = this.articulos.length;
+      }
     }
   }
 
