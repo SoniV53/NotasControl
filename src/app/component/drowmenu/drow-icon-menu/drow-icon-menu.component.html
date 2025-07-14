@@ -1,0 +1,10 @@
+<div class="btn-group">
+    <div data-bs-toggle="dropdown" [id]="'drowItem'+idDrow" aria-expanded="false"
+        (contextmenu)="activarEdicionR($event)">
+        <button (click)="actionClick()"> <i [ngClass]="itemDrow?.value || 'fa-solid fa-table'"></i> </button>
+    </div>
+
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+        <ng-content></ng-content>
+    </ul>
+</div>

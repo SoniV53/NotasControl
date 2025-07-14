@@ -25,6 +25,8 @@ import { ItemMenuComponent } from './component/menu/item-menu/item-menu.componen
 import { MenuLateralIzquierdaComponent } from './component/menu/menu-lateral-izquierda/menu-lateral-izquierda.component';
 import { InicioCategoriaComponent } from './ui/main/inicio-categoria/inicio-categoria.component';
 import { RightClickDirective } from './directive/RightClickDirective';
+import { DrowmenuComponent } from './component/drowmenu/drowmenu.component';
+import { DrowIconMenuComponent } from './component/drowmenu/drow-icon-menu/drow-icon-menu.component';
 
 @NgModule({
   declarations: [
@@ -48,7 +50,9 @@ import { RightClickDirective } from './directive/RightClickDirective';
     ItemMenuComponent,
     MenuLateralIzquierdaComponent,
     InicioCategoriaComponent,
-    RightClickDirective  
+    RightClickDirective,
+    DrowmenuComponent,
+    DrowIconMenuComponent  
   ],
   imports: [
     BrowserModule,

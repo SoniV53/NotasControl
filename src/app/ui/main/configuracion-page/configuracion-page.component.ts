@@ -8,6 +8,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { CategoriaCarpetas } from '../../../model/CategoriaCarpetasModel';
 import { ATRIBUTOS_LISTA_CATEGORIA, Tipos } from '../../../providers/atribuitos/Atributos';
 import { AtributosTitulo } from '../../../providers/atribuitos/EnumAtributos';
+import { DataDrownItem } from '../../../component/drowmenu/drowmenu.component';
 
 declare var bootstrap: any;
 
@@ -18,7 +19,13 @@ declare var bootstrap: any;
 })
 export class ConfiguracionPageComponent {
   private savedPosition: [number, number] = [0, 0];
-
+  listaDrowDefault: DataDrownItem[] = [
+    { id: '1', value: 'Eliminar' },
+    { id: '2', value: 'Editar' },
+  ]
+  listaDrowEliminar: DataDrownItem[] = [
+    { id: '1', value: 'Eliminar' },
+  ]
   //this.router.navigate(['/carpeta', id]);
 
   constructor(

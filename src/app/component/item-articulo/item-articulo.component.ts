@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges } from '@angular/core';
+import { Component, ElementRef, EventEmitter, Input, OnChanges, OnInit, Output, SimpleChanges, ViewChild } from '@angular/core';
 import { Articulo } from '../articulos/articulos.component';
 import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
 import Swal from 'sweetalert2';
@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
   styleUrl: './item-articulo.component.scss'
 })
 export class ItemArticuloComponent extends ConfiguracionPageComponent implements OnInit, OnChanges {
+  @ViewChild('editor') editor!: ElementRef;
 
 
   @Input() articulo: Articulo = {
@@ -77,5 +78,130 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
     }
   }
 
+  onClickTools(event: any) {
+    switch (event) {
+      case 'copy':
+        this.copiarHTML();
+        break;
+      case 'copy2':
+        this.copiarHTMLV2();
+        break;
+      case 'save':
+        this.guardarContenido();
+        break;
+      case 'print':
+        this.imprimirPorId(this.formatId('printArticuloId' + this.articulo?.id));
+        break;
+
+      default:
+        break;
+    }
+  }
+
+  copiarHTML() {
+    const textoLimpio = this.editor.nativeElement.innerText.trim();
+
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textoLimpio).then(() => {
+        this.mensajeCopiar();
+      }).catch(err => {
+        console.error('Error copiando: ', err);
+      });
+    } else {
+      const listener = (e: ClipboardEvent) => {
+        e.clipboardData?.setData('text/plain', textoLimpio);
+        e.preventDefault();
+      };
+
+      document.addEventListener('copy', listener);
+      document.execCommand('copy');
+      document.removeEventListener('copy', listener);
+
+      this.mensajeCopiar();
+    }
+  }
+
+  copiarHTMLV2() {
+    const texto = this.editor.nativeElement.innerText;
+    const textoLimpio = texto.replace(/\u200B/g, '').replace(/\s+/g, ' ').trim();
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(textoLimpio).then(() => {
+        this.mensajeCopiar();
+      }).catch(err => {
+        console.error('Error copiando: ', err);
+      });
+    } else {
+      const listener = (e: ClipboardEvent) => {
+        e.clipboardData?.setData('text/plain', textoLimpio);
+        e.preventDefault();
+      };
+
+      document.addEventListener('copy', listener);
+      document.execCommand('copy');
+      document.removeEventListener('copy', listener);
+
+      this.mensajeCopiar();
+    }
+  }
+
+  mensajeCopiar() {
+    const Toast = Swal.mixin({
+      toast: true,
+      position: "bottom-end",
+      showConfirmButton: false,
+      timer: 3000,
+      timerProgressBar: true,
+      didOpen: (toast) => {
+        toast.onmouseenter = Swal.stopTimer;
+        toast.onmouseleave = Swal.resumeTimer;
+      }
+    });
+    Toast.fire({
+      icon: "success",
+      title: "Texto Copiado!"
+    });
+  }
+
+
+  imprimirPorId(id: string): void {
+    const contenido = document.getElementById(id)?.innerHTML || '';
+    try {
+      // const printContent = document.getElementById(id);
+      // const WindowPrt = window.open('', '', 'left=0,top=0,width=900,height=900,toolbar=0,scrollbars=0,status=0');
+      // WindowPrt?.document.write(printContent?.innerHTML || '');
+      // WindowPrt?.document.close();
+      // WindowPrt?.focus();
+      // WindowPrt?.print();
+      // WindowPrt?.close();
+
+      let originalContents = document.body.innerHTML;
+
+      document.body.innerHTML = contenido;
+
+      window.print();
+
+      document.body.innerHTML = originalContents;
+    } catch (error) {
+      console.log(error);
+    }
+
+  }
+
+  async guardarContenido() {
+    if (!this.articulo) return;
+    try {
+      const htmlContent = this.editor.nativeElement.innerHTML;
+      await this.electron.actualizarArticulo(this.articulo.id, this.articulo.title, htmlContent, this.articulo.ocultar);
+      this.articulo.isChange = false;
+      this.articulo.content = htmlContent;
+    } catch (error) {
+      console.error(error);
+      Swal.fire({
+        title: "Lo sentimos surgio algo inesperado",
+        icon: "error",
+        draggable: true
+      });
+    }
+  }
 
 }

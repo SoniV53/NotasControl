@@ -3,8 +3,8 @@
         <div class="mb-0 flex-grow-1 folder-item ">
             <!-- <app-titulo-editor [texto]="articulo.title" [articulo]="articulo"
                 (onChangeTextEmitter)="onChangeTextEmitter($event,articulo)"></app-titulo-editor> -->
-            <app-titulo-editor [texto]="articulo.title || ''" (onChangeTextEmitter)="changeTextEmitter($event, articulo)"
-                [numPage]="2">
+            <app-titulo-editor [texto]="articulo.title || ''"
+                (onChangeTextEmitter)="changeTextEmitter($event, articulo)" [numPage]="2">
             </app-titulo-editor>
         </div>
 
@@ -27,6 +27,8 @@
     </div>
 
     <div class="card-body position-relative" *ngIf="!articulo.ocultar">
+        <app-herramientas-editor (onClickTools)="onClickTools($event)" [articulo]="articulo"
+            [printSectionId]="formatId('printArticuloId'+articulo.id)"></app-herramientas-editor>
         <div [ngClass]="{'cont-min':isMin,'cont-max':!isMin}">
             <app-editor-formato [articulo]="articulo"></app-editor-formato>
         </div>

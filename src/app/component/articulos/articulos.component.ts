@@ -2,6 +2,7 @@ import { Component, Input, OnChanges, OnInit, SimpleChanges } from '@angular/cor
 import { ElectronService } from '../../../../electron/services/electron.service';
 import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
 import { Dropdown } from 'bootstrap';
+import { DataDrownItem } from '../drowmenu/drowmenu.component';
 
 export interface Articulo {
   id: number;
@@ -43,7 +44,7 @@ export class ArticulosComponent extends ConfiguracionPageComponent implements On
         this.seleccionarArticulo(this.articulos[0]);
       }
 
-      if (this.numList != 0 &&  this.articulos.length > this.numList) {
+      if (this.numList != 0 && this.articulos.length > this.numList) {
         this.seleccionarArticulo(this.articulos[(this.articulos.length - 1)]);
         this.numList = this.articulos.length;
       }
@@ -93,17 +94,9 @@ export class ArticulosComponent extends ConfiguracionPageComponent implements On
     }
   }
 
-  async clickActionDrow(tipo: string) {
-    switch (tipo) {
-      case 'eliminar':
-        console.log(this.articuloDrow)
-        this.eliminarArticulo(this.articuloDrow);
-        break;
-
-      default:
-        break;
-    }
-
+  async clickActionDrow(item: DataDrownItem) {
+    console.log(this.articuloDrow)
+    this.eliminarArticulo(this.articuloDrow);
   }
 
   eliminarArticulo(articulo: Articulo | null) {

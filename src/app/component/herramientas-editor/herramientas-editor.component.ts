@@ -2,17 +2,14 @@ import { Component, ElementRef, EventEmitter, Input, Output, ViewChild } from '@
 import { Articulo } from '../articulos/articulos.component';
 import { Modal } from 'bootstrap';
 import { Dropdown } from 'bootstrap';
-
-export interface HerramientasData {
-  id: string
-}
+import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
 
 @Component({
   selector: 'app-herramientas-editor',
   templateUrl: './herramientas-editor.component.html',
   styleUrl: './herramientas-editor.component.scss'
 })
-export class HerramientasEditorComponent {
+export class HerramientasEditorComponent extends ConfiguracionPageComponent {
   @Input() articulo: Articulo | null = null;
   @Input() printSectionId: string = '';
   @ViewChild('editor') editor!: ElementRef;
@@ -24,8 +21,7 @@ export class HerramientasEditorComponent {
   columnas = 2;
 
 
-  constructor() {
-  }
+ 
 
   exec(cmd: string) {
     document.execCommand(cmd, false, '');
@@ -196,13 +192,13 @@ export class HerramientasEditorComponent {
 
 
   activarEdicionR(event: MouseEvent) {
+    const toggleButton = document.getElementById('tableIdView')!;
+    const dropdown = new Dropdown(toggleButton);
+    dropdown.toggle();
+    // event.preventDefault();
+    // if (window.electron && window.electron.ipcRenderer) {
+    //   console.log("CLICK")
 
-    event.preventDefault();
-    if (window.electron && window.electron.ipcRenderer) {
-      console.log("CLICK")
-      const toggleButton = document.getElementById('tableIdView')!;
-      const dropdown = new Dropdown(toggleButton);
-      dropdown.toggle();
-    }
+    // }
   }
 }

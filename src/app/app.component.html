@@ -3,16 +3,11 @@
     (onClickCreate)="clickCreate($event)" (onClickEliminate)="clickDelete($event)"></menu-lateral> -->
 
 
-    <app-menu-lateral-izquierda></app-menu-lateral-izquierda>
+  <app-menu-lateral-izquierda></app-menu-lateral-izquierda>
   <div class="flex-fill">
     <router-outlet></router-outlet>
   </div>
 </div>
 
-<modal-creacion-actualizacion
-  [modalId]="'carpetaCreateModal'"
-  [title]="'Crear Carpeta'"
-  [fields]="formFields"
-  [modelData]="requestData"
-  (formSubmit)="crearCarpe($event)"
-></modal-creacion-actualizacion>
+<modal-creacion-actualizacion [modalId]="'carpetaCreateModal'" [title]="'Crear Carpeta'" [fields]="formFields"
+  [modelData]="requestData" (formSubmit)="crearCarpe($event)"></modal-creacion-actualizacion>

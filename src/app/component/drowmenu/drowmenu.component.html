@@ -1,0 +1,15 @@
+<div class="btn-group">
+    <div data-bs-toggle="dropdown" [id]="'drowItem'+idDrow" aria-expanded="false"
+        (contextmenu)="activarEdicionR($event)">
+        <ng-content></ng-content>
+    </div>
+
+    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+        <div *ngFor="let item of listaDrow">
+            <li>
+                <a class="dropdown-item" (click)="actionClick(item)" style="cursor: pointer;">{{item.value}}</a>
+            </li>
+        </div>
+
+    </ul>
+</div>

@@ -1,40 +1,27 @@
-<div class="container mt-3" style="overflow-y: none;">
-  <div *ngIf="articulos.length === 0" class="alert alert-secondary text-center">
-    No hay artículos en esta carpeta.
-  </div>
-
-
-  <div>
+<section class="container" style="overflow-y: none;">
+  <header>
     <nav aria-label="Page navigation" *ngIf="articulo">
       <ul class="pagination flex-wrap">
         <div *ngFor="let articulo of articulos;let i = index">
-          <div class="btn-group">
-            <li class="page-item" data-bs-toggle="dropdown" [id]="'drowItemArtId'+articulo.id" aria-expanded="false"
-              [ngClass]="{'active': articuloId(articulo.id)}" (contextmenu)="activarEdicionR($event,articulo)">
+          <app-drowmenu [listaDrow]="listaDrowEliminar" [idDrow]="articulo.id.toString()"
+            (onActinClick)="clickActionDrow($event)">
+            <li class="page-item" [ngClass]="{'active': articuloId(articulo.id)}">
               <a class="page-link" (click)="seleccionarArticulo(articulo)" style="cursor: pointer;">{{i + 1}}</a>
             </li>
-
-            <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-              <li><a class="dropdown-item" (click)="clickActionDrow('eliminar')" style="cursor: pointer;">Eliminar</a>
-              </li>
-            </ul>
-          </div>
+          </app-drowmenu>
         </div>
 
 
       </ul>
     </nav>
-  </div>
+  </header>
+  <main>
+    <app-item-articulo *ngIf="articulo" [articulo]="articulo" (onEliminarArticulo)="onEliminarArticulo($event)"
+      [isMin]="true"></app-item-articulo>
 
-  <app-item-articulo *ngIf="articulo" [articulo]="articulo" (onEliminarArticulo)="onEliminarArticulo($event)"
-    [isMin]="true"></app-item-articulo>
-
-  <!-- <div data-bs-spy="scroll" data-bs-target="#navbar-example2" data-bs-root-margin="0px 0px -40%"
-    data-bs-smooth-scroll="true" class="scrollspy-example bg-body-tertiary p-3 rounded-2" tabindex="0">
-    <div *ngFor="let articulo of articulos" id="articulosComponenteId">
-      
+    <div *ngIf="articulos.length === 0" class="alert alert-secondary text-center">
+      No hay artículos en esta carpeta.
     </div>
-  </div> -->
+  </main>
 
-
-</div>
+</section>
