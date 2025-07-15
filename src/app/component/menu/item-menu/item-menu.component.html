@@ -1,6 +1,6 @@
-<div class="btn-group">
-    <div class="unidad-item" [ngClass]="{'unidad-item-select':itemSelect}" [id]="itemId" data-bs-toggle="dropdown"
-        (contextmenu)="activarEdicionR($event)">
+<app-drowmenu [listaDrow]="listaDrowDefault" [idDrow]="itemId.toString()"
+    (onActinClick)="clickActionDrow($event)">
+    <div class="unidad-item" [ngClass]="{'unidad-item-select':itemSelect}" [id]="itemId">
         <span class="unidad-icon">
             <div class="icon-arraw" (click)="clickMore()" *ngIf="tipo != 1">
                 <i class="fa-solid fa-caret-right" *ngIf="ocultar"></i>
@@ -11,17 +11,12 @@
         </span>
 
         <div (click)="clickItem()">
-            <app-titulo-editor [texto]="texto" (onChangeTextEmitter)="changeTextEmitter($event)" [editandoTitulo]="editandoTitulo"></app-titulo-editor>
+            <app-titulo-editor [texto]="texto" (onChangeTextEmitter)="changeTextEmitter($event)"
+                [editandoTitulo]="editandoTitulo"></app-titulo-editor>
         </div>
 
         <span class="unidad-close justifyCenter" (click)="clickItemCarpeta()" *ngIf="tipo === 0">
             <i class="fa-solid fa-folder-plus"></i>
         </span>
     </div>
-
-
-    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start" >
-        <li><a class="dropdown-item" (click)="clickActionDrow('editar')" style="cursor: pointer;">Editar</a></li>
-        <li><a class="dropdown-item" (click)="clickActionDrow('eliminar')" style="cursor: pointer;">Eliminar</a></li>
-    </ul>
-</div>
+</app-drowmenu>

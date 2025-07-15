@@ -94,9 +94,9 @@ export class ArticulosComponent extends ConfiguracionPageComponent implements On
     }
   }
 
-  async clickActionDrow(item: DataDrownItem) {
-    console.log(this.articuloDrow)
-    this.eliminarArticulo(this.articuloDrow);
+  async clickActionDrow(item: DataDrownItem,articulo:Articulo) {
+    console.log(articulo)
+    this.eliminarArticulo(articulo);
   }
 
   eliminarArticulo(articulo: Articulo | null) {

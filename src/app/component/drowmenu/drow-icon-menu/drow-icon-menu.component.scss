@@ -11,3 +11,24 @@ button:hover {
     background-color: #e2e8f0;
     border-radius: 4px;
 }
+
+
+.color-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 10px 0;
+}
+
+.color-button {
+    width: 20px;
+    border-radius: 4px;
+    height: 20px;
+    cursor: pointer;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+
+}
+
+.dropdown-menu-color{
+    width: 300px !important;
+}

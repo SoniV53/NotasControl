@@ -22,6 +22,10 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
 
 
   ngAfterViewInit(): void {
+    this.editor.nativeElement.addEventListener('focusout', () => {
+      console.log('Focus fuera de todo el editor');
+      this.guardarContenido();
+    });
     this.pegarContenido();
   }
 
@@ -32,10 +36,13 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
   async guardarContenido() {
     if (!this.articulo) return;
     try {
+      await this.saveEditorContentCheck();
       const htmlContent = this.editor.nativeElement.innerHTML;
       await this.electron.actualizarArticulo(this.articulo.id, this.articulo.title, htmlContent, this.articulo.ocultar);
       this.articulo.isChange = false;
       this.articulo.content = htmlContent;
+
+
     } catch (error) {
       console.error(error);
       Swal.fire({
@@ -47,6 +54,16 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
   }
 
 
+  saveEditorContentCheck() {
+    const checkboxes = this.editor.nativeElement.querySelectorAll('input[type="checkbox"]');
+    checkboxes.forEach((checkbox: HTMLInputElement) => {
+      if (checkbox.checked) {
+        checkbox.setAttribute('checked', '');
+      } else {
+        checkbox.removeAttribute('checked');
+      }
+    });
+  }
 
   pegarContenido() {
     if (this.editor) {
@@ -75,9 +92,10 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
   }
 
   onBlur() {
-    console.log('El editor perdió el foco');
-    const contenido = this.editor.nativeElement.innerHTML;
-    this.guardarContenido();
+    // console.log('El editor perdió el foco');
+    // const contenido = this.editor.nativeElement.innerHTML;
+
+    // this.guardarContenido();
   }
 
   // @HostListener('document:click', ['$event'])

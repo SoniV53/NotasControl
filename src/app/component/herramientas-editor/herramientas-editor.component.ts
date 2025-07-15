@@ -3,6 +3,7 @@ import { Articulo } from '../articulos/articulos.component';
 import { Modal } from 'bootstrap';
 import { Dropdown } from 'bootstrap';
 import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
+import { COLORS } from '../../providers/Colors';
 
 @Component({
   selector: 'app-herramientas-editor',
@@ -16,16 +17,23 @@ export class HerramientasEditorComponent extends ConfiguracionPageComponent {
   @Output() onClickTools = new EventEmitter<string>();
   fontSize: number = 7;
 
+  colores = COLORS;
+  color = '#000000';
+
   mostrarModalTabla = false;
   filas = 2;
   columnas = 2;
 
 
- 
-
   exec(cmd: string) {
     document.execCommand(cmd, false, '');
   }
+
+  aplicarColor(color: string) {
+    this.color = color;
+    document.execCommand('foreColor', false, color);
+  }
+
   exec2(cmd: string) {
     let fragmentoHtml = '';
     switch (cmd) {
@@ -76,7 +84,6 @@ export class HerramientasEditorComponent extends ConfiguracionPageComponent {
 
   guardarContenido() {
     const htmlContent = this.editor.nativeElement.innerHTML;
-    console.log(htmlContent);
   }
 
   pegarContenido() {

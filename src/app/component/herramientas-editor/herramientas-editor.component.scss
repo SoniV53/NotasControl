@@ -45,7 +45,36 @@ button:hover {
     padding: 1px;
 }
 
-p{
+p {
     margin: 0;
     padding: 0;
+}
+
+.color-palette {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px; 
+    margin: 8px;
+}
+
+.color-button {
+    width: 32px;
+    height: 32px;
+    border: none;
+    border-radius: 50%; 
+    cursor: pointer;
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+
+    border: 2px solid #fff;
+    box-shadow: 0 0 2px rgba(0, 0, 0, 0.2);
+
+    &:hover {
+        transform: scale(1.2);
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
+    }
+
+    &:focus {
+        outline: none;
+        box-shadow: 0 0 0 2px #333; 
+    }
 }

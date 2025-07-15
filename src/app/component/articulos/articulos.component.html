@@ -4,14 +4,13 @@
       <ul class="pagination flex-wrap">
         <div *ngFor="let articulo of articulos;let i = index">
           <app-drowmenu [listaDrow]="listaDrowEliminar" [idDrow]="articulo.id.toString()"
-            (onActinClick)="clickActionDrow($event)">
+            (onActinClick)="clickActionDrow($event,articulo)">
             <li class="page-item" [ngClass]="{'active': articuloId(articulo.id)}">
-              <a class="page-link" (click)="seleccionarArticulo(articulo)" style="cursor: pointer;">{{i + 1}}</a>
+              <a class="page-link" (click)="seleccionarArticulo(articulo)" style="cursor: pointer;">{{(i + 1) +
+                articulo.title}} </a>
             </li>
           </app-drowmenu>
         </div>
-
-
       </ul>
     </nav>
   </header>

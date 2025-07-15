@@ -26,10 +26,11 @@
         <button (click)="exec('insertUnorderedList')"><i class="fa-solid fa-list"></i></button>
         <button (click)="exec('insertOrderedList')"><i class="fa-solid fa-list-ol"></i></button>
         <button (click)="exec('underline')"><i class="fa-solid fa-underline"></i></button>
+        <button (click)="exec('strikeThrough')"><i class="fa-solid fa-strikethrough"></i></button>
         <button (click)="exec2('check')"><i class="fa-solid fa-square-check"></i></button>
 
-        <app-drow-icon-menu [idDrow]="'tableId'" [itemDrow]="{id:'1',value:''}"
-            (onActinClick)="exec2('table')">
+
+        <app-drow-icon-menu [idDrow]="'tableId'" [itemDrow]="{id:'1',value:''}" (onActinClick)="exec2('table')">
             <div class="p-2">
                 <li>
                     <label>Columnas:
@@ -45,6 +46,15 @@
                 </li>
             </div>
         </app-drow-icon-menu>
+
+        <app-drow-icon-menu [idDrow]="'colorPaleta'" [itemDrow]="{id:'2',value:''}" [isColor]="true" [color]="color" (onActinClickButton)="aplicarColor(color)">
+            <div class="color-palette">
+                <button *ngFor="let color of colores" [style.background]="color" (click)="aplicarColor(color)"
+                    [style.background]="color" class="color-button">
+                </button>
+            </div>
+        </app-drow-icon-menu>
+
 
         <div class="align-text">
             <button (click)="alignText('left')" title="Alinear izquierda"><i

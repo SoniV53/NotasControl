@@ -1,10 +1,14 @@
-<div class="btn-group">
+<div class="dropdown">
     <div data-bs-toggle="dropdown" [id]="'drowItem'+idDrow" aria-expanded="false"
         (contextmenu)="activarEdicionR($event)">
-        <button (click)="actionClick()"> <i [ngClass]="itemDrow?.value || 'fa-solid fa-table'"></i> </button>
+        <button *ngIf="!isColor" (click)="actionClick()"> <i [ngClass]="itemDrow?.value || 'fa-solid fa-table'"></i> </button>
+
+        <div class="color-palette" *ngIf="isColor">
+            <button [style.background]="color" [style.background]="color" class="color-button" (click)="actionClickButton()"></button>
+        </div>
     </div>
 
-    <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
+    <ul class="dropdown-menu" [ngClass]="{'dropdown-menu-color':isColor}">
         <ng-content></ng-content>
     </ul>
 </div>

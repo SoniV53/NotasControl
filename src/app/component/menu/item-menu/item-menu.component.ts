@@ -1,12 +1,14 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Dropdown } from 'bootstrap';
+import { ConfiguracionPageComponent } from '../../../ui/main/configuracion-page/configuracion-page.component';
+import { DataDrownItem } from '../../drowmenu/drowmenu.component';
 
 @Component({
   selector: 'app-item-menu',
   templateUrl: './item-menu.component.html',
   styleUrl: './item-menu.component.scss'
 })
-export class ItemMenuComponent {
+export class ItemMenuComponent extends ConfiguracionPageComponent{
 
   @Input() itemSelect: boolean = false;
   @Input() itemId: string = '';
@@ -48,9 +50,9 @@ export class ItemMenuComponent {
     }
   }
 
-  clickActionDrow(tipo:string){
-    switch (tipo) {
-      case 'editar':
+  clickActionDrow(tipo:DataDrownItem){
+    switch (tipo.id) {
+      case '2':
         this.editandoTitulo = true;
         break;
     

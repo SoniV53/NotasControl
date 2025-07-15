@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { ItemSeleccionado } from '../../../providers/selector-service.service';
 import { ATRIBUTOS_LISTA_CATEGORIA, Tipos } from '../../../providers/atribuitos/Atributos';
 import { AtributosTitulo } from '../../../providers/atribuitos/EnumAtributos';
+import { DataDrownItem } from '../../drowmenu/drowmenu.component';
 
 @Component({
   selector: 'app-menu-lateral-izquierda',
@@ -185,9 +186,9 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
     });
   }
 
-  clickActionDrow(tipo: string, item: any, categoriaId: number = 0) {
-    switch (tipo) {
-      case 'eliminar':
+  clickActionDrow(tipo: DataDrownItem, item: any, categoriaId: number = 0) {
+    switch (tipo.id) {
+      case '1':
         if (!categoriaId) {
           this.myApp.clickDelete(item?.id)
         } else {

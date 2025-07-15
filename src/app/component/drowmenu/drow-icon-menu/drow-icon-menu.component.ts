@@ -10,10 +10,16 @@ import { Dropdown } from 'bootstrap';
 export class DrowIconMenuComponent {
   @Input() idDrow: string = '';
   @Input() itemDrow: DataDrownItem | null = null;
+  @Input() isColor: boolean = false;
+  @Input() color: string = '';
   @Output() onActinClick = new EventEmitter<any>();
+  @Output() onActinClickButton = new EventEmitter<any>();
 
   actionClick() {
     this.onActinClick.emit(this.itemDrow);
+  }
+  actionClickButton() {
+    this.onActinClickButton.emit(this.color);
   }
 
   activarEdicionR(event: MouseEvent) {
