@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
 import { Dropdown } from 'bootstrap';
 import { ConfiguracionPageComponent } from '../../../ui/main/configuracion-page/configuracion-page.component';
 import { DataDrownItem } from '../../drowmenu/drowmenu.component';
@@ -8,8 +8,7 @@ import { DataDrownItem } from '../../drowmenu/drowmenu.component';
   templateUrl: './item-menu.component.html',
   styleUrl: './item-menu.component.scss'
 })
-export class ItemMenuComponent extends ConfiguracionPageComponent{
-
+export class ItemMenuComponent extends ConfiguracionPageComponent implements AfterViewInit {
   @Input() itemSelect: boolean = false;
   @Input() itemId: string = '';
   @Input() tipo: number = 0;
@@ -22,6 +21,14 @@ export class ItemMenuComponent extends ConfiguracionPageComponent{
   @Output() onClickActionDrow = new EventEmitter<any>();
 
   editandoTitulo = false;
+
+
+  ngAfterViewInit(): void {
+    if (this.tipo == 0) {
+      this.listaDrowDefault.push({id:'3',value:'Ocultar'})
+    }
+
+  }
 
   clickMore() {
     this.ocultar = !this.ocultar
@@ -50,16 +57,16 @@ export class ItemMenuComponent extends ConfiguracionPageComponent{
     }
   }
 
-  clickActionDrow(tipo:DataDrownItem){
+  clickActionDrow(tipo: DataDrownItem) {
     switch (tipo.id) {
       case '2':
         this.editandoTitulo = true;
         break;
-    
+
       default:
         this.onClickActionDrow.emit(tipo)
         break;
     }
-    
+
   }
 }

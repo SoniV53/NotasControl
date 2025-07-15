@@ -186,13 +186,20 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
     });
   }
 
-  clickActionDrow(tipo: DataDrownItem, item: any, categoriaId: number = 0) {
+  async clickActionDrow(tipo: DataDrownItem, item: any, categoriaId: number = 0) {
     switch (tipo.id) {
       case '1':
         if (!categoriaId) {
           this.myApp.clickDelete(item?.id)
         } else {
-          this.myApp.eliminarCarpeta(item,categoriaId)
+          this.myApp.eliminarCarpeta(item, categoriaId)
+        }
+        break;
+      case '3':
+        if (item) {
+          await this.myApp.actualizarAtributo(AtributosTitulo.VisibleMenu, "false", Tipos.Categoria, item.id.toString());
+          this.selectorSer.actualizarAtributoCategoria(item.id, AtributosTitulo.VisibleMenu, "false");
+
         }
         break;
 
