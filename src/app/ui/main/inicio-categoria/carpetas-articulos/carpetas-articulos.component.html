@@ -1,1 +1,48 @@
-<p>carpetas-articulos works!</p>
+<div class="spinner-border" role="status" *ngIf="loading" style="margin: 24px;">
+    <span class="visually-hidden">Loading...</span>
+</div>
+
+
+<section *ngIf="rastroCarpeta.length > 0 && !loading">
+    <header class="m-2">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item" *ngFor="let carpeta of rastroCarpeta; let i = index"
+                    [class.active]="i === rastroCarpeta.length - 1"
+                    [attr.aria-current]="i === rastroCarpeta.length - 1 ? 'page' : null">
+                    <span *ngIf="i !== rastroCarpeta.length - 1" (click)="irACarpeta(carpeta.id, i)" class="fake-link">
+                        {{ carpeta.nombre }}
+                    </span>
+                    <span *ngIf="i === rastroCarpeta.length - 1">{{ carpeta.nombre }}</span>
+                </li>
+            </ol>
+        </nav>
+
+        <app-carpetas [carpetasListado]="carpetas" (onClickAction)="onClickFiles($event)"></app-carpetas>
+
+        <button type="button" class="btn btn-link" data-bs-toggle="modal" data-bs-target="#carpetaCreateModal">Crear
+            Carpeta </button>
+
+    </header>
+    <main id="inicioMainId">
+
+        <crear-articulo *ngIf="rastroCarpeta.length > 0 && carpeta" [folderId]="carpeta.id"
+            (onClickAction)="onClickAction()" [modalId]="'crearArticuloId'" title="Crear Articulo"></crear-articulo>
+
+        <app-articulos [articulos]="articulos" [carpetaId]="carpeta?.id || 0"></app-articulos>
+
+        <!-- Boton Flotante -->
+        <button
+            class="btn btn-primary rounded-circle position-fixed bottom-0 end-0 m-4 d-flex align-items-center justify-content-center"
+            style="width: 56px; height: 56px; z-index: 1050;" (click)="crearArticulo()">
+            <i class="fas fa-plus"></i>
+        </button>
+    </main>
+    <footer>
+
+    </footer>
+
+</section>
+
+<modal-creacion-actualizacion [modalId]="'carpetaCreateModal'" [title]="'Crear Carpeta'" [fields]="myApp.formFields"
+    [modelData]="requestData" (formSubmit)="crearCarpeta($event)"></modal-creacion-actualizacion>

@@ -1,7 +1,8 @@
 <div class="row row-cols-auto g-2 justify-content-start">
+
   <div *ngFor="let item of carpetasListado" class="col">
     <div class="btn-group" [id]="'listCarpetaId'+item.id" data-bs-toggle="dropdown" (contextmenu)="activarEdicionR($event,item)">
-      <div class="folder-item" (click)="clickAction(item)">
+      <div class="folder-item" (click)="clickAction(item)" (dblclick)="dbClickAction(item)" [ngClass]="{'folder-item-select': (isCategoria && isValidateId(item.id))}">
         <div class="folder-icon">
           <i class="fas fa-folder"></i>
         </div>

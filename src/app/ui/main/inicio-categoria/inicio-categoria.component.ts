@@ -9,6 +9,7 @@ import { Carpeta } from '../../../model/CategoriaCarpetasModel';
 })
 export class InicioCategoriaComponent extends ConfiguracionPageComponent implements OnInit {
   carpetas: any[] = [];
+  carpeta: Carpeta | null = null;
   requestData: any = {};
   categoriaId: number = 0;
 
@@ -20,26 +21,31 @@ export class InicioCategoriaComponent extends ConfiguracionPageComponent impleme
 
     this.selectorSer.listadoCarpetas$.subscribe(async data => {
       this.carpetas = data;
+      this.carpeta = null;
     })
   }
 
-  onClickFiles(event: any) {
+  ondbClickFiles(event: any) {
     this.selectorSer.setItemSeleccionId({ id: event.id, tipo: 1 })
     this.router.navigate(['/inicio']);
     this.selectorSer.clearHistorial();
     this.selectorSer.addCarpeta(event);
   }
 
+  onClickFiles(event: any) {
+    this.carpeta = event;
+  }
+
   async crearCarpeta(value: any) {
     try {
       if (this.categoriaId) {
         const res = await this.electron.crearCarpeta(this.requestData.nombre, null, this.categoriaId);
-        let carp:Carpeta = {
+        let carp: Carpeta = {
           id: res?.lastInsertRowid,
           nombre: this.requestData.nombre,
           fechaCreacion: ''
         }
-        this.selectorSer.agregarCarpetaCategoria(this.categoriaId,carp);
+        this.selectorSer.agregarCarpetaCategoria(this.categoriaId, carp);
         value.nombre = '';
         const carpeta = this.myApp.listadoCategoria.find(res => res.id == this.categoriaId)?.carpetas;
         this.selectorSer.clearListadoCarpetas();

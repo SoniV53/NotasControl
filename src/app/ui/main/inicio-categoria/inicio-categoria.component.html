@@ -9,10 +9,10 @@
             No hay carpetas en esta categoria.
         </div>
 
-        <app-carpetas [carpetasListado]="carpetas" (onClickAction)="onClickFiles($event)" [isCategoria]="true"
+        <app-carpetas [carpetasListado]="carpetas" (onDbClickAction)="ondbClickFiles($event)" (onClickAction)="onClickFiles($event)" [isCategoria]="true"
             [categoriaId]="categoriaId"></app-carpetas>
 
-        <app-carpetas-articulos></app-carpetas-articulos>
+        <app-carpetas-articulos [carpeta]="carpeta" *ngIf="carpeta"></app-carpetas-articulos>
     </main>
     <footer>
 

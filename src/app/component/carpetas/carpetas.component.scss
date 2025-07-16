@@ -15,6 +15,10 @@
     }
 }
 
+.folder-item-select {
+    background-color: rgb(181, 216, 255);
+}
+
 .folder-icon {
     color: #444;
     margin-right: 12px;
@@ -39,5 +43,5 @@
 }
 
 .folder-item app-titulo-editor {
-  flex-grow: 1; 
+    flex-grow: 1;
 }

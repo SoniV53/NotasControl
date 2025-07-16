@@ -14,12 +14,24 @@ export class CarpetasComponent extends ConfiguracionPageComponent {
   @Input() isCategoria: boolean = false;
   @Input() categoriaId: number = 0;
   @Output() onClickAction = new EventEmitter<any>()
+  @Output() onDbClickAction = new EventEmitter<any>()
 
+  carpetaId = '';  
   carpetaSelec: any;
   editandoTitulo = false;
 
   clickAction(event: any) {
+    if (this.isCategoria) {
+      this.carpetaId = event.id
+    }
     this.onClickAction.emit(event);
+  }
+  dbClickAction(event: any) {
+    this.onDbClickAction.emit(event);
+  }
+
+  isValidateId(id:any){
+    return this.carpetaId.toString() === id.toString();
   }
 
   async eliminarCarpeta(item: any) {

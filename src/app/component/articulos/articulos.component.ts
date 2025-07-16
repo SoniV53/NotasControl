@@ -34,7 +34,7 @@ export class ArticulosComponent extends ConfiguracionPageComponent implements On
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.numList);
+    console.log(this.articulos);
     if (this.articulos.length > 0 && this.carpetaId) {
       const articuloId = this.selectorSer.obtenerArticuloCarpeta(this.carpetaId);
       const itemArticulo = this.articulos.find(res => res.id == articuloId);
@@ -48,6 +48,8 @@ export class ArticulosComponent extends ConfiguracionPageComponent implements On
         this.seleccionarArticulo(this.articulos[(this.articulos.length - 1)]);
         this.numList = this.articulos.length;
       }
+    }else{
+      this.articulo = null
     }
   }
 
