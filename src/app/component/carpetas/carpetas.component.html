@@ -1,21 +1,18 @@
 <div class="row row-cols-auto g-2 justify-content-start">
 
   <div *ngFor="let item of carpetasListado" class="col">
-    <div class="btn-group" [id]="'listCarpetaId'+item.id" data-bs-toggle="dropdown" (contextmenu)="activarEdicionR($event,item)">
-      <div class="folder-item" (click)="clickAction(item)" (dblclick)="dbClickAction(item)" [ngClass]="{'folder-item-select': (isCategoria && isValidateId(item.id))}">
+    <app-drowmenu [listaDrow]="listaDrowDefault" [idDrow]="'listCarpetaId'+item.id"
+      (onActinClick)="clickActionDrow($event,item)">
+      <div class="folder-item" (click)="clickAction(item)" (dblclick)="dbClickAction(item)"
+        [ngClass]="{'folder-item-select': (isCategoria && isValidateId(item.id))}">
         <div class="folder-icon">
           <i class="fas fa-folder"></i>
         </div>
         <app-titulo-editor [texto]="item?.nombre || ''" (onChangeTextEmitter)="changeTextEmitter($event, item)"
-          [numPage]="1" [editandoTitulo]="editandoTitulo">
+          [numPage]="1" [editandoTitulo]="item.editandoTitulo || false" [idEditor]="formatId('editorCarpetaId'+item.id)">
         </app-titulo-editor>
       </div>
+    </app-drowmenu>
 
-
-      <ul class="dropdown-menu dropdown-menu-end dropdown-menu-lg-start">
-        <li><a class="dropdown-item" (click)="clickActionDrow('editar')" style="cursor: pointer;">Editar</a></li>
-        <li><a class="dropdown-item" (click)="clickActionDrow('eliminar')" style="cursor: pointer;">Eliminar</a></li>
-      </ul>
-    </div>
   </div>
 </div>

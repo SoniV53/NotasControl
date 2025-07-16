@@ -106,7 +106,6 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
 
   copiarHTML() {
     const textoLimpio = this.htmlContent;
-    console.log(textoLimpio)
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(textoLimpio).then(() => {
         this.mensajeCopiar();

@@ -1,24 +1,33 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { Carpeta } from '../../model/CategoriaCarpetasModel';
 import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/configuracion-page.component';
 import Swal from 'sweetalert2';
 import { Dropdown } from 'bootstrap';
+import { TituloEditorComponent } from '../titulo-editor/titulo-editor.component';
 
 @Component({
   selector: 'app-carpetas',
   templateUrl: './carpetas.component.html',
   styleUrl: './carpetas.component.scss'
 })
-export class CarpetasComponent extends ConfiguracionPageComponent {
+export class CarpetasComponent extends ConfiguracionPageComponent implements AfterViewInit {
   @Input() carpetasListado: Carpeta[] = [];
   @Input() isCategoria: boolean = false;
   @Input() categoriaId: number = 0;
   @Output() onClickAction = new EventEmitter<any>()
   @Output() onDbClickAction = new EventEmitter<any>()
+  @ViewChildren(TituloEditorComponent) titulosEditor!: QueryList<TituloEditorComponent>;
 
-  carpetaId = '';  
+  carpetaId = '';
   carpetaSelec: any;
-  editandoTitulo = false;
+
+  ngAfterViewInit(): void {
+    this.carpetasListado = this.carpetasListado.map(res => ({
+      ...res,
+      editandoTitulo: false
+    }));
+    console.log(this.carpetasListado)
+  }
 
   clickAction(event: any) {
     if (this.isCategoria) {
@@ -30,7 +39,7 @@ export class CarpetasComponent extends ConfiguracionPageComponent {
     this.onDbClickAction.emit(event);
   }
 
-  isValidateId(id:any){
+  isValidateId(id: any) {
     return this.carpetaId.toString() === id.toString();
   }
 
@@ -66,36 +75,25 @@ export class CarpetasComponent extends ConfiguracionPageComponent {
       this.selectorSer.actualizarNombreCarpeta(this.categoriaId, carpeta.id, carpeta.nombre);
     }
     this.electron.actualizarCarpeta(carpeta.id, carpeta.nombre);
+    carpeta.editandoTitulo = false;
   }
 
-  activarEdicionR(event: MouseEvent, carpeta: any) {
-    this.carpetaSelec = carpeta;
-    event.preventDefault();
-    if (window.electron && window.electron.ipcRenderer && carpeta) {
-      const id = `listCarpetaId${carpeta.id}`
-      const toggleButton = document.getElementById(id)!;
-      const dropdown = new Dropdown(toggleButton);
-      dropdown.toggle();
-    }
-  }
-
-  async clickActionDrow(tipo: string) {
-    switch (tipo) {
-      case 'editar':
-        this.editandoTitulo = true;
+  async clickActionDrow(tipo: any, carpeta: any) {
+    switch (tipo.id) {
+      case '2':
+        carpeta.editandoTitulo = true;
+        this.editarTitulo('editorCarpetaId' + carpeta.id,this.titulosEditor)
         break;
-      case 'eliminar':
+      case '1':
         if (this.isCategoria) {
-          await this.myApp.eliminarCarpeta(this.carpetaSelec,this.categoriaId);
+          await this.myApp.eliminarCarpeta(this.carpetaSelec, this.categoriaId);
         } else {
           this.eliminarCarpeta(this.carpetaSelec);
         }
         break;
-
       default:
         break;
     }
-
   }
 }
 

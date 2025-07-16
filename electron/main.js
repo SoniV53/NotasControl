@@ -6,11 +6,14 @@ const ContextMenuHandler = require('./herramientas/ContextMenuHandler');
 let mainWindow;
 
 function createWindow() {
+  const isDev = !app.isPackaged;
   mainWindow = new BrowserWindow({
     width: 1200,
     height: 900,
     menuBarVisible: false,
-    icon: path.join(__dirname, '../src/assets/icons/icono-electron.png'),
+    icon: isDev
+      ? path.join(__dirname, '../src/assets/icons/icono-electron.png')
+      : path.join(__dirname, '..', 'dist', 'control-notas', 'browser', 'browser', 'assets', 'icons', 'icono-electron.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -22,8 +25,6 @@ function createWindow() {
 
   mainWindow.setAutoHideMenuBar(true);
   mainWindow.setMenuBarVisibility(false);
-
-  const isDev = !app.isPackaged;
 
   const indexPath = isDev
     ? path.join(__dirname, '../dist/control-notas/browser/index.html')

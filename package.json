@@ -1,6 +1,6 @@
 {
   "name": "control-notas",
-  "version": "1.2.5",
+  "version": "1.2.6",
   "main": "electron/main.js",
   "scripts": {
     "ng": "ng",
@@ -49,8 +49,8 @@
     "typescript": "~5.4.2"
   },
   "build": {
-    "appId": "com.miempresa.controlnotas",
-    "productName": "ControlNotas",
+    "appId": "com.soni.controlnotas",
+    "productName": "Notas-Guia",
     "files": [
       "dist/control-notas/**/*",
       "electron/**/*",
@@ -61,7 +61,11 @@
       "buildResources": "assets"
     },
     "win": {
-      "target": "nsis"
+      "target": "nsis",
+      "icon": "src/assets/icons/icono-electron.ico"
+    },
+    "linux": {
+      "icon": "src/assets/icons/icono-electron.png"
     },
     "asar": false
   }

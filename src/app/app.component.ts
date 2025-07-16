@@ -62,7 +62,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
       await this.electron.eliminarCategoria(this.idCategoria);
       this.selectorSer.eliminarCategoria(this.idCategoria);
       const attr: any[] = await this.electron.obtenerAtributosPorTipo(Tipos.Categoria, this.idCategoria.toString());
-      console.log(attr);
       if (attr) {
         attr.forEach(async res => {
          await this.electron.eliminarAtributo(res.id);
@@ -214,7 +213,6 @@ export class AppComponent implements OnInit, AfterViewInit, OnDestroy {
     if (listaAtr) {
       ATRIBUTOS_LISTA_CATEGORIA.forEach(res => {
         if (!this.isExistAtribute(listaAtr, res.titulo)) {
-          console.log(res)
           this.electron.crearAtributo(Tipos.Categoria, categoryId, res.titulo, res.value.toString())
         }
       })

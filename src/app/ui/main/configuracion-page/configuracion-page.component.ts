@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, QueryList, ViewChildren } from '@angular/core';
 import { ElectronService } from '../../../../../electron/services/electron.service';
 import { AppComponent } from '../../../app.component';
 import { SelectorServiceService } from '../../../providers/selector-service.service';
@@ -9,6 +9,7 @@ import { CategoriaCarpetas } from '../../../model/CategoriaCarpetasModel';
 import { ATRIBUTOS_LISTA_CATEGORIA, Tipos } from '../../../providers/atribuitos/Atributos';
 import { AtributosTitulo } from '../../../providers/atribuitos/EnumAtributos';
 import { DataDrownItem } from '../../../component/drowmenu/drowmenu.component';
+import { TituloEditorComponent } from '../../../component/titulo-editor/titulo-editor.component';
 
 declare var bootstrap: any;
 
@@ -18,6 +19,7 @@ declare var bootstrap: any;
   styleUrl: './configuracion-page.component.scss'
 })
 export class ConfiguracionPageComponent {
+
   private savedPosition: [number, number] = [0, 0];
   listaDrowDefault: DataDrownItem[] = [
     { id: '1', value: 'Eliminar' },
@@ -147,9 +149,16 @@ export class ConfiguracionPageComponent {
 
   async irAAnchor(id: string) {
     if (id) {
-      console.log(id)
       await this.viewportScroller.scrollToAnchor(id);
     }
   }
 
+  async editarTitulo(id:string,titulosEditor:QueryList<TituloEditorComponent>){
+    setTimeout(() => {
+      const editor = titulosEditor.find(
+        t => t.idEditor.toString() === this.formatId(id).toString()
+      );
+      editor?.activarEdicionTitulo();
+    }, 0);
+  }
 }

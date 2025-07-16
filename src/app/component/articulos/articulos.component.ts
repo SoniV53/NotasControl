@@ -34,7 +34,6 @@ export class ArticulosComponent extends ConfiguracionPageComponent implements On
   }
 
   ngOnChanges(changes: SimpleChanges): void {
-    console.log(this.articulos);
     if (this.articulos.length > 0 && this.carpetaId) {
       const articuloId = this.selectorSer.obtenerArticuloCarpeta(this.carpetaId);
       const itemArticulo = this.articulos.find(res => res.id == articuloId);
@@ -97,7 +96,6 @@ export class ArticulosComponent extends ConfiguracionPageComponent implements On
   }
 
   async clickActionDrow(item: DataDrownItem,articulo:Articulo) {
-    console.log(articulo)
     this.eliminarArticulo(articulo);
   }
 

@@ -1,7 +1,8 @@
-import { AfterViewInit, Component, EventEmitter, Input, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, Output, QueryList, ViewChildren } from '@angular/core';
 import { Dropdown } from 'bootstrap';
 import { ConfiguracionPageComponent } from '../../../ui/main/configuracion-page/configuracion-page.component';
 import { DataDrownItem } from '../../drowmenu/drowmenu.component';
+import { TituloEditorComponent } from '../../titulo-editor/titulo-editor.component';
 
 @Component({
   selector: 'app-item-menu',
@@ -9,23 +10,22 @@ import { DataDrownItem } from '../../drowmenu/drowmenu.component';
   styleUrl: './item-menu.component.scss'
 })
 export class ItemMenuComponent extends ConfiguracionPageComponent implements AfterViewInit {
+  @ViewChildren(TituloEditorComponent) titulosEditor!: QueryList<TituloEditorComponent>;
   @Input() itemSelect: boolean = false;
   @Input() itemId: string = '';
   @Input() tipo: number = 0;
   @Input() ocultar: boolean = true;
   @Input() texto: string = '';
+  @Input() editandoTitulo: boolean = false;
   @Output() onChangeTextEmitter = new EventEmitter<any>();
   @Output() onClickItem = new EventEmitter<any>();
   @Output() onClickItemCarpeta = new EventEmitter<number>();
   @Output() onClickMore = new EventEmitter<any>();
   @Output() onClickActionDrow = new EventEmitter<any>();
 
-  editandoTitulo = false;
-
-
   ngAfterViewInit(): void {
     if (this.tipo == 0) {
-      this.listaDrowDefault.push({id:'3',value:'Ocultar'})
+      this.listaDrowDefault.push({ id: '3', value: 'Ocultar' })
     }
 
   }
@@ -46,27 +46,11 @@ export class ItemMenuComponent extends ConfiguracionPageComponent implements Aft
     this.onChangeTextEmitter.emit({ text: this.texto, tipo: this.tipo });
   }
 
-  activarEdicionR(event: MouseEvent) {
-    event.preventDefault();
-    if (window.electron && window.electron.ipcRenderer) {
-      const toggleButton = document.getElementById(this.itemId)!;
-      if (toggleButton) {
-        const dropdown = new Dropdown(toggleButton);
-        dropdown.show();
-      }
-    }
-  }
 
   clickActionDrow(tipo: DataDrownItem) {
-    switch (tipo.id) {
-      case '2':
-        this.editandoTitulo = true;
-        break;
-
-      default:
-        this.onClickActionDrow.emit(tipo)
-        break;
-    }
-
+    if (tipo.id === '2') {
+      this.editarTitulo(this.itemId + 'editor', this.titulosEditor);
+    } 
+    this.onClickActionDrow.emit(tipo);
   }
 }

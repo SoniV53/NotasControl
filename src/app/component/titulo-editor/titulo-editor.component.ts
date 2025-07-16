@@ -10,12 +10,13 @@ import { ConfiguracionPageComponent } from '../../ui/main/configuracion-page/con
 export class TituloEditorComponent extends ConfiguracionPageComponent implements AfterViewInit, OnChanges {
 
   @Input() texto: string = '';
+  @Input() idEditor: string = '';
   @Input() numPage: number = 0;
   @Output() onChangeTextEmitter = new EventEmitter<string>();
-  @Input() editandoTitulo = false;
+  @Input() editandoTitulo: boolean = false;
   enterPressed = false;
 
-  @ViewChild('tituloRef') tituloRef!: ElementRef;
+  @ViewChild('tituloRef') tituloRef!: ElementRef<HTMLHeadingElement>;
 
   ngAfterViewInit() {
     this.pegarContenido();
@@ -23,6 +24,21 @@ export class TituloEditorComponent extends ConfiguracionPageComponent implements
 
   ngOnChanges(changes: SimpleChanges): void {
     this.pegarContenido();
+  }
+
+  activarEdicionTitulo() {
+    if (this.tituloRef) {
+      console.log("FOCUS EDITAR");
+      const el = this.tituloRef.nativeElement;
+      el.focus();
+
+      const range = document.createRange();
+      const sel = window.getSelection();
+      range.selectNodeContents(el);
+      range.collapse(false);
+      sel?.removeAllRanges();
+      sel?.addRange(range);
+    }
   }
 
   activarEdicion(tituloEl: HTMLElement) {
@@ -41,7 +57,7 @@ export class TituloEditorComponent extends ConfiguracionPageComponent implements
     }
   }
 
-  
+
 
   pegarContenido() {
     if (!this.texto) {
@@ -53,6 +69,7 @@ export class TituloEditorComponent extends ConfiguracionPageComponent implements
   }
 
   guardarTitulo(tituloEl: HTMLElement) {
+    console.log("Exit Focus");
     if (this.enterPressed) {
       this.enterPressed = false;
       return;

@@ -4,7 +4,7 @@
         (contextmenu)="activarEdicionR(tituloRef,$event)" (blur)="guardarTitulo(tituloRef)"
         (keydown.enter)="guardarTitulo(tituloRef); $event.preventDefault()" (input)="onChangeEditor(tituloRef)"></h5> -->
 
-    <h5 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo"
+    <h5 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo" [id]="idEditor"
         (blur)="guardarTitulo(tituloRef)" (keydown.enter)="guardarTitulo(tituloRef); $event.preventDefault()"
         (input)="onChangeEditor(tituloRef)"></h5>
 </div>
@@ -18,7 +18,7 @@
         (contextmenu)="activarEdicionR(tituloRef,$event)"
         (keydown.enter)="onEnterKey(tituloRef); $event.preventDefault()" (blur)="guardarTitulo(tituloRef)"
         (input)="onChangeEditor(tituloRef)"></h4> -->
-    <h4 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo"
+    <h4 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo" [id]="idEditor"
         (keydown.enter)="onEnterKey(tituloRef); $event.preventDefault()" (blur)="guardarTitulo(tituloRef)"
         (input)="onChangeEditor(tituloRef)"></h4>
 </div>
@@ -33,6 +33,6 @@
         (keydown.enter)="onEnterKey(tituloRef); $event.preventDefault()" (blur)="guardarTitulo(tituloRef)"
         (input)="onChangeEditor(tituloRef)"></h3> -->
     <h3 #tituloRef class="mb-0 flex-grow-1" [attr.contenteditable]="editandoTitulo" (click)="activarEdicion(tituloRef)"
-        (keydown.enter)="onEnterKey(tituloRef); $event.preventDefault()" (blur)="guardarTitulo(tituloRef)"
-        (input)="onChangeEditor(tituloRef)"></h3>
+        [id]="idEditor" (keydown.enter)="onEnterKey(tituloRef); $event.preventDefault()"
+        (blur)="guardarTitulo(tituloRef)" (input)="onChangeEditor(tituloRef)"></h3>
 </div>

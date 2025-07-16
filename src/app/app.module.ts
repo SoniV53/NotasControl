@@ -28,6 +28,7 @@ import { RightClickDirective } from './directive/RightClickDirective';
 import { DrowmenuComponent } from './component/drowmenu/drowmenu.component';
 import { DrowIconMenuComponent } from './component/drowmenu/drow-icon-menu/drow-icon-menu.component';
 import { CarpetasArticulosComponent } from './ui/main/inicio-categoria/carpetas-articulos/carpetas-articulos.component';
+import { AutoFocusDirective } from './directive/auto-focus.directive';
 
 @NgModule({
   declarations: [
@@ -54,7 +55,8 @@ import { CarpetasArticulosComponent } from './ui/main/inicio-categoria/carpetas-
     RightClickDirective,
     DrowmenuComponent,
     DrowIconMenuComponent,
-    CarpetasArticulosComponent  
+    CarpetasArticulosComponent,
+    AutoFocusDirective  
   ],
   imports: [
     BrowserModule,

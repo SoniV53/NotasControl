@@ -22,7 +22,8 @@
                         (onClickMore)="clickMore($event,item)" (onClickItem)="clickItem(item,0)"
                         (onChangeTextEmitter)="changeTextEmitter($event,item,'')"
                         (onClickItemCarpeta)="clickItemCarpeta(item, item?.carpetas?.length)"
-                        (onClickActionDrow)="clickActionDrow($event,item)"></app-item-menu>
+                        (onClickActionDrow)="clickActionDrow($event,item)"
+                        [editandoTitulo]="item.editandoTitulo || false"></app-item-menu>
 
                     <div *ngIf="!item.ocultar">
                         <div *ngFor="let carpeta of item.carpetas" style="margin: 4px 16px;">
@@ -30,7 +31,8 @@
                                 [itemId]="'itemMenuCarp'+carpeta.id" [texto]="carpeta.nombre"
                                 (onClickItem)="clickItem(carpeta,1)"
                                 (onClickActionDrow)="clickActionDrow($event,carpeta,item.id)"
-                                (onChangeTextEmitter)="changeTextEmitter($event,carpeta,item.id)"></app-item-menu>
+                                (onChangeTextEmitter)="changeTextEmitter($event,carpeta,item.id)"
+                                [editandoTitulo]="carpeta.editandoTitulo || false"></app-item-menu>
                         </div>
                     </div>
                 </div>

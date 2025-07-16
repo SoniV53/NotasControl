@@ -12,7 +12,7 @@
 
         <div (click)="clickItem()">
             <app-titulo-editor [texto]="texto" (onChangeTextEmitter)="changeTextEmitter($event)"
-                [editandoTitulo]="editandoTitulo"></app-titulo-editor>
+                [editandoTitulo]="editandoTitulo"  [idEditor]="itemId+'editor'"></app-titulo-editor>
         </div>
 
         <span class="unidad-close justifyCenter" (click)="clickItemCarpeta()" *ngIf="tipo === 0">

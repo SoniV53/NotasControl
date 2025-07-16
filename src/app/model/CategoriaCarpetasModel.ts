@@ -3,6 +3,7 @@ import { ItemAtributos } from "../providers/atribuitos/Atributos";
 export interface Carpeta {
   id: number;
   nombre: string;
+  editandoTitulo?: boolean;
   fechaCreacion: string;
 }
 
@@ -11,7 +12,8 @@ export interface CategoriaCarpetas {
   categoria: string;
   ocultar: boolean;
   carpetas: Carpeta[];
-  attr?:ItemAtributos[];
+  editandoTitulo?: boolean;
+  attr?: ItemAtributos[];
 }
 
 

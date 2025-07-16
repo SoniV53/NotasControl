@@ -1,4 +1,4 @@
-import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
+import { AfterViewInit, Component, EventEmitter, Input, OnInit, Output, QueryList, ViewChildren } from '@angular/core';
 import { ConfiguracionPageComponent } from '../../../ui/main/configuracion-page/configuracion-page.component';
 import { Carpeta, CategoriaCarpetas, CATEGORIAS_DUMMY } from '../../../model/CategoriaCarpetasModel';
 import Swal from 'sweetalert2';
@@ -6,6 +6,7 @@ import { ItemSeleccionado } from '../../../providers/selector-service.service';
 import { ATRIBUTOS_LISTA_CATEGORIA, Tipos } from '../../../providers/atribuitos/Atributos';
 import { AtributosTitulo } from '../../../providers/atribuitos/EnumAtributos';
 import { DataDrownItem } from '../../drowmenu/drowmenu.component';
+import { TituloEditorComponent } from '../../titulo-editor/titulo-editor.component';
 
 @Component({
   selector: 'app-menu-lateral-izquierda',
@@ -13,7 +14,7 @@ import { DataDrownItem } from '../../drowmenu/drowmenu.component';
   styleUrl: './menu-lateral-izquierda.component.scss'
 })
 export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent implements OnInit, AfterViewInit {
-
+  @ViewChildren(TituloEditorComponent) titulosEditor!: QueryList<TituloEditorComponent>;
 
   listadoCategoria: CategoriaCarpetas[] = []
   listadoCarpetas: Carpeta[] = []
@@ -35,7 +36,6 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
           this.listadoCategoria.push(res);
         }
       })
-      console.log(this.listadoCategoria)
     })
   }
 
@@ -82,6 +82,7 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
   }
 
   changeTextEmitter(event: any, item: any, categoriaId: any) {
+    item.editandoTitulo = false;
     if (event?.text && event?.tipo === 0) {
       this.selectorSer.actualizarNombreCategoria(item.id, event.text);
       this.electron.actualizarCategoria(item.id, event.text, item.ocultar);
@@ -194,6 +195,9 @@ export class MenuLateralIzquierdaComponent extends ConfiguracionPageComponent im
         } else {
           this.myApp.eliminarCarpeta(item, categoriaId)
         }
+        break;
+      case '2':
+        item.editandoTitulo = true;
         break;
       case '3':
         if (item) {
