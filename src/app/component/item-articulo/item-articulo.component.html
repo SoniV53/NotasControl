@@ -29,8 +29,9 @@
     <div class="card-body position-relative" *ngIf="!articulo.ocultar">
         <app-herramientas-editor (onClickTools)="onClickTools($event)" [articulo]="articulo"
             [printSectionId]="formatId('printArticuloId'+articulo.id)"></app-herramientas-editor>
+
         <div [ngClass]="{'cont-min':isMin,'cont-max':!isMin}">
-            <app-editor-formato [articulo]="articulo"></app-editor-formato>
+            <app-editor-formato [articulo]="articulo" (onAfterViewInit)="onAfterViewInit($event)"></app-editor-formato>
         </div>
 
         <div class="text-end text-muted small position-absolute bottom-0 end-0 p-3">

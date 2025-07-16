@@ -27,6 +27,7 @@ import { InicioCategoriaComponent } from './ui/main/inicio-categoria/inicio-cate
 import { RightClickDirective } from './directive/RightClickDirective';
 import { DrowmenuComponent } from './component/drowmenu/drowmenu.component';
 import { DrowIconMenuComponent } from './component/drowmenu/drow-icon-menu/drow-icon-menu.component';
+import { CarpetasArticulosComponent } from './ui/main/inicio-categoria/carpetas-articulos/carpetas-articulos.component';
 
 @NgModule({
   declarations: [
@@ -52,7 +53,8 @@ import { DrowIconMenuComponent } from './component/drowmenu/drow-icon-menu/drow-
     InicioCategoriaComponent,
     RightClickDirective,
     DrowmenuComponent,
-    DrowIconMenuComponent  
+    DrowIconMenuComponent,
+    CarpetasArticulosComponent  
   ],
   imports: [
     BrowserModule,

@@ -10,9 +10,10 @@ import Swal from 'sweetalert2';
   styleUrl: './editor-formato.component.scss'
 })
 export class EditorFormatoComponent extends ConfiguracionPageComponent implements AfterViewInit, OnChanges {
-
+  //@Input() ditor!: ElementRef
   @ViewChild('editor') editor!: ElementRef;
   @ViewChild('contenedor') contenedorRef!: ElementRef;
+  @Output() onAfterViewInit = new EventEmitter<any>();
   mostrar = false;
 
   @Input() articulo: Articulo | null = null;
@@ -27,10 +28,20 @@ export class EditorFormatoComponent extends ConfiguracionPageComponent implement
       this.guardarContenido();
     });
     this.pegarContenido();
+
+    this.actionAfterEmitter();
   }
 
   ngOnChanges(changes: SimpleChanges) {
     this.pegarContenido();
+    this.actionAfterEmitter();
+  }
+
+  actionAfterEmitter() {
+    const textoLimpio = this.editor?.nativeElement?.innerText?.trim();
+    if (textoLimpio) {
+      this.onAfterViewInit.emit(textoLimpio);
+    }
   }
 
   async guardarContenido() {

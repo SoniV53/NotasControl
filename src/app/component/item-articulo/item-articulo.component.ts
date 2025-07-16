@@ -9,7 +9,7 @@ import Swal from 'sweetalert2';
   styleUrl: './item-articulo.component.scss'
 })
 export class ItemArticuloComponent extends ConfiguracionPageComponent implements OnInit, OnChanges {
-  @ViewChild('editor') editor!: ElementRef;
+  //@ViewChild('editor') editor!: ElementRef;
 
 
   @Input() articulo: Articulo = {
@@ -24,6 +24,8 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
   @Input() isPage = false;
 
   @Output() onEliminarArticulo = new EventEmitter<number>();
+
+  htmlContent:string = ''
 
   ngOnInit(): void {
   }
@@ -78,6 +80,10 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
     }
   }
 
+  onAfterViewInit(event:any){
+    this.htmlContent = event;
+  }
+
   onClickTools(event: any) {
     switch (event) {
       case 'copy':
@@ -99,8 +105,8 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
   }
 
   copiarHTML() {
-    const textoLimpio = this.editor.nativeElement.innerText.trim();
-
+    const textoLimpio = this.htmlContent;
+    console.log(textoLimpio)
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(textoLimpio).then(() => {
         this.mensajeCopiar();
@@ -122,7 +128,7 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
   }
 
   copiarHTMLV2() {
-    const texto = this.editor.nativeElement.innerText;
+    const texto = this.htmlContent;
     const textoLimpio = texto.replace(/\u200B/g, '').replace(/\s+/g, ' ').trim();
     if (navigator.clipboard && navigator.clipboard.writeText) {
       navigator.clipboard.writeText(textoLimpio).then(() => {
@@ -190,7 +196,7 @@ export class ItemArticuloComponent extends ConfiguracionPageComponent implements
   async guardarContenido() {
     if (!this.articulo) return;
     try {
-      const htmlContent = this.editor.nativeElement.innerHTML;
+      const htmlContent = this.htmlContent;
       await this.electron.actualizarArticulo(this.articulo.id, this.articulo.title, htmlContent, this.articulo.ocultar);
       this.articulo.isChange = false;
       this.articulo.content = htmlContent;
