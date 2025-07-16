@@ -10,6 +10,7 @@ function createWindow() {
     width: 1200,
     height: 900,
     menuBarVisible: false,
+    icon: path.join(__dirname, '../src/assets/icons/icono-electron.png'),
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
       nodeIntegration: false,
@@ -36,7 +37,7 @@ function createWindow() {
   if (isDev) {
     mainWindow.webContents.openDevTools();
   }
-  
+
 
   mainWindow.on("closed", () => {
     mainWindow = null;
@@ -153,8 +154,8 @@ ipcMain.handle('eliminar-articulo', (event, id) => {
 
 // === HISTORIAL DE CARPETAS ===
 
-ipcMain.handle('agregar-historial', (event, key,tipo) => {
-  return db.agregarHistorial(key,tipo);
+ipcMain.handle('agregar-historial', (event, key, tipo) => {
+  return db.agregarHistorial(key, tipo);
 });
 
 ipcMain.handle('obtener-historial-carpetas', () => {
@@ -175,15 +176,15 @@ ipcMain.handle('limpiar-historial', () => {
 // === ATRIBUTOS ===
 
 ipcMain.handle('crear-atributo', (event, tipo, key, titulo, value) => {
-  return db.crearAtributo(tipo, key, titulo, value );
+  return db.crearAtributo(tipo, key, titulo, value);
 });
 
 ipcMain.handle('obtener-atributos', () => {
   return db.obtenerAtributos();
 });
 
-ipcMain.handle('obtener-atributos-por-tipo', (event, tipo,key) => {
-  return db.obtenerAtributosPorTipo(tipo,key);
+ipcMain.handle('obtener-atributos-por-tipo', (event, tipo, key) => {
+  return db.obtenerAtributosPorTipo(tipo, key);
 });
 
 ipcMain.handle('actualizar-atributo', (event, id, tipo, key, value) => {
