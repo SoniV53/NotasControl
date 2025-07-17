@@ -46,6 +46,7 @@ export class CarpetasComponent extends ConfiguracionPageComponent implements Aft
   async eliminarCarpeta(item: any) {
     this.messageEliminar(async () => {
       try {
+        
         await this.electron.eliminarCarpeta(item.id).then(() => {
           this.carpetasListado = this.carpetasListado.filter(c => c.id !== item.id);
         });
@@ -86,9 +87,9 @@ export class CarpetasComponent extends ConfiguracionPageComponent implements Aft
         break;
       case '1':
         if (this.isCategoria) {
-          await this.myApp.eliminarCarpeta(this.carpetaSelec, this.categoriaId);
+          await this.myApp.eliminarCarpeta(carpeta, this.categoriaId);
         } else {
-          this.eliminarCarpeta(this.carpetaSelec);
+          this.eliminarCarpeta(carpeta);
         }
         break;
       default:

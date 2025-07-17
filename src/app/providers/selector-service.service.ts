@@ -158,10 +158,11 @@ export class SelectorServiceService {
   }
 
   agregarCarpetaCategoria(idCategoria: number, carpeta: Carpeta): void {
+
     if (carpeta && carpeta.id) {
       const actualList = this.listadoCategoria.getValue();
 
-      const categoria = actualList.find(res => res.id === idCategoria);
+      const categoria = actualList.find(res => res.id.toString() === idCategoria.toString());
 
       if (categoria) {
         if (!categoria.carpetas) {
@@ -170,7 +171,7 @@ export class SelectorServiceService {
 
         categoria.carpetas.push(carpeta);
       }
-
+      console.log(actualList)
       this.listadoCategoria.next(actualList);
     }
   }

@@ -17,6 +17,7 @@ export class InicioCategoriaComponent extends ConfiguracionPageComponent impleme
     await this.route.queryParams.subscribe(params => {
       const categoriaId = params['categoriaId'];
       this.categoriaId = categoriaId;
+      console.log(categoriaId)
     });
 
     this.selectorSer.listadoCarpetas$.subscribe(async data => {
@@ -37,12 +38,13 @@ export class InicioCategoriaComponent extends ConfiguracionPageComponent impleme
   }
 
   async crearCarpeta(value: any) {
+    console.log(value)
     try {
       if (this.categoriaId) {
-        const res = await this.electron.crearCarpeta(this.requestData.nombre, null, this.categoriaId);
+        const res = await this.electron.crearCarpeta(value.nombre, null, this.categoriaId);
         let carp: Carpeta = {
           id: res?.lastInsertRowid,
-          nombre: this.requestData.nombre,
+          nombre: value.nombre,
           fechaCreacion: ''
         }
         this.selectorSer.agregarCarpetaCategoria(this.categoriaId, carp);
